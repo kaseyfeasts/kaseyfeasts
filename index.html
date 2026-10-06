@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kasey Feasts — New England food, honestly reviewed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Krona+One&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍩</text></svg>">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#/" aria-label="Kasey Feasts home"><span class="k">KASEY</span><span class="f">FEASTS</span></a>
+    <button class="menu-btn" aria-label="Menu" aria-expanded="false" id="menuBtn">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="main" id="nav">
+      <a href="#/" data-r="">Map</a>
+      <a href="#/hitlist" data-r="hitlist">Hit list</a>
+      <a href="#/blog" data-r="blog">Blog</a>
+      <a href="#/about" data-r="about">About</a>
+      <a href="#/work" data-r="work">Work with me</a>
+      <a href="#/next" data-r="next">Where next?</a>
+      <a href="mailto:kaseyfeasts@delmgmt.com" class="btn red" style="margin-left:6px">Email me</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app">
+
+<!-- ================= HOME ================= -->
+<div data-view="home">
+  <section class="hero">
+    <div class="wrap">
+      <div class="avatar-stage" id="avStage" title="Say hi">
+        <!--AVATAR-->
+      </div>
+      <div class="hero-copy">
+        <h1 class="xoxo" aria-label="Love you, XOXO"><span class="l1">LOVE YOU</span><span class="l2">XOXO</span></h1>
+        <p>Independent reviews of New England's best donuts, sandwiches and pizza. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.</p>
+        <div class="row">
+          <a class="btn red" href="#directory">Explore the map</a>
+          <a class="btn ghost" href="#/hitlist">See the hit list</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="directory">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <h2 class="big">Places I've been</h2>
+          <p class="lede" id="dirLede">Drag the map to your area, then tap a dot to watch my review.</p>
+        </div>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" id="tabMap">Map</button>
+          <button role="tab" aria-selected="false" id="tabList">List</button>
+        </div>
+      </div>
+
+      <div id="mapPane">
+        <div class="mapgrid">
+          <div class="mapbox" id="mapbox">
+            <svg id="map" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="map-top" id="mapCats"></div>
+            <div class="map-ui">
+              <button id="zin" aria-label="Zoom in">+</button>
+              <button id="zout" aria-label="Zoom out">−</button>
+              <button id="zall" aria-label="Show all of New England" title="Show all" style="font-size:15px">⤢</button>
+            </div>
+            <div class="map-hint" id="mapHint">Drag to move · scroll or pinch to zoom</div>
+            <div class="pop" id="pop" hidden></div>
+            <div class="soon" id="mapSoon" hidden><button class="x" aria-label="Hide this and explore the map">×</button><span class="eyebrow">COMING SOON</span><h3>Reviews are on the way</h3><p>Every place I review will be pinned here with a link to the video. Drag around New England while you wait.</p><div class="row"><a class="btn red" href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Follow for updates</a><a class="btn ghost" href="#/next">Suggest a spot</a></div></div>
+          </div>
+          <aside class="side">
+            <div class="side-h"><strong id="inViewCount">Spots in this area</strong><small>Updates as you move the map</small></div>
+            <div class="chips" style="padding:10px 14px 0" id="jumps"></div>
+            <ul id="inView"></ul>
+          </aside>
+        </div>
+      </div>
+
+      <div id="listPane" hidden>
+        <div class="filters">
+          <label>Search<input class="field" id="fq" type="search" placeholder="Name, town or dish"></label>
+          <label>State<select class="field" id="fst"><option value="">All states</option></select></label>
+          <label>Food<select class="field" id="fcat"><option value="">All food</option></select></label>
+          <label class="check"><input type="checkbox" id="fhit"> Hit list only</label>
+        </div>
+        <p class="count" id="fcount"></p>
+        <div class="rows" id="frows"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0">
+    <div class="wrap">
+      <div class="head-row">
+        <div><h2 class="big">The hit list</h2><p class="lede">The places I'd drive two hours for. Start here.</p></div>
+        <a class="btn ghost" href="#/hitlist">All hit list spots</a>
+      </div>
+      <div class="hits" id="hitPreview"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= HIT LIST ================= -->
+<div data-view="hitlist" hidden>
+  <section class="block"><div class="wrap">
+    <h2 class="big">The hit list</h2>
+    <p class="lede">My highest recommendations across New England. Filter by what you're craving or where you are.</p>
+    <div style="display:grid;gap:10px;margin:22px 0 26px">
+      <div class="chips" id="hlCats"></div>
+      <div class="chips" id="hlStates"></div>
+    </div>
+    <div class="hits" id="hitAll"></div>
+  </div></section>
+</div>
+
+<!-- ================= SPOT ================= -->
+<div data-view="spot" hidden>
+  <section class="block" style="padding-top:0"><div class="wrap" id="spotBody"></div></section>
+</div>
+
+<!-- ================= BLOG ================= -->
+<div data-view="blog" hidden>
+  <section class="block"><div class="wrap" id="blogBody"></div></section>
+</div>
+
+<!-- ================= ABOUT ================= -->
+<div data-view="about" hidden>
+  <section class="block"><div class="wrap">
+    <div class="about-hero">
+      <div class="avbox" id="aboutAv"></div>
+      <div>
+        <h2 class="big">Hi, I'm Kasey.</h2>
+        <p>I drive around New England eating donuts, sandwiches and pizza, then tell you which ones are worth the trip. Massachusetts and New Hampshire are home base. Maine, Vermont, Rhode Island and Connecticut get visits whenever a tip sounds too good to ignore.</p>
+        <p>Every review is my own money and my own opinion. If a place isn't good, it doesn't make the map. If it's great, you'll hear about it, loudly.</p>
+        <div class="stat-line">
+          <span class="tag">2.7K followers on Instagram</span>
+          <span class="tag">MA · NH · Beyond</span>
+        </div>
+      </div>
+    </div>
+    <div class="policy"><strong>No paid praise.</strong> Restaurants can't buy a review. Sponsored work is always labeled, and it never touches the map or the hit list.</div>
+    <div class="two">
+      <div class="panel"><h3>How I pick</h3><p style="margin:0">If it's on the map, I went, I paid, and I'd send a friend there. Each spot links to my video so you can see exactly what I ate and decide for yourself.</p></div>
+      <div class="panel"><h3>Got a tip?</h3><p style="margin:0 0 14px">Most of my best finds came from followers. Tell me where to go next.</p><a class="btn" href="#/next">Suggest a spot</a></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ================= WORK ================= -->
+<div data-view="work" hidden>
+  <section class="block"><div class="wrap">
+    <h2 class="big">Work with me</h2>
+    <p class="lede">Brands, restaurants, students and fellow creators: here's how we can work together.</p>
+    <div class="two" style="margin:28px 0 36px">
+      <div class="panel">
+        <h3>For brands and restaurants</h3>
+        <ul>
+          <li>Sponsored videos and posts, clearly labeled</li>
+          <li>Event coverage and openings</li>
+          <li>Review requests (I'll come as a regular customer and pay my own bill)</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>For students and creators</h3>
+        <ul>
+          <li>Short-form video editing</li>
+          <li>Feedback on your food content</li>
+          <li>Ride-alongs and shoot days</li>
+        </ul>
+      </div>
+    </div>
+    <div class="two">
+      <form class="stack" id="workForm">
+        <div class="form-grid">
+          <label>Your name<input class="field" name="name" required autocomplete="name"></label>
+          <label>Email<input class="field" name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <div class="form-grid">
+          <label>I'm a…<select class="field" name="who"><option>Brand or agency</option><option>Restaurant</option><option>Student</option><option>Creator</option><option>Something else</option></select></label>
+          <label>This is about…<select class="field" name="topic"><option>Partnership</option><option>Review request</option><option>Video editing</option><option>Content feedback</option><option>Something else</option></select></label>
+        </div>
+        <label>Message<textarea class="field" name="msg" required placeholder="What are you thinking? Include dates, budget or links if you have them."></textarea></label>
+        <div><button class="btn red" type="submit">Send inquiry</button><p class="note" style="margin:8px 0 0">Opens your email app with your message ready to send.</p></div>
+        <div id="workMsg" aria-live="polite"></div>
+      </form>
+      <div>
+        <div class="panel">
+          <h3>Prefer email?</h3>
+          <p style="margin:0 0 12px">Management: <a href="mailto:kaseyfeasts@delmgmt.com">kaseyfeasts@delmgmt.com</a></p>
+          <p class="note" style="margin:0">Review requests don't guarantee a post. If I go and love it, you'll know.</p>
+        </div>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ================= NEXT ================= -->
+<div data-view="next" hidden>
+  <section class="block"><div class="wrap">
+    <h2 class="big">Where should I go next?</h2>
+    <p class="lede">Send me your favorite donut shop, sub spot or pizza place. The best tips end up in a video.</p>
+    <div class="two" style="margin-top:28px">
+      <form class="stack" id="recForm">
+        <div class="form-grid">
+          <label>Restaurant<input class="field" name="place" required placeholder="e.g. Ma's Sub Shop"></label>
+          <label>Town<input class="field" name="town" required placeholder="e.g. Lowell, MA"></label>
+        </div>
+        <label>What should I order?<input class="field" name="order" placeholder="The one thing I can't skip"></label>
+        <label>Why it's great<textarea class="field" name="why" placeholder="Sell me on it"></textarea></label>
+        <label>Your name or handle (optional)<input class="field" name="by"></label>
+        <div><button class="btn red" type="submit">Send my tip</button><p class="note" style="margin:8px 0 0">Opens your email app with your tip ready to send.</p></div>
+        <div id="recMsg" aria-live="polite"></div>
+      </form>
+      <div>
+        <div class="panel">
+          <h3>How tips work</h3>
+          <p style="margin:0 0 12px">Your tip goes straight to my inbox. I read every one, and the best ones end up in a video.</p>
+          <p style="margin:0">Rather write it yourself? Email <a href="mailto:kaseyfeasts@delmgmt.com?subject=Where%20should%20I%20go%20next%3F">kaseyfeasts@delmgmt.com</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+</main>
+
+<section class="news" id="contact">
+  <div class="wrap">
+    <div>
+      <h2>Say hi</h2>
+      <p>Questions, tips, collabs or just want to talk donuts? Email me.</p>
+      <div class="news-soon"><span class="pill">NEWSLETTER COMING SOON</span><span>Want in? <a href="mailto:kaseyfeasts@delmgmt.com?subject=Add%20me%20to%20the%20newsletter">Email me</a> and I'll add you when it launches.</span></div>
+    </div>
+    <div class="mailbox">
+      <a class="mail-big" href="mailto:kaseyfeasts@delmgmt.com">kaseyfeasts@delmgmt.com</a>
+      <div class="row">
+        <a class="btn" href="mailto:kaseyfeasts@delmgmt.com">✉ Email me</a>
+        <button class="btn ghost" type="button" id="copyMail">Copy address</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="sign">LOVE YOU XOXO</div>
+    <div>Independent reviews, no paid praise · <a href="mailto:kaseyfeasts@delmgmt.com">kaseyfeasts@delmgmt.com</a> · Newsletter coming soon · <a href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Instagram</a></div>
+  </div>
+</footer>
+<script src="data/map-data.js"></script>
+<script src="data/content.js"></script>
+<script src="data/posts.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
