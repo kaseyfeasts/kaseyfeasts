@@ -1,1 +1,203 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kasey Feasts | Admin</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="admin.css"></head><body><header><div class="brand"><span class="mark">✚</span><strong>KASEY <em>FEASTS</em></strong><span class="adminlabel">ADMIN</span></div><div class="headright"><span id="who">Not connected</span><button id="logout" hidden>Sign out</button><a href="../">View site ↗</a></div></header><main><section id="login" class="login"><div class="eyebrow">CONTENT MANAGEMENT</div><h1>Your food finds,<br>all in one place.</h1><p>Sign in with the GitHub account that owns this website to manage restaurants and blog posts.</p><button class="primary" id="signin">Sign in with GitHub →</button><p class="small">An administrator must configure the GitHub connection once before sign-in works.</p></section><section id="dashboard" hidden><div class="heading"><div><div class="eyebrow">KASEY FEASTS</div><h1>Content dashboard</h1><p>Changes go live after GitHub Pages publishes your update.</p></div><button id="refresh">↻ Refresh</button></div><div class="tabs"><button data-tab="spots" class="active">Restaurants <span id="spotcount">0</span></button><button data-tab="posts">Blog posts <span id="postcount">0</span></button></div><div class="toolbar"><input id="search" placeholder="Search your content..." aria-label="Search"><button class="primary" id="new">+ Add restaurant</button></div><div id="items" class="items"></div><div id="editor" class="editor" hidden><div class="editorhead"><h2 id="editorTitle">Add restaurant</h2><button id="close" aria-label="Close">✕</button></div><form id="form"><div id="fields"></div><div class="actions"><button type="button" id="cancel">Cancel</button><button type="submit" class="primary" id="save">Publish changes</button></div></form></div><div id="notice" role="status"></div></section></main><script src="config.js"></script><script src="admin.js"></script></body></html>
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kasey Feasts | Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="admin.css">
+
+  <style>
+    /* Header wordmark */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .brand .mark,
+    .brand .adminlabel {
+      display: none;
+    }
+
+    .brand strong {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -1.1px;
+      color: #22222b;
+      white-space: nowrap;
+    }
+
+    .brand strong em {
+      color: #ed5a91;
+      font-style: normal;
+    }
+
+    /* Center the login card */
+    body:has(#login:not([hidden])) main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 90px);
+      box-sizing: border-box;
+      padding: 24px;
+    }
+
+    #login {
+      width: 100%;
+      max-width: 670px;
+      box-sizing: border-box;
+      text-align: center;
+      margin: 0 auto;
+      padding: 60px 48px;
+    }
+
+    #login .eyebrow,
+    #login h1,
+    #login p {
+      text-align: center;
+    }
+
+    #login h1 {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #login p {
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #login #signin {
+      display: inline-block;
+      margin: 12px auto 0;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .brand strong {
+        font-size: 20px;
+      }
+
+      #login {
+        padding: 40px 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="brand">
+      <strong>KASEY<em>FEASTS</em></strong>
+    </div>
+
+    <div class="headright">
+      <span id="who">Not connected</span>
+      <button id="logout" hidden>Sign out</button>
+      <a href="../">View site ↗</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- LOGIN SCREEN -->
+    <section id="login" class="login">
+      <div class="eyebrow">CONTENT MANAGEMENT</div>
+
+      <h1>
+        Your food finds,<br>
+        all in one place.
+      </h1>
+
+      <p>
+        Sign in with GitHub to manage your restaurants,
+        Hit List entries, and blog posts.
+      </p>
+
+      <button class="primary" id="signin">
+        Sign in with GitHub →
+      </button>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" hidden>
+
+      <div class="heading">
+        <div>
+          <div class="eyebrow">KASEY FEASTS</div>
+          <h1>Content dashboard</h1>
+          <p>
+            Changes go live after GitHub Pages publishes your update.
+          </p>
+        </div>
+
+        <button id="refresh">↻ Refresh</button>
+      </div>
+
+      <div class="tabs">
+        <button data-tab="spots" class="active">
+          Restaurants <span id="spotcount">0</span>
+        </button>
+
+        <button data-tab="posts">
+          Blog posts <span id="postcount">0</span>
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <input
+          id="search"
+          placeholder="Search your content..."
+          aria-label="Search"
+        >
+
+        <button class="primary" id="new">
+          + Add restaurant
+        </button>
+      </div>
+
+      <div id="items" class="items"></div>
+
+      <!-- CONTENT EDITOR -->
+      <div id="editor" class="editor" hidden>
+
+        <div class="editorhead">
+          <h2 id="editorTitle">Add restaurant</h2>
+          <button id="close" aria-label="Close">✕</button>
+        </div>
+
+        <form id="form">
+          <div id="fields"></div>
+
+          <div class="actions">
+            <button type="button" id="cancel">
+              Cancel
+            </button>
+
+            <button type="submit" class="primary" id="save">
+              Publish changes
+            </button>
+          </div>
+        </form>
+
+      </div>
+
+      <div id="notice" role="status"></div>
+
+    </section>
+
+  </main>
+
+  <!-- Keep existing authentication functionality -->
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+
+</body>
+</html>
