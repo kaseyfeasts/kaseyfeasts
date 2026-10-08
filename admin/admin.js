@@ -291,9 +291,38 @@
             v.body,
             'textarea',
             true
-          );
+          )
+        + `<div style="margin-top:10px">
+            <button type="button" id="markdownHelpToggle" aria-expanded="false"
+              aria-controls="markdownHelpPanel"
+              style="cursor:pointer;border:1px solid #ddd;border-radius:8px;padding:9px 12px;background:white;font:inherit">
+              ⓘ Formatting help
+            </button>
+            <div id="markdownHelpPanel" hidden
+              style="margin-top:10px;padding:16px;border:1px solid #e4e4e7;border-radius:10px;background:#fafafa">
+              <strong>How to format your blog post</strong>
+              <p>Type these symbols in the article box:</p>
+              <pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.8"># Main heading
+## Section heading
+**Bold text**
+*Italic text*
+- First bullet
+- Second bullet
+[Link text](https://example.com)</pre>
+              <p>Leave a blank line between paragraphs. Formatting depends on what the public blog supports.</p>
+            </div>
+          </div>`;
 
     $('editor').hidden = false;
+
+    const helpToggle = $('markdownHelpToggle');
+    const helpPanel = $('markdownHelpPanel');
+    if (helpToggle && helpPanel) {
+      helpToggle.addEventListener('click', () => {
+        helpPanel.hidden = !helpPanel.hidden;
+        helpToggle.setAttribute('aria-expanded', String(!helpPanel.hidden));
+      });
+    }
   }
 
   function formatSpots() {
