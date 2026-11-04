@@ -20,12 +20,12 @@
     </button>
     <nav class="main" id="nav">
       <a href="#/" data-r="">Map</a>
-      <a href="#/hitlist" data-r="hitlist">Hit list</a>
+      <a href="#/series" data-r="series">Series</a>
       <a href="#/blog" data-r="blog">Blog</a>
       <a href="#/about" data-r="about">About</a>
       <a href="#/work" data-r="work">Work with me</a>
       <a href="#/next" data-r="next">Where next?</a>
-      <a href="mailto:kaseyfeasts@delmgmt.com" class="btn red" style="margin-left:6px">Email me</a>
+      <a href="mailto:kaseyfeasts@gmail.com" class="btn red" style="margin-left:6px">Email me</a>
     </nav>
   </div>
 </header>
@@ -44,7 +44,7 @@
         <p>Independent reviews of New England's best donuts, sandwiches and pizza. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.</p>
         <div class="row">
           <a class="btn red" href="#directory">Explore the map</a>
-          <a class="btn ghost" href="#/hitlist">See the hit list</a>
+          <a class="btn ghost" href="#/series">Watch the series</a>
         </div>
       </div>
     </div>
@@ -71,11 +71,11 @@
             <div class="map-ui">
               <button id="zin" aria-label="Zoom in">+</button>
               <button id="zout" aria-label="Zoom out">−</button>
-              <button id="zall" aria-label="Show all of New England" title="Show all" style="font-size:15px">⤢</button>
+              <button id="zall" aria-label="Reset globe" title="Show all" style="font-size:15px">⤢</button>
             </div>
-            <div class="map-hint" id="mapHint">Drag to move · scroll or pinch to zoom</div>
+            <div class="map-hint" id="mapHint">Drag to spin · scroll or pinch to zoom</div>
             <div class="pop" id="pop" hidden></div>
-            <div class="soon" id="mapSoon" hidden><button class="x" aria-label="Hide this and explore the map">×</button><span class="eyebrow">COMING SOON</span><h3>Reviews are on the way</h3><p>Every place I review will be pinned here with a link to the video. Drag around New England while you wait.</p><div class="row"><a class="btn red" href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Follow for updates</a><a class="btn ghost" href="#/next">Suggest a spot</a></div></div>
+            <div class="soon" id="mapSoon" hidden><button class="x" aria-label="Hide this and explore the map">×</button><span class="eyebrow">COMING SOON</span><h3>Reviews are on the way</h3><p>Every place I review will be pinned here with a link to the video. Spin the globe while you wait.</p><div class="row"><a class="btn red" href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Follow for updates</a><a class="btn ghost" href="#/next">Suggest a spot</a></div></div>
           </div>
           <aside class="side">
             <div class="side-h"><strong id="inViewCount">Spots in this area</strong><small>Updates as you move the map</small></div>
@@ -88,7 +88,7 @@
       <div id="listPane" hidden>
         <div class="filters">
           <label>Search<input class="field" id="fq" type="search" placeholder="Name, town or dish"></label>
-          <label>State<select class="field" id="fst"><option value="">All states</option></select></label>
+          <label>Region<select class="field" id="fst"><option value="">All regions</option></select></label>
           <label>Food<select class="field" id="fcat"><option value="">All food</option></select></label>
           <label class="check"><input type="checkbox" id="fhit"> Hit list only</label>
         </div>
@@ -98,27 +98,16 @@
     </div>
   </section>
 
-  <section class="block" style="padding-top:0">
-    <div class="wrap">
-      <div class="head-row">
-        <div><h2 class="big">The hit list</h2><p class="lede">The places I'd drive two hours for. Start here.</p></div>
-        <a class="btn ghost" href="#/hitlist">All hit list spots</a>
-      </div>
-      <div class="hits" id="hitPreview"></div>
-    </div>
-  </section>
+  <section class="block" style="padding-top:0"><div class="wrap">
+    <div class="head-row"><div><h2 class="big">The series</h2><p class="lede">Donuts, pizza and sandwiches, one episode at a time.</p></div><a class="btn ghost" href="#/series">Browse the series</a></div>
+  </div></section>
 </div>
 
-<!-- ================= HIT LIST ================= -->
-<div data-view="hitlist" hidden>
+<div data-view="series" hidden>
   <section class="block"><div class="wrap">
-    <h2 class="big">The hit list</h2>
-    <p class="lede">My highest recommendations across New England. Filter by what you're craving or where you are.</p>
-    <div style="display:grid;gap:10px;margin:22px 0 26px">
-      <div class="chips" id="hlCats"></div>
-      <div class="chips" id="hlStates"></div>
-    </div>
-    <div class="hits" id="hitAll"></div>
+    <h1 class="big">The series</h1>
+    <p class="lede">Pick what you're craving and catch up on every episode.</p>
+    <div class="series-grid" id="seriesGrid"></div>
   </div></section>
 </div>
 
@@ -195,7 +184,7 @@
       <div>
         <div class="panel">
           <h3>Prefer email?</h3>
-          <p style="margin:0 0 12px">Management: <a href="mailto:kaseyfeasts@delmgmt.com">kaseyfeasts@delmgmt.com</a></p>
+          <p style="margin:0 0 12px">Email: <a href="mailto:kaseyfeasts@gmail.com">kaseyfeasts@gmail.com</a></p>
           <p class="note" style="margin:0">Review requests don't guarantee a post. If I go and love it, you'll know.</p>
         </div>
       </div>
@@ -224,7 +213,7 @@
         <div class="panel">
           <h3>How tips work</h3>
           <p style="margin:0 0 12px">Your tip goes straight to my inbox. I read every one, and the best ones end up in a video.</p>
-          <p style="margin:0">Rather write it yourself? Email <a href="mailto:kaseyfeasts@delmgmt.com?subject=Where%20should%20I%20go%20next%3F">kaseyfeasts@delmgmt.com</a>.</p>
+          <p style="margin:0">Rather write it yourself? Email <a href="mailto:kaseyfeasts@gmail.com?subject=Where%20should%20I%20go%20next%3F">kaseyfeasts@gmail.com</a>.</p>
         </div>
       </div>
     </div>
@@ -238,12 +227,12 @@
     <div>
       <h2>Say hi</h2>
       <p>Questions, tips, collabs or just want to talk donuts? Email me.</p>
-      <div class="news-soon"><span class="pill">NEWSLETTER COMING SOON</span><span>Want in? <a href="mailto:kaseyfeasts@delmgmt.com?subject=Add%20me%20to%20the%20newsletter">Email me</a> and I'll add you when it launches.</span></div>
+      <div class="news-soon"><span class="pill">NEWSLETTER COMING SOON</span><span>Want in? <a href="mailto:kaseyfeasts@gmail.com?subject=Add%20me%20to%20the%20newsletter">Email me</a> and I'll add you when it launches.</span></div>
     </div>
     <div class="mailbox">
-      <a class="mail-big" href="mailto:kaseyfeasts@delmgmt.com">kaseyfeasts@delmgmt.com</a>
+      <a class="mail-big" href="mailto:kaseyfeasts@gmail.com">kaseyfeasts@gmail.com</a>
       <div class="row">
-        <a class="btn" href="mailto:kaseyfeasts@delmgmt.com">✉ Email me</a>
+        <a class="btn" href="mailto:kaseyfeasts@gmail.com">✉ Email me</a>
         <button class="btn ghost" type="button" id="copyMail">Copy address</button>
       </div>
     </div>
@@ -253,11 +242,13 @@
 <footer>
   <div class="wrap">
     <div class="sign">LOVE YOU XOXO</div>
-    <div>Independent reviews, no paid praise · <a href="mailto:kaseyfeasts@delmgmt.com">kaseyfeasts@delmgmt.com</a> · Newsletter coming soon · <a href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Instagram</a></div>
+    <div>Independent reviews, no paid praise · <a href="mailto:kaseyfeasts@gmail.com">kaseyfeasts@gmail.com</a> · Newsletter coming soon · <a href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Instagram</a></div>
   </div>
 </footer>
+<script src="assets/d3.min.js"></script>
 <script src="data/map-data.js"></script>
 <script src="data/content.js"></script>
+<script src="data/series.js"></script>
 <script src="data/posts.js"></script>
 <script src="assets/app.js"></script>
 </body>

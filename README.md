@@ -18,18 +18,23 @@ To use your own domain (like kaseyfeasts.com), add it under **Settings → Pages
 | File | What it's for |
 |---|---|
 | `index.html` | Page structure: header, sections and forms |
-| `data/content.js` | **Edit this.** Places on the map and hit list, Instagram link |
+| `data/content.js` | **Edit this.** Places on the globe and directory, Instagram link |
+| `data/series.js` | **Edit this.** Video links for Donuts, Pizza and Sandwiches |
 | `data/posts.js` | **Edit this.** Blog posts |
 | `images/` | Photos for blog posts |
 | `assets/styles.css` | Colors, fonts and layout |
 | `assets/app.js` | Map, filters, page routing, forms, cartoon animation |
-| `data/map-data.js` | New England map outlines (no need to edit) |
+| `data/map-data.js` | Worldwide land outlines from Natural Earth (no need to edit) |
 | `assets/kasey-avatar.svg` | Your cartoon as a standalone image for social or merch |
 
 ## Adding a place
 
-Add a line to `SPOTS` in `data/content.js` (there's a commented example to copy). Until the first place is added, the map, list and hit list show "coming soon". To get coordinates, right-click the place in Google Maps and click the numbers to copy them (the first is `lat`, the second is `lng`). Add `video:"https://www.instagram.com/reel/..."` to link that spot's review video. Set `hit:true` to put it on the Hit List. There are no scores on the site.
+Add a line to `SPOTS` in `data/content.js` (there's a commented example to copy). Until the first place is added, the map and list show "coming soon". To get coordinates, right-click the place in Google Maps and click the numbers to copy them (the first is `lat`, the second is `lng`). Add `video:"https://www.instagram.com/reel/..."` to link that spot's review video. Set `hit:true` to mark a featured recommendation in the directory. There are no scores on the site.
 
+
+## Adding a Series episode
+
+Publish the video on your preferred platform. Then open `data/series.js` and add a `{ title: "...", url: "https://..." },` entry under Donuts, Pizza or Sandwiches. Use the public video link and keep the entries in viewing order.
 
 ## Writing a blog post
 
@@ -47,7 +52,7 @@ You can do this right on github.com, no software needed.
 
 ## Forms
 
-The Work With Me and Where Next forms open the visitor's email app with a message to kaseyfeasts@delmgmt.com, already filled in. No service or setup is needed. To change the address, edit `const MAIL` in `assets/app.js` and the email links in `index.html`.
+The Work With Me and Where Next forms open the visitor's email app with a message to kaseyfeasts@gmail.com, already filled in. No service or setup is needed. To change the address, edit `const MAIL` in `assets/app.js` and the email links in `index.html`.
 
 Later, if you'd rather have submissions send in the background (no email app needed), sign up for a form service like Formspree or Tally and replace the `openEmail(...)` calls in `assets/app.js` with a `fetch()` POST to the address they give you.
 
@@ -55,5 +60,5 @@ There's no newsletter yet. The site says "Newsletter coming soon," and the "Emai
 
 ## Notes
 
-- The map is custom-drawn SVG, not Google Maps. To switch to Google Maps or Mapbox later, keep the same `SPOTS` data and swap out the map section in `app.js`.
-- Pages use hash links (`#/hitlist`, `#/spot/brick-and-basil`), so they work on GitHub Pages without any server setup.
+- The globe uses bundled D3 and Natural Earth land data, so it needs no map API key.
+- Pages use hash links (`#/series`, `#/spot/brick-and-basil`), so they work on GitHub Pages without any server setup.
