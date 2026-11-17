@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-tilton-house-of-pizza",
+    "name": "Pepperoni Pizza",
+    "rating": 67.5,
+    "cat": "Pizza",
+    "sub": "New England Greek Style Pizza",
+    "spot": "tilton-house-of-pizza"
+  },
+  {
     "id": "pepperoni-pizza-joanie-s-pizza",
     "name": "Pepperoni Pizza",
     "rating": 87.5,
