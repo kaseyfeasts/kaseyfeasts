@@ -425,3 +425,71 @@ nav.main .dropmenu a:hover{background:var(--soft)}
 .foodcard .btn{justify-self:start}
 h1.big{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,40px);letter-spacing:-.005em}
 @media (max-width:960px){nav.main.open{z-index:80}header:has(nav.main.open) .switchbar{visibility:hidden}}
+
+/* ---------- landing: name only, centered ---------- */
+.rcard{align-items:center;justify-content:center;text-align:center;min-height:200px}
+.rcard h2{margin:0}
+@media (max-width:760px){.rcard{min-height:110px;padding:22px}}
+
+/* ---------- detailed map ---------- */
+#glmap{position:absolute;inset:0;z-index:1;display:none}
+.mapbox.is-detailed #glmap{display:block}
+.mapbox.is-detailed #map{display:none}
+.mapbox.is-detailed{cursor:auto;background:#EAE6DE}
+.map-top,.map-ui,.map-hint,.pop,.soon{z-index:5}
+.glmk{width:18px;height:18px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);padding:0;cursor:pointer}
+.glmk.hl,.glmk:hover{border-color:#161616;transform:scale(1.15)}
+.maplibregl-ctrl-attrib{font-size:11px}
+
+/* ---------- series ---------- */
+.series-list{display:grid;gap:12px;margin-top:26px}
+.series-row{display:grid;grid-template-columns:1fr auto auto;gap:16px;align-items:center;padding:20px 22px;border:1.5px solid var(--line);border-radius:18px;text-decoration:none;background:var(--card)}
+.series-row:hover{border-color:var(--text)}
+.sr-name{font-family:var(--display);font-size:clamp(16px,2vw,21px);line-height:1.25}
+.sr-count{color:var(--muted);font-weight:600;font-size:15px;white-space:nowrap}
+.sr-go{font-size:22px;font-weight:700}
+.series-title{max-width:22em}
+.big-eps{margin-top:24px;border-top:1.5px solid var(--line)}
+.big-eps li{padding:14px 0;gap:14px}
+.big-eps .ept a{font-size:18px}
+@media (max-width:620px){.series-row{grid-template-columns:1fr auto}.sr-count{grid-column:1;grid-row:2}.big-eps .badge{display:none}.big-eps li{flex-wrap:wrap}}
+
+/* ---------- multi-select filters ---------- */
+.rankfilters{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:22px 0 14px;align-items:end}
+.ms{position:relative;display:flex;flex-direction:column;gap:4px;min-width:0}
+.ms-label{font-size:13px;font-weight:600;color:var(--muted)}
+.ms-btn{text-align:left;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:30px;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23777' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center}
+.ms-panel{position:absolute;top:calc(100% + 6px);left:0;min-width:100%;width:max-content;max-width:min(320px,90vw);max-height:320px;overflow:auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.18);padding:6px;z-index:40}
+.ms:nth-last-child(-n+2) .ms-panel{left:auto;right:0}
+.ms-opt{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;cursor:pointer;font-size:15px}
+.ms-opt:hover{background:var(--soft)}
+.ms-opt input{width:18px;height:18px;accent-color:var(--sauce);flex:none}
+.ms-none{margin:8px 10px;color:var(--muted);font-size:14px}
+.ms-actions{position:sticky;bottom:-6px;display:flex;justify-content:space-between;gap:8px;padding:8px 6px 4px;background:var(--card);border-top:1px solid var(--line);margin-top:4px}
+.ms-actions button[data-act="clear"]{border:0;background:none;color:var(--muted);font-weight:600;cursor:pointer;text-decoration:underline}
+@media (max-width:900px){.rankfilters{grid-template-columns:1fr 1fr}.ms-panel{left:0;right:auto}.ms:nth-child(even) .ms-panel{left:auto;right:0}}
+
+/* ---------- footer social icons ---------- */
+.foot-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.soc{display:inline-flex;gap:4px;align-items:center}
+.soc a{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;color:#fff;text-decoration:none;font-size:18px}
+.soc a:hover{background:#2a2a2a}
+.soc svg{width:18px;height:18px}
+.soc-fb{font-size:12px;font-weight:700}
+.soc a:has(svg) .soc-fb{display:none}
+
+/* ---------- about ---------- */
+#aboutText p{font-size:19px;max-width:36em}
+.about-hero .policy{margin:22px 0 0}
+.rcard h2{font-size:clamp(20px,2.3vw,32px);white-space:nowrap}
+@media (max-width:760px){.rcard h2{font-size:clamp(20px,7vw,30px)}}
+#seriesMenu{min-width:290px}
+#seriesMenu a{white-space:normal;line-height:1.3}
+.rankfilters .field{height:48px}
+.rankfilters .ms-label{min-height:18px}
+/* score filter on the map */
+.map-top{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
+.map-cats{display:contents}
+.score-sel{appearance:none;-webkit-appearance:none;padding-right:30px;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23777' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 11px center;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.18);border-color:transparent}
+.filters{grid-template-columns:2fr repeat(5,1fr)}
+@media (max-width:900px){.filters{grid-template-columns:1fr 1fr}}

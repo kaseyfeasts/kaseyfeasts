@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kasey Feasts · New England, Hong Kong & beyond</title>
 <script>
-// Puts clean links like /newengland/blog back in the address bar after 404.html sends them here.
+// Puts clean links like /newengland/series back in the address bar after 404.html sends them here.
 (function(l){var m=l.search.match(/[?&]p=([^&]*)/);if(m){history.replaceState(null,"","/"+decodeURIComponent(m[1]).replace(/^\/+/,"")+l.hash);}})(location);
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Krona+One&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.0/dist/maplibre-gl.css">
 <link rel="stylesheet" href="/assets/styles.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍩</text></svg>">
 </head>
@@ -23,11 +24,11 @@
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
     <nav class="main" id="nav">
-      <a href="/newengland/series" data-path="/series" data-r="series">Series</a>
-      <div class="drop" id="rankDrop" data-r="rankings">
-        <button type="button" class="dropbtn" id="rankBtn" aria-expanded="false" aria-haspopup="true">Food Item Rankings <span aria-hidden="true">▾</span></button>
-        <div class="dropmenu" id="rankMenu"></div>
+      <div class="drop" id="seriesDrop" data-r="series">
+        <button type="button" class="dropbtn" id="seriesBtn" aria-expanded="false" aria-haspopup="true">Series <span aria-hidden="true">▾</span></button>
+        <div class="dropmenu" id="seriesMenu"></div>
       </div>
+      <a href="/newengland/rankings" data-path="/rankings" data-r="rankings">Food Item Rankings</a>
       <a href="/newengland/about" data-path="/about" data-r="about">About</a>
       <a href="/newengland/work" data-path="/work" data-r="work">Work with Me</a>
       <a href="/newengland/next" data-path="/next" data-r="next">Where Next?</a>
@@ -87,11 +88,15 @@
         <div class="mapgrid">
           <div class="mapbox" id="mapbox">
             <svg id="map" xmlns="http://www.w3.org/2000/svg"></svg>
-            <div class="map-top" id="mapCats"></div>
+            <div id="glmap" aria-label="Map of places I've been"></div>
+            <div class="map-top">
+              <select class="chip score-sel" id="mapScore" aria-label="Filter by score"><option value="">All scores</option><option>All-Star</option><option>Fantastic</option><option>Great</option><option>Very Good</option><option>Good</option></select>
+              <div class="map-cats" id="mapCats"></div>
+            </div>
             <div class="map-ui">
               <button id="zin" aria-label="Zoom in">+</button>
               <button id="zout" aria-label="Zoom out">−</button>
-              <button id="zall" aria-label="Reset globe" title="Show all" style="font-size:15px">⤢</button>
+              <button id="zall" aria-label="Fit all pins" title="Fit all pins" style="font-size:15px">⤢</button>
             </div>
             <div class="map-hint" id="mapHint">Drag to spin · scroll or pinch to zoom</div>
             <div class="pop" id="pop" hidden></div>
@@ -111,6 +116,7 @@
           <label>State / area<select class="field" id="fst"><option value="">All</option></select></label>
           <label>City / district<select class="field" id="fcity"><option value="">All</option></select></label>
           <label>Food<select class="field" id="fcat"><option value="">All food</option></select></label>
+          <label>Score<select class="field" id="fscore"><option value="">All scores</option></select></label>
           <label>Sort<select class="field" id="fsort"><option value="name">A to Z</option><option value="best">Best to worst</option></select></label>
         </div>
         <p class="count" id="fcount"></p>
@@ -120,16 +126,12 @@
   </section>
 
   <section class="block" style="padding-top:0"><div class="wrap">
-    <div class="head-row"><div><h2 class="big">The series</h2><p class="lede">Donuts, pizza and sandwiches, one episode at a time.</p></div><a class="btn ghost" href="/newengland/series" data-path="/series">Browse the series</a></div>
+    <div class="head-row"><div><h2 class="big">The series</h2><p class="lede" id="homeSeriesLede"></p></div><a class="btn ghost" href="/newengland/series" data-path="/series">Browse the series</a></div>
   </div></section>
 </div>
 
 <div data-view="series" hidden>
-  <section class="block"><div class="wrap">
-    <h1 class="big">The series</h1>
-    <p class="lede" id="seriesLede">Pick what you're craving and catch up on every episode.</p>
-    <div class="series-grid" id="seriesGrid"></div>
-  </div></section>
+  <section class="block"><div class="wrap" id="seriesBody"></div></section>
 </div>
 
 <!-- ================= FOOD ITEM RANKINGS ================= -->
@@ -142,10 +144,6 @@
   <section class="block" style="padding-top:0"><div class="wrap" id="spotBody"></div></section>
 </div>
 
-<!-- ================= BLOG ================= -->
-<div data-view="blog" hidden>
-  <section class="block"><div class="wrap" id="blogBody"></div></section>
-</div>
 
 <!-- ================= ABOUT ================= -->
 <div data-view="about" hidden>
@@ -154,18 +152,9 @@
       <div class="avbox" id="aboutAv"></div>
       <div>
         <h2 class="big">Hi, I'm Kasey.</h2>
-        <p>I drive around New England eating donuts, sandwiches and pizza, then tell you which ones are worth the trip. Massachusetts and New Hampshire are home base. Maine, Vermont, Rhode Island and Connecticut get visits whenever a tip sounds too good to ignore.</p>
-        <p>Every review is my own money and my own opinion. If a place isn't good, it doesn't make the map. If it's great, you'll hear about it, loudly.</p>
-        <div class="stat-line">
-          <span class="tag">41K followers on Instagram</span>
-          <span class="tag">New England · Hong Kong · Global</span>
-        </div>
+        <div id="aboutText"></div>
+        <div class="policy" id="aboutPolicy"></div>
       </div>
-    </div>
-    <div class="policy"><strong>No paid praise.</strong> Restaurants can't buy a review. Sponsored work is always labeled, and it never touches the map or the hit list.</div>
-    <div class="two">
-      <div class="panel"><h3>How I pick</h3><p style="margin:0">If it's on the map, I went, I paid, and I'd send a friend there. Each spot links to my video so you can see exactly what I ate and decide for yourself.</p></div>
-      <div class="panel"><h3>Got a tip?</h3><p style="margin:0 0 14px">Most of my best finds came from followers. Tell me where to go next.</p><a class="btn" href="/newengland/next" data-path="/next">Suggest a spot</a></div>
     </div>
   </div></section>
 </div>
@@ -174,14 +163,14 @@
 <div data-view="work" hidden>
   <section class="block"><div class="wrap">
     <h2 class="big">Work with me</h2>
-    <p class="lede">Brands, restaurants, students and fellow creators: here's how we can work together.</p>
+    <p class="lede">Brands, students and fellow creators: here's how we can work together.</p>
     <div class="two" style="margin:28px 0 36px">
       <div class="panel">
-        <h3>For brands and restaurants</h3>
+        <h3>For brands</h3>
         <ul>
           <li>Sponsored videos and posts, clearly labeled</li>
           <li>Event coverage and openings</li>
-          <li>Review requests (I'll come as a regular customer and pay my own bill)</li>
+          <li>Sponsorships</li>
         </ul>
       </div>
       <div class="panel">
@@ -200,7 +189,7 @@
           <label>Email<input class="field" name="email" type="email" required autocomplete="email"></label>
         </div>
         <div class="form-grid">
-          <label>I'm a…<select class="field" name="who"><option>Brand or agency</option><option>Restaurant</option><option>Student</option><option>Creator</option><option>Something else</option></select></label>
+          <label>I'm a…<select class="field" name="who"><option>Brand or agency</option><option>Student</option><option>Creator</option><option>Something else</option></select></label>
           <label>This is about…<select class="field" name="topic"><option>Partnership</option><option>Review request</option><option>Video editing</option><option>Content feedback</option><option>Something else</option></select></label>
         </div>
         <label>Message<textarea class="field" name="msg" required placeholder="What are you thinking? Include dates, budget or links if you have them."></textarea></label>
@@ -222,7 +211,7 @@
 <div data-view="next" hidden>
   <section class="block"><div class="wrap">
     <h2 class="big">Where should I go next?</h2>
-    <p class="lede">Send me your favorite donut shop, sub spot or pizza place. The best tips end up in a video.</p>
+    <p class="lede">Send me all your favorite spots. The best tips end up in a video.</p>
     <div class="two" style="margin-top:28px">
       <form class="stack" id="recForm">
         <div class="form-grid">
@@ -253,7 +242,6 @@
     <div>
       <h2>Say hi</h2>
       <p>Questions, tips, collabs or just want to talk donuts? Email me.</p>
-      <div class="news-soon"><span class="pill">NEWSLETTER COMING SOON</span><span>Want in? <a href="mailto:kaseyfeasts@gmail.com?subject=Add%20me%20to%20the%20newsletter">Email me</a> and I'll add you when it launches.</span></div>
     </div>
     <div class="mailbox">
       <a class="mail-big" href="mailto:kaseyfeasts@gmail.com">kaseyfeasts@gmail.com</a>
@@ -268,7 +256,14 @@
 <footer>
   <div class="wrap">
     <div class="sign">LOVE YOU XOXO</div>
-    <div>Independent reviews, no paid praise · <a href="mailto:kaseyfeasts@gmail.com">kaseyfeasts@gmail.com</a> · Newsletter coming soon · <a href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Instagram</a> · <a href="/newengland/blog" data-path="/blog">Blog</a></div>
+    <div class="foot-line">Independent reviews, no paid praise · <a href="mailto:kaseyfeasts@gmail.com">kaseyfeasts@gmail.com</a> ·
+      <span class="soc">
+        <a href="https://www.instagram.com/kaseyfeasts" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="soc-fb">IG</span></a>
+        <a href="https://www.tiktok.com/@kaseyfeasts" target="_blank" rel="noopener" aria-label="TikTok" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i><span class="soc-fb">TT</span></a>
+        <a href="https://www.facebook.com/p/KaseyFeasts-61573180673292/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i><span class="soc-fb">FB</span></a>
+        <a href="https://www.youtube.com/@kaseyfeasts" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span class="soc-fb">YT</span></a>
+      </span>
+    </div>
   </div>
 </footer>
 <script src="/assets/d3.min.js"></script>
@@ -278,7 +273,10 @@
 <script src="/data/lists.js"></script>
 <script src="/data/content.js"></script>
 <script src="/data/items.js"></script>
-<script src="/data/posts.js"></script>
+<script src="/data/series.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.0/dist/maplibre-gl.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/brands.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/fontawesome.min.js"></script>
 <script src="/assets/app.js"></script>
 </body>
 </html>

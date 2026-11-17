@@ -1,4 +1,3 @@
-/* ===================== DATA (sample — replace with real reviews) ===================== */
 /* ===================== FOOD ICONS ===================== */
 const ICON = {
  Donuts:`<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="40" fill="#D9964C"/><path d="M14 50c4-20 20-32 36-32s34 10 37 30c1 8-5 6-8 10-4 5-2 10-9 10-6 0-6-6-12-5-7 1-8 8-15 6-6-2-3-8-9-10-6-2-11 5-16 1-4-3-4-6-4-10z" fill="#E8679A"/><circle cx="50" cy="50" r="12" fill="var(--ph,#fff)"/><g stroke-width="4" stroke-linecap="round"><path d="M30 34l5 3" stroke="#fff"/><path d="M62 30l5-2" stroke="#E9A923"/><path d="M72 46l3 5" stroke="#5BC0EB"/><path d="M27 52l1 5" stroke="#E9A923"/><path d="M45 28l-4 3" stroke="#5BC0EB"/><path d="M64 62l5 2" stroke="#fff"/></g></svg>`,
@@ -183,13 +182,6 @@ const rItems=()=>ALL_ITEMS.filter(i=>inRegion(PLACE_BY_ID[i.spot]));
 const isEmpty=()=>rSpots().length===0;
 const P=(p="/")=>`/${region||"newengland"}${p}`;
 function go(url,replace){ history[replace?"replaceState":"pushState"](null,"",url); route(); }
-function sitePath(u){ // "/next" or "#/next" -> "/<region>/next"
-  if(/^#\//.test(u)) u=u.slice(1);
-  if(!/^\/(?!\/)/.test(u)) return u;
-  const first=u.split("/")[1]||"";
-  if(REGIONS[first]||["admin","images","assets","data"].includes(first)) return u;
-  return P(u);
-}
 async function copyText(text,btn){
   try{ await navigator.clipboard.writeText(text); }catch{ const t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select(); try{document.execCommand("copy")}catch{} t.remove(); }
   if(btn){ const o=btn.textContent; btn.textContent="Copied!"; setTimeout(()=>btn.textContent=o,1800); }
@@ -197,10 +189,12 @@ async function copyText(text,btn){
 document.addEventListener("click",e=>{ const b=e.target.closest("[data-copy]"); if(b){ e.preventDefault(); copyText(b.dataset.copy,b); } });
 const addrButtons = s => s.address?`<button class="btn ghost sm" type="button" data-copy="${esc(s.address)}">Copy address</button><a class="btn ghost sm" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.address)}" target="_blank" rel="noopener">Open in Maps</a>`:"";
 
-/* ===================== MAP ===================== */
+/* ===================== MAP (detailed street map, with a simple fallback) ===================== */
+// The detailed map uses MapLibre + OpenFreeMap tiles (MAP_STYLE in data/regions.js).
+// If that can't load (offline, blocked, or MAP_STYLE is ""), the simple built-in map is used.
 const NS="http://www.w3.org/2000/svg";
 const svg = $("#map"), box = $("#mapbox");
-const projection = d3.geoOrthographic();
+const projection = d3.geoMercator(); // flat map
 const path = d3.geoPath(projection);
 const mk=(cls)=>{const e=document.createElementNS(NS,"path");e.setAttribute("class",cls);return e};
 const ocean=mk("globe-ocean"), land=mk("globe-land"), dMask=mk("globe-mask"), dLand=mk("globe-detail"), dCoast=mk("globe-coast"), graticule=mk("globe-grid");
@@ -210,7 +204,9 @@ const grid = d3.geoGraticule10();
 svg.append(ocean,land,dMask,dLand,dCoast,graticule,gMk);
 const HAS_DETAIL = typeof DETAIL!=="undefined";
 
-let mapCat = null; // null = all food
+let engine="simple";       // "simple" or "detailed"
+let gl=null, glMarkers={};
+let mapCat = null;         // null = all food
 const mkEls = {};
 PLACES.forEach(s=>{
   const c=document.createElementNS(NS,"circle");
@@ -221,18 +217,30 @@ PLACES.forEach(s=>{
   c.addEventListener("pointerenter",()=>hl(s.id,true));c.addEventListener("pointerleave",()=>hl(s.id,false));
   gMk.appendChild(c);mkEls[s.id]=c;
 });
-const showsCat = s => !mapCat || s.foods.some(f=>f.cat===mapCat);
+let mapScore = ""; // "" = all scores
+const foodsFor = s => s.foods.filter(f=>!mapCat||f.cat===mapCat);
+const showsCat = s => foodsFor(s).length>0 && (!mapScore || foodsFor(s).some(f=>stampOf(f.rating)===mapScore));
+const markerColor = s => catColor(mapCat||(s.foods[0]||{}).cat);
 
 let longitude=-38, latitude=22, zoom=1, popSpot=null, raf=0;
-const clampZoom = value => Math.max(1, Math.min(900, value));
+const clampZoom = value => Math.max(0.4, Math.min(2000, value));
 function visible(s){
-  return inRegion(s) && d3.geoDistance([longitude,latitude],[s.lng,s.lat]) < Math.PI/2
-    && s.x>=0 && s.x<=box.clientWidth && s.y>=0 && s.y<=box.clientHeight;
+  if(!inRegion(s)) return false;
+  return s.x>=0 && s.x<=box.clientWidth && s.y>=0 && s.y<=box.clientHeight;
 }
 function draw(){
   const {clientWidth:w,clientHeight:h}=box;
   if(!w||!h)return;
-  projection.translate([w/2,h/2]).scale(Math.min(w,h)*.46*zoom).rotate([-longitude,-latitude]);
+  if(engine==="detailed"&&gl){
+    for(const s of PLACES){
+      const p=gl.project([s.lng,s.lat]); s.x=p.x; s.y=p.y;
+      const m=glMarkers[s.id]; if(!m) continue;
+      const el=m.getElement(); el.style.background=markerColor(s);
+      el.style.display=visible(s)&&showsCat(s)?"":"none";
+    }
+    placePop();updateSide();return;
+  }
+  projection.translate([w/2,h/2]).scale(Math.min(w,h)*.46*zoom).rotate([-longitude,0]).center([0,latitude]);
   svg.setAttribute("viewBox",`0 0 ${w} ${h}`);
   ocean.setAttribute("d",path(sphere));
   land.setAttribute("d",path(WORLD_LAND)||"");
@@ -245,13 +253,55 @@ function draw(){
     [s.x,s.y]=projection([s.lng,s.lat]);
     const c=mkEls[s.id];
     c.setAttribute("cx",s.x);c.setAttribute("cy",s.y);c.setAttribute("r",8);
-    c.setAttribute("fill",catColor(mapCat||(s.foods[0]||{}).cat));
+    c.setAttribute("fill",markerColor(s));
     c.style.display=visible(s)&&showsCat(s)?"":"none";
   }
   placePop();updateSide();
 }
 function render(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(draw); }
-function flyTo(lng,lat,level){ longitude=lng;latitude=lat;zoom=level;render(); }
+function flyTo(v,instant){ // v = [lng, lat, simpleZoom, detailedZoom]
+  const [lng,lat,z1,z2]=v;
+  if(engine==="detailed"&&gl){ (instant||REDUCED)?gl.jumpTo({center:[lng,lat],zoom:z2}):gl.flyTo({center:[lng,lat],zoom:z2,speed:1.6,essential:true}); return; }
+  longitude=lng;latitude=lat;zoom=z1;render();
+}
+function setProjectionForRegion(){
+  if(!(engine==="detailed"&&gl&&gl.setProjection)) return;
+  try{ gl.setProjection({type:"mercator"}); }catch(e){}
+}
+
+/* detailed map setup */
+function useSimple(){
+  engine="simple"; box.classList.remove("is-detailed");
+  if(gl){ try{gl.remove()}catch(e){} gl=null; glMarkers={}; }
+  render();
+}
+function startDetailed(){
+  if(typeof MAP_STYLE==="undefined"||!MAP_STYLE||!window.maplibregl) return;
+  let loaded=false;
+  try{
+    gl=new maplibregl.Map({container:"glmap",style:MAP_STYLE,center:[R().view[0],R().view[1]],zoom:R().view[3],minZoom:1,maxZoom:19,
+      attributionControl:{compact:true},dragRotate:false,pitchWithRotate:false,touchPitch:false,maxPitch:0,cooperativeGestures:false});
+  }catch(e){ gl=null; return; }
+  gl.touchZoomRotate.disableRotation();
+  const fail=()=>{ if(!loaded) useSimple(); };
+  const timer=setTimeout(fail,9000);
+  gl.on("error",fail);
+  gl.on("load",()=>{
+    loaded=true; clearTimeout(timer);
+    engine="detailed"; box.classList.add("is-detailed");
+    for(const s of PLACES){
+      const el=document.createElement("button");
+      el.type="button"; el.className="glmk"; el.setAttribute("aria-label",`${s.name}, ${where(s)}`);
+      el.addEventListener("click",e=>{e.stopPropagation();openPop(s)});
+      el.addEventListener("pointerenter",()=>hl(s.id,true));el.addEventListener("pointerleave",()=>hl(s.id,false));
+      glMarkers[s.id]=new maplibregl.Marker({element:el}).setLngLat([s.lng,s.lat]).addTo(gl);
+    }
+    setProjectionForRegion(); flyTo(R().view,true); render();
+  });
+  gl.on("move",render);
+  gl.on("movestart",e=>{ if(e.originalEvent){ pauseSpin(); $("#mapHint").hidden=true; } });
+  gl.on("click",()=>closePop());
+}
 
 /* slow spin for the Global globe */
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -262,60 +312,68 @@ function spinLoop(t){
   const homeShown=!$('[data-view="home"]').hidden && !$("#mapPane").hidden;
   if(homeShown && t>idleUntil && !popSpot && !pointers.size){
     const dt=spinLast?Math.min(t-spinLast,50):16;
-    longitude=((longitude+dt*0.004+180)%360+360)%360-180;
-    draw();
+    if(engine==="detailed"&&gl){
+      if(gl.getZoom()<3.2&&!gl.isMoving()){ const c=gl.getCenter(); gl.setCenter([((c.lng+dt*0.004+180)%360+360)%360-180,c.lat]); }
+    }else{
+      longitude=((longitude+dt*0.004+180)%360+360)%360-180; draw();
+    }
   }
   spinLast=t; requestAnimationFrame(spinLoop);
 }
 function setSpin(on){ const want=on&&!REDUCED; if(want&&!spinOn){spinOn=true;spinLast=0;requestAnimationFrame(spinLoop);} else if(!want) spinOn=false; }
 
+/* simple-map dragging and zooming */
 const pointers=new Map();
 let moved=false;
 box.addEventListener("pointerdown",e=>{
+  if(engine==="detailed") return;
   if(e.target.closest(".pop,.map-ui,.map-top,.soon"))return;
   if(!pointers.size)moved=false;
   pointers.set(e.pointerId,[e.clientX,e.clientY]);
   $("#mapHint").hidden=true; pauseSpin();
 });
 box.addEventListener("pointermove",e=>{
+  if(engine==="detailed") return;
   const previous=pointers.get(e.pointerId);
   if(!previous)return;
   const next=[e.clientX,e.clientY];
   const dx=next[0]-previous[0],dy=next[1]-previous[1];
   if(!moved&&Math.abs(dx)+Math.abs(dy)<4)return;
-  if(!moved){
-    moved=true;
-    box.classList.add("dragging");
-    for(const id of pointers.keys())box.setPointerCapture(id);
-  }
+  if(!moved){ moved=true; box.classList.add("dragging"); for(const id of pointers.keys())box.setPointerCapture(id); }
   const other=[...pointers].find(([id])=>id!==e.pointerId)?.[1];
   if(other){
     const before=Math.hypot(previous[0]-other[0],previous[1]-other[1]);
     const after=Math.hypot(next[0]-other[0],next[1]-other[1]);
     if(before&&after)zoom=clampZoom(zoom*after/before);
   }else{
-    const sensitivity=90/(Math.min(box.clientWidth,box.clientHeight)*.46*zoom);
-    longitude=((longitude-dx*sensitivity+180)%360+360)%360-180;
-    latitude=Math.max(-90,Math.min(90,latitude+dy*sensitivity));
+    const c=projection.invert([box.clientWidth/2-dx,box.clientHeight/2-dy]);
+    if(c){ longitude=((c[0]+180)%360+360)%360-180; latitude=Math.max(-80,Math.min(80,c[1])); }
   }
   pointers.set(e.pointerId,next); pauseSpin();
   closePop();render();
 });
-function endPointer(e){
-  pointers.delete(e.pointerId);
-  if(!pointers.size)box.classList.remove("dragging");
-}
+function endPointer(e){ pointers.delete(e.pointerId); if(!pointers.size)box.classList.remove("dragging"); }
 box.addEventListener("pointerup",endPointer);
 box.addEventListener("pointercancel",endPointer);
-box.addEventListener("click",e=>{
-  if(!moved&&!e.target.closest(".mk,.pop,.map-ui,.map-top,.soon"))closePop();
-});
-function zoomBy(factor){zoom=clampZoom(zoom*factor);pauseSpin();render()}
-box.addEventListener("wheel",e=>{e.preventDefault();zoomBy(Math.exp(-e.deltaY*.0016))},{passive:false});
+box.addEventListener("click",e=>{ if(engine==="simple"&&!moved&&!e.target.closest(".mk,.pop,.map-ui,.map-top,.soon"))closePop(); });
+function zoomBy(factor){
+  pauseSpin();
+  if(engine==="detailed"&&gl){ factor>1?gl.zoomIn():gl.zoomOut(); return; }
+  zoom=clampZoom(zoom*factor);render();
+}
+box.addEventListener("wheel",e=>{ if(engine==="detailed") return; e.preventDefault();zoomBy(Math.exp(-e.deltaY*.0016))},{passive:false});
 $("#zin").onclick=()=>zoomBy(1.6);
 $("#zout").onclick=()=>zoomBy(1/1.6);
-$("#zall").onclick=()=>{closePop();idleUntil=0;flyTo(...R().view)};
-$("#jumps").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;const j=R().jumps[b.dataset.j];closePop();pauseSpin(15000);flyTo(j[1],j[2],j[3])};
+$("#zall").onclick=()=>{ // fit all pins in this region
+  closePop(); const list=rSpots().filter(showsCat);
+  if(engine==="detailed"&&gl&&list.length){
+    if(list.length===1){ gl.flyTo({center:[list[0].lng,list[0].lat],zoom:14}); return; }
+    const b=new maplibregl.LngLatBounds(); list.forEach(s=>b.extend([s.lng,s.lat]));
+    gl.fitBounds(b,{padding:70,maxZoom:14,duration:REDUCED?0:900}); return;
+  }
+  flyTo(R().view);
+};
+$("#jumps").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;const j=R().jumps[b.dataset.j];closePop();pauseSpin(20000);flyTo(j.slice(1))};
 
 function fillMapCats(){
   const cats=[...new Set(rSpots().flatMap(s=>s.foods.map(f=>f.cat)))];
@@ -323,7 +381,9 @@ function fillMapCats(){
   mapCat=null;
   $("#mapCats").innerHTML=ordered.map(c=>`<button class="chip" aria-pressed="false" data-c="${esc(c)}"><span class="dot" style="background:${catColor(c)}"></span>${esc(c)}</button>`).join("");
   $("#mapCats").style.display=ordered.length?"":"none";
+  mapScore=""; $("#mapScore").value=""; $("#mapScore").style.display=rSpots().length?"":"none";
 }
+$("#mapScore").addEventListener("change",()=>{ mapScore=$("#mapScore").value; if(popSpot&&!showsCat(popSpot))closePop(); sideKey=null; render(); });
 $("#mapCats").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;
   const on=b.getAttribute("aria-pressed")==="true";
   $("#mapCats").querySelectorAll("[data-c]").forEach(x=>x.setAttribute("aria-pressed","false"));
@@ -332,12 +392,13 @@ $("#mapCats").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;
 
 const foodLine = s => s.foods.map(f=>`<span class="fl"><span class="dot" style="background:${catColor(f.cat)}"></span>${esc(f.cat)} ${stampHTML(f.rating,true)}</span>`).join("");
 function openPop(s){
-  popSpot=s; const p=$("#pop");
+  popSpot=s; pauseSpin(30000); const p=$("#pop");
   p.innerHTML=`<button class="x" aria-label="Close">×</button><h4>${esc(s.name)}</h4>
    <div class="meta">${esc(where(s))}</div>
    <div class="foods">${foodLine(s)}</div>
    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><a class="btn red sm" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch review</a><a class="btn ghost sm" href="${P('/spot/'+s.id)}">Details</a></div>`;
   p.hidden=false; p.querySelector(".x").onclick=closePop;
+  if(engine==="detailed"&&gl){ const pt=gl.project([s.lng,s.lat]); if(pt.y<230||pt.x<140||pt.x>box.clientWidth-140) gl.easeTo({center:[s.lng,s.lat],offset:[0,110],duration:REDUCED?0:500}); }
   render();
 }
 function closePop(){popSpot=null;$("#pop").hidden=true}
@@ -349,13 +410,13 @@ function placePop(){
   p.style.left=Math.max(half+6,Math.min(box.clientWidth-half-6,popSpot.x))+"px";
   p.style.top=Math.max(p.offsetHeight+24,popSpot.y-6)+"px";
 }
-function hl(id,on){ mkEls[id]?.classList.toggle("hl",on); document.querySelector(`#inView [data-id="${id}"]`)?.classList.toggle("hl",on); }
+function hl(id,on){ mkEls[id]?.classList.toggle("hl",on); glMarkers[id]?.getElement().classList.toggle("hl",on); document.querySelector(`#inView [data-id="${id}"]`)?.classList.toggle("hl",on); }
 
 let sideKey=null;
 function updateSide(){
   let inView=PLACES.filter(s=>showsCat(s)&&visible(s));
   inView.sort(mapCat?byRating(s=>foodRating(s,mapCat)):(a,b)=>a.name.localeCompare(b.name));
-  const key=region+":"+mapCat+":"+inView.map(s=>s.id).join();
+  const key=region+":"+mapCat+":"+mapScore+":"+inView.map(s=>s.id).join();
   if(key===sideKey)return; sideKey=key;
   const empty=isEmpty();
   $("#inViewCount").textContent=empty?"Places I've been":`${inView.length} ${inView.length===1?"spot":"spots"} in this area${mapCat?` · best ${mapCat.toLowerCase()} first`:""}`;
@@ -365,7 +426,7 @@ function updateSide(){
 $("#inView").addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b){pauseSpin(15000);openPop(PLACE_BY_ID[b.dataset.id])}});
 $("#inView").addEventListener("pointerover",e=>{const b=e.target.closest("[data-id]");if(b)hl(b.dataset.id,true)});
 $("#inView").addEventListener("pointerout",e=>{const b=e.target.closest("[data-id]");if(b)hl(b.dataset.id,false)});
-new ResizeObserver(()=>render()).observe(box);
+new ResizeObserver(()=>{ if(gl) gl.resize(); render(); }).observe(box);
 $("#mapSoon .x").onclick=()=>{$("#mapSoon").hidden=true;$("#mapHint").hidden=false};
 $("#mapSoon").addEventListener("pointerdown",e=>e.stopPropagation());
 
@@ -376,8 +437,8 @@ function fillListFilters(){
   const list=rSpots();
   $("#fst").innerHTML=opts(uniq(list.map(stateLabel)),"All");
   $("#fcity").innerHTML=opts(uniq(list.map(s=>s.city)),"All");
-  const cats=uniq(list.flatMap(s=>s.foods.map(f=>f.cat)));
-  $("#fcat").innerHTML=opts(cats,"All food");
+  $("#fcat").innerHTML=opts(uniq(list.flatMap(s=>s.foods.map(f=>f.cat))),"All food");
+  $("#fscore").innerHTML=opts(RATING_STAMPS.map(x=>x[1]),"All scores");
   $("#fst").closest("label").style.display=$("#fst").options.length>2?"":"none";
 }
 $("#fst").addEventListener("change",()=>{ const st=$("#fst").value; const list=rSpots().filter(s=>!st||stateLabel(s)===st); const cur=$("#fcity").value; $("#fcity").innerHTML=opts(uniq(list.map(s=>s.city)),"All"); if([...$("#fcity").options].some(o=>o.value===cur)) $("#fcity").value=cur; });
@@ -386,8 +447,9 @@ function renderList(){
   if(!list.length){ $("#listPane .filters").style.display="none"; $("#fcount").textContent="";
     rows.className="soon-block"; rows.innerHTML=`<h3>${esc(R().name)} reviews coming soon</h3><p>Every place I've been will be listed here, searchable by area and food, with a link to the review.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a>`; return; }
   $("#listPane .filters").style.display=""; rows.className="rows";
-  const q=$("#fq").value.trim().toLowerCase(), st=$("#fst").value, city=$("#fcity").value, c=$("#fcat").value, sort=$("#fsort").value;
-  let r=list.filter(s=>(!q||[s.name,s.city,s.state,s.country,...s.foods.map(f=>f.cat)].join(" ").toLowerCase().includes(q))&&(!st||stateLabel(s)===st)&&(!city||s.city===city)&&(!c||s.foods.some(f=>f.cat===c)));
+  const q=$("#fq").value.trim().toLowerCase(), st=$("#fst").value, city=$("#fcity").value, c=$("#fcat").value, sort=$("#fsort").value, sc=$("#fscore").value;
+  let r=list.filter(s=>(!q||[s.name,s.city,s.state,s.country,...s.foods.map(f=>f.cat)].join(" ").toLowerCase().includes(q))&&(!st||stateLabel(s)===st)&&(!city||s.city===city)&&(!c||s.foods.some(f=>f.cat===c))
+    &&(!sc||s.foods.some(f=>(!c||f.cat===c)&&stampOf(f.rating)===sc)));
   r.sort(sort==="best"?byRating(s=>c?foodRating(s,c):+(bestFood(s)||{}).rating):(a,b)=>a.name.localeCompare(b.name));
   $("#fcount").textContent=`${r.length} of ${list.length} places`+(sort==="best"?(c?` · best ${c.toLowerCase()} first`:" · best first"):"");
   rows.innerHTML=r.length?r.map(s=>rowHTML(s,c)).join("")
@@ -395,74 +457,117 @@ function renderList(){
 }
 const rowHTML = (s,cat) => { const f=cat?s.foods.find(f=>f.cat===cat):bestFood(s);
   return `<a class="rowi" href="${P('/spot/'+s.id)}">${badge(f?f.cat:"")}<span><span class="nm">${esc(s.name)}</span><br><span class="tw">${esc(where(s))} · ${esc(s.foods.map(f=>f.cat).join(", "))}</span></span><span class="rowstamp">${f?stampHTML(f.rating,true):""}</span></a>`; };
-["fq","fst","fcity","fcat","fsort"].forEach(id=>$("#"+id).addEventListener("input",renderList));
+["fq","fst","fcity","fcat","fscore","fsort"].forEach(id=>$("#"+id).addEventListener("input",renderList));
 function tab(which){
   $("#tabMap").setAttribute("aria-selected",which==="map");$("#tabList").setAttribute("aria-selected",which==="list");
-  $("#mapPane").hidden=which!=="map";$("#listPane").hidden=which!=="list"; if(which==="map")render();
+  $("#mapPane").hidden=which!=="map";$("#listPane").hidden=which!=="list"; if(which==="map"){ if(gl) gl.resize(); render(); }
 }
 $("#tabMap").onclick=()=>tab("map");$("#tabList").onclick=()=>tab("list");
 
-/* ===================== SERIES (built from the admin's series boxes) ===================== */
-function renderSeries(){
-  const groups={};
-  for(const s of rSpots()) for(const f of s.foods) if(f.series) (groups[f.cat]=groups[f.cat]||[]).push({s,f});
-  const names=[...FOOD_CATEGORIES.filter(c=>groups[c]),...Object.keys(groups).filter(c=>!FOOD_CATEGORIES.includes(c))];
-  $("#seriesLede").textContent=`Pick what you're craving and catch up on every ${R().name} episode.`;
-  $("#seriesGrid").innerHTML=names.length?names.map(cat=>{
-    const eps=groups[cat].sort((a,b)=>(+a.f.ep||999)-(+b.f.ep||999)||a.s.name.localeCompare(b.s.name));
-    return `<section class="series-card">
-    <div class="series-art" style="background:${BG[cat]||"var(--soft)"}">${ICON[cat]?art(cat):`<span class="series-letter">${esc(cat.slice(0,1))}</span>`}</div>
-    <div class="series-body"><h2>${esc(cat)}</h2><ol class="eps">${eps.map(({s,f})=>`<li><span class="epn">${f.ep?"Ep "+esc(f.ep):"Ep"}</span><span class="ept"><a href="${P('/spot/'+s.id)}">${esc(s.name)}</a><small>${esc(where(s))}</small></span>${f.video?`<a class="btn ghost sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch</a>`:""}</li>`).join("")}</ol></div>
-  </section>`;
-  }).join(""):`<div class="soon-block" style="grid-column:1/-1"><h3>${esc(R().name)} series coming soon</h3><p>New episodes will show up here as they drop.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a></div>`;
+/* ===================== SERIES (named series, episodes set in the admin) ===================== */
+const ALL_SERIES = typeof SERIES!=="undefined"&&Array.isArray(SERIES)?SERIES:[];
+const seriesInRegion = () => ALL_SERIES.filter(x=>region==="global"||x.region===region);
+function episodesOf(id){
+  const eps=[];
+  for(const s of rSpots()) for(const f of s.foods) if(f.series===id) eps.push({s,f});
+  return eps.sort((a,b)=>(+a.f.ep||9999)-(+b.f.ep||9999)||a.s.name.localeCompare(b.s.name));
+}
+function fillSeriesMenu(){
+  const list=seriesInRegion();
+  $("#seriesMenu").innerHTML=`<a href="${P('/series')}">All series</a>`+list.map(x=>`<a href="${P('/series/'+x.id)}">${esc(x.name)}</a>`).join("");
+}
+function renderSeries(id){
+  const list=seriesInRegion(), el=$("#seriesBody");
+  const one=id&&list.find(x=>x.id===id);
+  if(one){
+    const eps=episodesOf(one.id);
+    el.innerHTML=`<a class="back" href="${P('/series')}">‹ All series</a><h1 class="big series-title">${esc(one.name)}</h1>
+      <p class="lede">${eps.length?`${eps.length} ${eps.length===1?"episode":"episodes"} so far, in order.`:"Episodes are on the way."}</p>
+      ${eps.length?`<ol class="eps big-eps">${eps.map(({s,f})=>`<li><span class="epn">${f.ep?"Ep "+esc(f.ep):"Ep"}</span>${badge(f.cat)}<span class="ept"><a href="${P('/spot/'+s.id)}">${esc(s.name)}</a><small>${esc(where(s))} · ${esc(f.cat)}</small></span>${stampHTML(f.rating,true)}${f.video?`<a class="btn ghost sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch</a>`:""}</li>`).join("")}</ol>`
+        :`<div class="soon-block"><h3>Episodes coming soon</h3><p>New episodes of ${esc(one.name)} will show up here as they drop.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a></div>`}`;
+    document.title=`${one.name} · Kasey Feasts`; return;
+  }
+  el.innerHTML=`<h1 class="big">The series</h1><p class="lede">Every ${esc(R().name)} series, one episode at a time.</p>
+    <div class="series-list">${list.map(x=>{const n=episodesOf(x.id).length;return `<a class="series-row" href="${P('/series/'+x.id)}"><span class="sr-name">${esc(x.name)}</span><span class="sr-count">${n?`${n} ${n===1?"episode":"episodes"}`:"Coming soon"}</span><span class="sr-go" aria-hidden="true">→</span></a>`}).join("")}</div>`;
 }
 
-/* ===================== FOOD ITEM RANKINGS ===================== */
+/* ===================== FOOD ITEM RANKINGS (multi-select filters) ===================== */
+const RF={cat:new Set(),sub:new Set(),country:new Set(),state:new Set(),city:new Set()};
 const itemCats = () => [...new Set([...Object.keys(ITEM_CATEGORIES),...rItems().map(i=>i.cat)])].filter(Boolean);
-function fillRankMenu(){
-  $("#rankMenu").innerHTML=`<a href="${P('/rankings')}">All items</a>`+itemCats().map(c=>`<a href="${P('/rankings/'+slugify(c))}">${esc(c)}</a>`).join("");
+function msHTML(key,label){ return `<div class="ms" data-ms="${key}"><span class="ms-label">${label}</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>`; }
+function msSet(key,options,allText){
+  const box=document.querySelector(`.ms[data-ms="${key}"]`); if(!box) return;
+  const sel=RF[key]; [...sel].forEach(v=>{ if(!options.includes(v)) sel.delete(v); });
+  box.dataset.all=allText;
+  box.querySelector(".ms-panel").innerHTML=(options.length?options.map(o=>`<label class="ms-opt"><input type="checkbox" value="${esc(o)}" ${sel.has(o)?"checked":""}><span>${esc(o)}</span></label>`).join(""):`<p class="ms-none">Nothing to pick yet</p>`)
+    +`<div class="ms-actions"><button type="button" data-act="clear">Clear</button><button type="button" data-act="done" class="btn sm">Done</button></div>`;
+  msSummary(key);
 }
+function msSummary(key){
+  const box=document.querySelector(`.ms[data-ms="${key}"]`), sel=[...RF[key]];
+  box.querySelector(".ms-btn").textContent=!sel.length?box.dataset.all:sel.length<=2?sel.join(", "):`${sel.length} selected`;
+}
+function closeMs(except){ document.querySelectorAll(".ms[data-ms]").forEach(m=>{ if(m!==except){ m.querySelector(".ms-panel").hidden=true; m.querySelector(".ms-btn").setAttribute("aria-expanded","false"); } }); }
 function renderRankings(catSlug){
-  const cats=itemCats(); const cat=catSlug?cats.find(c=>slugify(c)===catSlug)||"":"";
-  const items=rItems();
   const el=$("#rankBody");
-  if(!el.dataset.ready||el.dataset.region!==region){
-    el.dataset.ready="1"; el.dataset.region=region;
+  if(!el.dataset.ready){
+    el.dataset.ready="1";
     el.innerHTML=`<h1 class="big">Food item rankings</h1>
       <p class="lede" id="rankLede"></p>
-      <div class="filters rankfilters">
-        <label>Food<select class="field" id="rcat"></select></label>
-        <label>Type<select class="field" id="rsub"></select></label>
-        <label>State / area<select class="field" id="rst"></select></label>
-        <label>City / district<select class="field" id="rcity"></select></label>
-        <label>Show<select class="field" id="rtop"><option value="5">Top 5</option><option value="10">Top 10</option><option value="0" selected>All</option></select></label>
-      </div>
+      <div class="rankfilters">${msHTML("cat","Food")}${msHTML("sub","Type")}${msHTML("country","Country")}${msHTML("state","State / area")}${msHTML("city","City / district")}
+        <label class="ms"><span class="ms-label">Show</span><select class="field" id="rtop"><option value="5">Top 5</option><option value="10">Top 10</option><option value="25">Top 25</option><option value="0" selected>All</option></select></label></div>
       <p class="count" id="rcount"></p><ol class="ranklist" id="rlist"></ol>`;
-    ["rcat","rsub","rst","rcity","rtop"].forEach(id=>$("#"+id).addEventListener("input",e=>{
-      if(id==="rcat"){ const c=$("#rcat").value; history.replaceState(null,"",P(c?"/rankings/"+slugify(c):"/rankings")); fillSub(); }
-      if(id==="rst") fillCity();
-      drawRank();
-    }));
+    el.addEventListener("click",e=>{
+      const btn=e.target.closest(".ms-btn"); const ms=e.target.closest(".ms[data-ms]");
+      if(btn){ const p=ms.querySelector(".ms-panel"); const open=p.hidden; closeMs(ms); p.hidden=!open; btn.setAttribute("aria-expanded",open); return; }
+      const act=e.target.closest("[data-act]");
+      if(act&&ms){ if(act.dataset.act==="clear"){ RF[ms.dataset.ms].clear(); ms.querySelectorAll("input").forEach(i=>i.checked=false); onRankChange(ms.dataset.ms); } else closeMs(); }
+    });
+    el.addEventListener("change",e=>{
+      const cb=e.target.closest('.ms-panel input[type="checkbox"]');
+      if(cb){ const key=cb.closest(".ms").dataset.ms; cb.checked?RF[key].add(cb.value):RF[key].delete(cb.value); onRankChange(key); }
+    });
+    $("#rtop").addEventListener("input",drawRank);
+    document.addEventListener("click",e=>{ if(!e.target.closest(".ms")) closeMs(); });
   }
-  $("#rankLede").textContent=`Every ${R().name} item I've ranked, best first. Filter down to find, say, the five best glazed donuts in one state.`;
-  $("#rcat").innerHTML=opts(cats,"All food"); $("#rcat").value=cat;
-  const st=uniq(items.map(i=>stateLabel(PLACE_BY_ID[i.spot])));
-  $("#rst").innerHTML=opts(st,"Everywhere"); $("#rst").closest("label").style.display=st.length>1?"":"none";
-  fillSub(); fillCity(); drawRank();
+  if(el.dataset.region!==region){ el.dataset.region=region; Object.values(RF).forEach(s=>s.clear()); }
+  const cats=itemCats();
+  if(catSlug!==undefined){ RF.cat.clear(); const c=cats.find(c=>slugify(c)===catSlug); if(c) RF.cat.add(c); }
+  $("#rankLede").textContent=`Every ${R().name} item I've ranked, best first. Tick as many boxes as you like, for example glazed donuts in NH, MA and ME.`;
+  refreshRankFilters(); drawRank();
 }
-function fillSub(){
-  const c=$("#rcat").value, items=rItems().filter(i=>!c||i.cat===c);
-  const subs=c?[...(ITEM_CATEGORIES[c]||[]),...items.map(i=>i.sub)]:items.map(i=>i.sub);
-  $("#rsub").innerHTML=opts([...new Set(subs.filter(Boolean))],"All types");
+function onRankChange(key){
+  if(key==="cat"){ const c=[...RF.cat]; history.replaceState(null,"",P(c.length===1?"/rankings/"+slugify(c[0]):"/rankings")); }
+  msSummary(key); refreshRankFilters(key); drawRank();
 }
-function fillCity(){
-  const st=$("#rst").value;
-  $("#rcity").innerHTML=opts(uniq(rItems().map(i=>PLACE_BY_ID[i.spot]).filter(s=>!st||stateLabel(s)===st).map(s=>s.city)),"All");
+// Filters always show, using the dropdown lists in data/lists.js plus anything in the data.
+const ordered = (base,extra) => [...base,...uniq(extra).filter(x=>!base.includes(x))];
+function regionStates(countries){
+  if(region==="newengland") return NEW_ENGLAND_STATES;
+  if(region==="hongkong") return STATES["Hong Kong"]||[];
+  const cs=countries.length?countries:["United States","Hong Kong"];
+  return cs.flatMap(c=>STATES[c]||[]);
+}
+function refreshRankFilters(changed){
+  const items=rItems(), spotOf=i=>PLACE_BY_ID[i.spot];
+  if(changed!=="cat") msSet("cat",itemCats(),"All food");
+  const byCat=items.filter(i=>!RF.cat.size||RF.cat.has(i.cat));
+  const subBase=(RF.cat.size?[...RF.cat]:itemCats()).flatMap(c=>ITEM_CATEGORIES[c]||[]);
+  if(changed!=="sub") msSet("sub",ordered([...new Set(subBase)],byCat.map(i=>i.sub)),"All types");
+  const isGlobal=region==="global";
+  if(changed!=="country") msSet("country",ordered(["United States","Hong Kong"],items.map(i=>spotOf(i).country)),"All countries");
+  document.querySelector('.ms[data-ms="country"]').style.display=isGlobal?"":"none";
+  const byCountry=items.filter(i=>!RF.country.size||RF.country.has(spotOf(i).country));
+  const stateBase=regionStates(isGlobal?[...RF.country]:[]);
+  if(changed!=="state") msSet("state",ordered(stateBase,byCountry.map(i=>spotOf(i).state)),"All");
+  const byState=byCountry.filter(i=>!RF.state.size||RF.state.has(spotOf(i).state));
+  const cityBase=(RF.state.size?[...RF.state]:stateBase).flatMap(st=>CITIES[st]||[]);
+  if(changed!=="city") msSet("city",ordered([...new Set(cityBase)],byState.map(i=>spotOf(i).city)),"All");
 }
 function drawRank(){
-  const c=$("#rcat").value, sub=$("#rsub").value, st=$("#rst").value, city=$("#rcity").value, top=+$("#rtop").value;
-  const all=rItems();
-  let r=all.filter(i=>{const s=PLACE_BY_ID[i.spot];return (!c||i.cat===c)&&(!sub||i.sub===sub)&&(!st||stateLabel(s)===st)&&(!city||s.city===city)});
+  const top=+$("#rtop").value, all=rItems();
+  let r=all.filter(i=>{const s=PLACE_BY_ID[i.spot];
+    return (!RF.cat.size||RF.cat.has(i.cat))&&(!RF.sub.size||RF.sub.has(i.sub))&&(!RF.country.size||RF.country.has(s.country))&&(!RF.state.size||RF.state.has(s.state))&&(!RF.city.size||RF.city.has(s.city));});
   r.sort(byRating(i=>+i.rating));
   const shown=top?r.slice(0,top):r;
   $("#rcount").textContent=all.length?`${shown.length} of ${r.length} ${r.length===1?"item":"items"}`:"";
@@ -475,6 +580,7 @@ function drawRank(){
 }
 
 /* ===================== SPOT PAGE ===================== */
+const seriesName = id => (ALL_SERIES.find(x=>x.id===id)||{}).name;
 function renderSpot(id){
   const s=PLACE_BY_ID[id]; const el=$("#spotBody");
   if(!s){el.innerHTML=`<a class="back" href="${P('/')}">‹ Back to the map</a><p>That spot isn't on the map. <a href="${P('/')}">See all spots</a>.</p>`;return}
@@ -486,7 +592,7 @@ function renderSpot(id){
    <div class="spot-grid">
      <div class="vid"><div class="art">${main&&ICON[main.cat]?art(main.cat,"#161616"):""}</div><div class="cap">My ${esc(s.name)} review</div><a class="btn" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch the review</a></div>
      <div>
-       <div class="foodcards">${s.foods.map(f=>`<div class="foodcard"><div class="fc-top">${badge(f.cat)}<div><h3>${esc(f.cat)}</h3>${f.series?`<small>${f.ep?"Episode "+esc(f.ep)+" of the ":"Part of the "}<a href="${P('/series')}">${esc(f.cat)} series</a></small>`:""}</div>${stampHTML(f.rating)}</div>${f.video?`<a class="btn red sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch the ${esc(f.cat.toLowerCase())} review</a>`:""}</div>`).join("")}</div>
+       <div class="foodcards">${s.foods.map(f=>{const sn=seriesName(f.series);return `<div class="foodcard"><div class="fc-top">${badge(f.cat)}<div><h3>${esc(f.cat)}</h3>${sn?`<small>${f.ep?"Episode "+esc(f.ep)+" of ":"Part of "}<a href="${P('/series/'+f.series)}">${esc(sn)}</a></small>`:""}</div>${stampHTML(f.rating)}</div>${f.video?`<a class="btn red sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch the ${esc(f.cat.toLowerCase())} review</a>`:""}</div>`}).join("")}</div>
        ${here.length?`<h3 class="sub">What I've ranked here</h3><ol class="ranklist compact">${here.map(i=>`<li class="rank"><span class="ri"><span class="nm">${esc(i.name)}</span><span class="tw">${esc(i.sub?i.cat+" · "+i.sub:i.cat)}</span></span><span class="ra">${stampHTML(i.rating,true)}</span></li>`).join("")}</ol>`:""}
        ${s.address?`<h3 class="sub">Address</h3><p class="addr">${esc(s.address)}</p>`:""}
        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px">${addrButtons(s)||`<a class="btn ghost" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name+" "+where(s))}" target="_blank" rel="noopener">Open in Maps</a>`}</div>
@@ -496,46 +602,18 @@ function renderSpot(id){
   document.title=`${s.name} · Kasey Feasts`;
 }
 
-/* ===================== BLOG ===================== */
-function mdInline(t){
-  return esc(t)
-    .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,(m,alt,u)=>`<img src="${/^(https?:|\/)/.test(u)?u:"/"+u}" alt="${alt}" loading="lazy">`)
-    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,(m,txt,u)=>`<a href="${sitePath(u)}"${/^https?:/.test(u)?' target="_blank" rel="noopener"':''}>${txt}</a>`)
-    .replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>")
-    .replace(/\*([^*]+)\*/g,"<em>$1</em>");
-}
-function md(text){
-  return String(text).trim().split(/\n\s*\n/).map(block=>{
-    const b=block.trim(), lines=b.split("\n");
-    if(b.startsWith("## ")) return `<h2>${mdInline(b.slice(3))}</h2>`;
-    if(lines.every(l=>/^\s*-\s+/.test(l))) return `<ul>${lines.map(l=>`<li>${mdInline(l.replace(/^\s*-\s+/,""))}</li>`).join("")}</ul>`;
-    if(/^!\[[^\]]*\]\([^)]+\)$/.test(b)) return `<figure>${mdInline(b)}</figure>`;
-    return `<p>${mdInline(lines.join(" "))}</p>`;
-  }).join("");
-}
-const fmt=d=>new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
-const postInRegion=p=>{const r=p.region||"all"; return region==="global"||r==="all"||r===region||(Array.isArray(r)&&r.includes(region));};
-function renderBlog(slug){
-  const el=$("#blogBody"); const all=[...POSTS].sort((a,b)=>b.date.localeCompare(a.date));
-  const posts=all.filter(postInRegion);
-  const p=slug&&all.find(x=>x.slug===slug);
-  if(slug&&!p){el.innerHTML=`<a class="back" href="${P('/blog')}">‹ All posts</a><p>That post doesn't exist. <a href="${P('/blog')}">See all posts</a>.</p>`;return}
-  if(p){
-    const body=Array.isArray(p.body)?p.body.join("\n\n"):p.body;
-    el.innerHTML=`<a class="back" href="${P('/blog')}">‹ All posts</a><article class="post"><time>${fmt(p.date)}</time><h1>${esc(p.title)}</h1>${md(body)}<p class="signoff">Love you, XOXO</p></article>`;
-    document.title=`${p.title} · Kasey Feasts`; return;
-  }
-  el.innerHTML=`<h2 class="big">${esc(R().name)} blog</h2><p class="lede">Longer takes, road trips and news from the road.</p>`+(posts.length?`<div class="posts" style="margin-top:26px">${posts.map(p=>`<a class="post-row" href="${P('/blog/'+p.slug)}"><time>${fmt(p.date)}</time><div><h3>${esc(p.title)}</h3><p>${esc(p.excerpt||p.ex||"")}</p></div></a>`).join("")}</div>`:`<div class="soon-block" style="margin-top:26px"><h3>Posts coming soon</h3><p>${esc(R().name)} stories will show up here.</p></div>`);
+/* ===================== ABOUT (one per region) ===================== */
+function renderAbout(){
+  $("#aboutText").innerHTML=R().about.map(p=>`<p>${esc(p)}</p>`).join("");
+  $("#aboutPolicy").innerHTML=`<strong>No paid praise.</strong> ${esc(ABOUT_POLICY)}`;
 }
 
 /* ===================== LANDING + SWITCHER ===================== */
-$("#regionCards").innerHTML=REGION_ORDER.map(k=>{const r=REGIONS[k];return `<a class="rcard" href="/${k}/" style="--c:${r.color};--i:${r.text}">
-  <span class="co">${esc(r.coords)}</span><span class="go" aria-hidden="true">→</span>
-  <h2>${esc(r.name.toUpperCase())}</h2><p>${esc(r.tagline)}</p></a>`}).join("");
+$("#regionCards").innerHTML=REGION_ORDER.map(k=>{const r=REGIONS[k];return `<a class="rcard" href="/${k}/" style="--c:${r.color};--i:${r.text}"><h2>${esc(r.name.toUpperCase())}</h2></a>`}).join("");
 $("#switchBubbles").innerHTML=REGION_ORDER.map(k=>`<a class="sbub" data-region="${k}" href="/${k}/" style="--c:${REGIONS[k].color};--i:${REGIONS[k].text}">${esc(REGIONS[k].name)}</a>`).join("");
 
 /* ===================== ROUTER ===================== */
-const TITLES={home:"",series:"Series",rankings:"Food Item Rankings",blog:"Blog",about:"About",work:"Work with Me",next:"Where Next?"};
+const TITLES={home:"",series:"Series",rankings:"Food Item Rankings",about:"About",work:"Work with Me",next:"Where Next?"};
 function applyRegion(r){
   if(region===r) return;
   region=r; const cfg=R();
@@ -549,8 +627,9 @@ function applyRegion(r){
   $("#mapSoonText").textContent=`Every place I review${r==="global"?"":" in "+cfg.name} will be pinned here with a link to the video. ${cfg.spin?"Watch the globe spin":"Look around"} while you wait.`;
   $(".side-h small").textContent=empty?"Jump to an area":"Updates as you move the map";
   $("#dirLede").textContent=empty?`The map is ready. The ${cfg.name} pins are coming soon, each linked to my review.`:"Drag the map to your area, then tap a dot to watch my review.";
-  $("#fq").value=""; $("#fsort").value="name"; fillMapCats(); fillListFilters(); renderList(); renderSeries(); fillRankMenu();
-  closePop(); sideKey=null; idleUntil=0; flyTo(...cfg.view); setSpin(!!cfg.spin);
+  $("#homeSeriesLede").textContent=seriesInRegion().map(x=>x.name).join(" · ");
+  $("#fq").value=""; $("#fsort").value="name"; fillMapCats(); fillListFilters(); renderList(); fillSeriesMenu(); renderAbout();
+  closePop(); sideKey=null; idleUntil=0; setProjectionForRegion(); flyTo(cfg.view,true); setSpin(!!cfg.spin);
 }
 function route(){
   const segs=location.pathname.split("/").filter(Boolean);
@@ -559,7 +638,7 @@ function route(){
   if(landing && segs.length){ history.replaceState(null,"","/"); }
   let v=landing?"landing":(segs[1]||"home"); const arg=segs[2];
   if(v==="hitlist") v="rankings";
-  if(!landing&&!["home","series","rankings","spot","blog","about","work","next"].includes(v)) v="home";
+  if(!landing&&!["home","series","rankings","spot","about","work","next"].includes(v)){ history.replaceState(null,"",P("/")); v="home"; }
   if(r) applyRegion(r); else setSpin(false);
   // a restaurant opened from a region it isn't part of moves to its own region
   if(v==="spot"){ const s=PLACE_BY_ID[arg]; if(s&&!inRegion(s)){ const home=s.country==="Hong Kong"?"hongkong":s.ne?"newengland":"global"; history.replaceState(null,"",`/${home}/spot/${s.id}`); return route(); } }
@@ -572,22 +651,22 @@ function route(){
   const cur=document.querySelector(`nav.main [data-r="${v}"]`); if(cur&&!landing) cur.setAttribute("aria-current","page");
   document.title=landing?"Kasey Feasts · New England, Hong Kong & beyond":`${TITLES[v]?TITLES[v]+" · ":""}Kasey Feasts ${R().name}`;
   if(v==="spot") renderSpot(arg);
-  if(v==="blog") renderBlog(arg);
+  if(v==="series") renderSeries(arg);
   if(v==="rankings") renderRankings(arg);
-  if(v==="home") { closePop(); render(); }
+  if(v==="home") { closePop(); if(gl) gl.resize(); render(); }
   closeMenus();
   window.scrollTo(0,0);
 }
-function closeMenus(){ $("#nav").classList.remove("open"); $("#menuBtn").setAttribute("aria-expanded","false"); $("#rankDrop").classList.remove("open"); $("#rankBtn").setAttribute("aria-expanded","false"); }
+function closeMenus(){ $("#nav").classList.remove("open"); $("#menuBtn").setAttribute("aria-expanded","false"); $("#seriesDrop").classList.remove("open"); $("#seriesBtn").setAttribute("aria-expanded","false"); }
 addEventListener("popstate",route);
-// Old links like kaseyfeasts.com/#/blog/welcome go to the New England version.
+// Old links like kaseyfeasts.com/#/series go to the New England version.
 if(/^#\/./.test(location.hash)||location.hash==="#/"){
-  let old=location.hash.slice(1).replace(/^\/hitlist/,"/rankings");
+  let old=location.hash.slice(1).replace(/^\/hitlist/,"/rankings").replace(/^\/blog.*/,"/");
   history.replaceState(null,"",old==="/"?"/":"/newengland"+old);
 }
 // Internal links change the page without reloading.
 document.addEventListener("click",e=>{
-  if(!e.target.closest("#rankDrop")) { $("#rankDrop").classList.remove("open"); $("#rankBtn").setAttribute("aria-expanded","false"); }
+  if(!e.target.closest("#seriesDrop")) { $("#seriesDrop").classList.remove("open"); $("#seriesBtn").setAttribute("aria-expanded","false"); }
   if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return;
   const a=e.target.closest("a[href]"); if(!a||a.target) return;
   const href=a.getAttribute("href");
@@ -599,10 +678,11 @@ document.addEventListener("click",e=>{
   if(!href.startsWith("/")||href.startsWith("//")||href.startsWith("/admin")) return;
   e.preventDefault(); go(href);
 });
-$("#rankBtn").onclick=e=>{ e.stopPropagation(); const o=$("#rankDrop").classList.toggle("open"); $("#rankBtn").setAttribute("aria-expanded",o); };
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeMenus(); });
+$("#seriesBtn").onclick=e=>{ e.stopPropagation(); const o=$("#seriesDrop").classList.toggle("open"); $("#seriesBtn").setAttribute("aria-expanded",o); };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeMenus(); closeMs(); } });
 $("#menuBtn").onclick=()=>{const o=$("#nav").classList.toggle("open");$("#menuBtn").setAttribute("aria-expanded",o)};
 route();
+startDetailed();
 
 /* ===================== FORMS → EMAIL ===================== */
 const MAIL = "kaseyfeasts@gmail.com";

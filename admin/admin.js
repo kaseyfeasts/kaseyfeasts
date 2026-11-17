@@ -6,14 +6,13 @@
 
   let token = sessionStorage.getItem('kf_token');
   let region = sessionStorage.getItem('kf_region') || null; // newengland | hongkong | global
-  let tab = 'spots';                                         // spots | items | posts
+  let tab = 'spots';                                         // spots | items
   let spots = [];
   let items = [];
-  let posts = [];
   let editing = null;
   let sha = {};
 
-  const FILES = { spots: 'data/content.js', items: 'data/items.js', posts: 'data/posts.js' };
+  const FILES = { spots: 'data/content.js', items: 'data/items.js' };
   const REGION_NAMES = { newengland: 'New England', hongkong: 'Hong Kong', global: 'Global' };
   const RATINGS = []; for (let r = 100; r >= 60; r -= 2.5) RATINGS.push(r);
 
@@ -72,6 +71,7 @@
     neStates: typeof NEW_ENGLAND_STATES !== 'undefined' ? NEW_ENGLAND_STATES : ['Connecticut', 'Maine', 'Massachusetts', 'New Hampshire', 'Rhode Island', 'Vermont'],
     foods: typeof FOOD_CATEGORIES !== 'undefined' ? FOOD_CATEGORIES : ['Donuts', 'Pizza', 'Sandwiches'],
     itemCats: typeof ITEM_CATEGORIES !== 'undefined' ? ITEM_CATEGORIES : {},
+    series: typeof SERIES !== 'undefined' ? SERIES : [],
     stamps: typeof RATING_STAMPS !== 'undefined' ? RATING_STAMPS : [[100, 'All-Star'], [90, 'Fantastic'], [80, 'Great'], [70, 'Very Good'], [60, 'Good']]
   };
   const stampOf = r => { r = +r; if (!Number.isFinite(r)) return ''; for (const [min, l] of L.stamps) if (r >= min) return l; return ''; };
@@ -92,8 +92,8 @@
   const inRegion = s => region === 'newengland' ? !!s.ne : region === 'hongkong' ? s.country === 'Hong Kong' : true;
   const spotById = id => spots.find(s => s.id === id);
   const itemInRegion = i => { const s = spotById(i.spot); return s ? inRegion(s) : region === 'global'; };
-  const postInRegion = p => { const r = p.region || 'all'; return region === 'global' || r === 'all' || r === region; };
   const where = s => [s.city, s.state, s.country].filter(Boolean).join(', ');
+  const seriesName = id => typeof id === 'string' ? (L.series.find(x => x.id === id) || {}).name || '' : '';
 
   async function getFile(path) {
     try {
@@ -115,11 +115,10 @@
       }
       $('who').textContent = '@' + user.login;
 
-      const [s, it, p] = await Promise.all([getFile(FILES.spots), getFile(FILES.items), getFile(FILES.posts)]);
+      const [s, it] = await Promise.all([getFile(FILES.spots), getFile(FILES.items)]);
       spots = s ? Function('"use strict";' + s + ';return SPOTS')() : [];
       items = it ? Function('"use strict";' + it + ';return ITEMS')() : [];
-      posts = p ? Function('"use strict";' + p + ';return POSTS')() : [];
-      if (!Array.isArray(spots) || !Array.isArray(items) || !Array.isArray(posts)) throw Error('Unexpected content format');
+      if (!Array.isArray(spots) || !Array.isArray(items)) throw Error('Unexpected content format');
       spots = spots.map(normSpot);
 
       $('login').hidden = true;
@@ -169,7 +168,7 @@
     const keep = id => $(id).value;
     const c = keep('fCountry'), st = keep('fState'), ci = keep('fCity'), cat = keep('fCat'), sub = keep('fSub');
     $('fCountry').innerHTML = optList(uniq(rs.map(s => s.country)), 'All countries', c);
-    $('fCountry').hidden = region !== 'global' || tab === 'posts';
+    $('fCountry').hidden = region !== 'global';
     const byC = rs.filter(s => !c || s.country === c);
     $('fState').innerHTML = optList(uniq(byC.map(s => s.state)), 'All states / areas', st);
     const byS = byC.filter(s => !st || s.state === st);
@@ -179,7 +178,6 @@
     const subs = uniq([...(L.itemCats[cat] || []), ...items.filter(i => !cat || i.cat === cat).map(i => i.sub)]);
     $('fSub').innerHTML = optList(subs, 'All sub-categories', sub);
     $('fSub').hidden = tab !== 'items';
-    ['fState', 'fCity', 'fCat', 'fSort'].forEach(id => { $(id).hidden = tab === 'posts'; });
   }
   ['fCountry', 'fState', 'fCity', 'fCat', 'fSub', 'fSort'].forEach(id => $(id).addEventListener('change', render));
 
@@ -187,11 +185,10 @@
   function render() {
     if (!region) return;
     fillFilters();
-    const rs = spots.filter(inRegion), ri = items.filter(itemInRegion), rp = posts.filter(postInRegion);
+    const rs = spots.filter(inRegion), ri = items.filter(itemInRegion);
     $('spotcount').textContent = rs.length;
     $('itemcount').textContent = ri.length;
-    $('postcount').textContent = rp.length;
-    $('new').textContent = tab === 'spots' ? '+ Add restaurant' : tab === 'items' ? '+ Add food item' : '+ Add blog post';
+    $('new').textContent = tab === 'spots' ? '+ Add restaurant' : '+ Add food item';
 
     const q = $('search').value.toLowerCase();
     const c = $('fCountry').value, st = $('fState').value, ci = $('fCity').value, cat = $('fCat').value, sub = $('fSub').value, sort = $('fSort').value;
@@ -201,11 +198,9 @@
       rows = spots.map((v, i) => ({ v, i })).filter(({ v }) => inRegion(v) && locOk(v) && (!cat || v.foods.some(f => f.cat === cat)) && JSON.stringify(v).toLowerCase().includes(q));
       const score = v => cat ? +(v.foods.find(f => f.cat === cat) || {}).rating || 0 : Math.max(0, ...v.foods.map(f => +f.rating || 0));
       rows.sort(sort === 'best' ? (a, b) => score(b.v) - score(a.v) || a.v.name.localeCompare(b.v.name) : (a, b) => a.v.name.localeCompare(b.v.name));
-    } else if (tab === 'items') {
+    } else {
       rows = items.map((v, i) => ({ v, i })).filter(({ v }) => itemInRegion(v) && locOk(spotById(v.spot) || {}) && (!cat || v.cat === cat) && (!sub || v.sub === sub) && JSON.stringify(v).toLowerCase().includes(q));
       rows.sort(sort === 'best' ? (a, b) => (+b.v.rating || 0) - (+a.v.rating || 0) || a.v.name.localeCompare(b.v.name) : (a, b) => a.v.name.localeCompare(b.v.name));
-    } else {
-      rows = posts.map((v, i) => ({ v, i })).filter(({ v }) => postInRegion(v) && JSON.stringify(v).toLowerCase().includes(q));
     }
     $('resultcount').textContent = `${rows.length} shown`;
 
@@ -213,18 +208,15 @@
       let title, meta;
       if (tab === 'spots') {
         title = v.name;
-        meta = `${esc(where(v))}${v.ne ? ' · <span class="ne">New England</span>' : ''}<br>${v.foods.map(f => `<span class="pill">${esc(f.cat)} ${esc(ratingLabel(f.rating))}${f.series ? ` · Series #${esc(f.ep || '?')}` : ''}</span>`).join(' ')}`;
-      } else if (tab === 'items') {
+        meta = `${esc(where(v))}${v.ne ? ' · <span class="ne">New England</span>' : ''}<br>${v.foods.map(f => `<span class="pill">${esc(f.cat)} ${esc(ratingLabel(f.rating))}${seriesName(f.series) ? ` · ${esc(seriesName(f.series))} #${esc(f.ep || '?')}` : ''}</span>`).join(' ')}`;
+      } else {
         const s = spotById(v.spot);
         title = v.name;
         meta = `${esc(v.cat)}${v.sub ? ' · ' + esc(v.sub) : ''} · <span class="pill">${esc(ratingLabel(v.rating))}</span><br>${s ? esc(s.name) + ' · ' + esc(where(s)) : '<span class="warn">Restaurant missing</span>'}`;
-      } else {
-        title = v.title;
-        meta = `${esc(v.date || '')} · ${esc(v.slug || '')} · ${esc({ all: 'All regions', newengland: 'New England', hongkong: 'Hong Kong', global: 'Global' }[v.region || 'all'] || v.region)}`;
       }
       return `<div class="item"><div><strong>${esc(title)}</strong><small>${meta}</small></div>
         <div><button data-edit="${i}">Edit</button><button class="delete" data-delete="${i}">Delete</button></div></div>`;
-    }).join('') : `<div class="empty">Nothing here yet in ${esc(REGION_NAMES[region])}. Add your first ${tab === 'spots' ? 'restaurant' : tab === 'items' ? 'food item' : 'blog post'}!</div>`;
+    }).join('') : `<div class="empty">Nothing here yet in ${esc(REGION_NAMES[region])}. Add your first ${tab === 'spots' ? 'restaurant' : 'food item'}!</div>`;
   }
 
   /* ---------- form helpers ---------- */
@@ -271,15 +263,16 @@
       ${ratingSelect('rating' + n, 'Rating', f.rating, false)}
       ${field('video' + n, 'Instagram video link', f.video || '', 'url', false, 'placeholder="https://www.instagram.com/reel/..."')}
       <div class="twocol">
-        <div class="checkrow"><input type="checkbox" id="f_series${n}" ${f.series ? 'checked' : ''}><label for="f_series${n}" id="f_series${n}_label">Part of the ${esc(f.cat || 'category')} series</label></div>
-        ${field('ep' + n, 'Number in series', f.ep ?? '', 'number', false, `min="1" step="1" ${f.series ? '' : 'disabled'}`)}
+        <div><label for="f_series${n}">Series</label>
+          <select id="f_series${n}"><option value="">Not part of a series</option>${L.series.map(x => `<option value="${esc(x.id)}" ${x.id === f.series ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>
+        ${field('ep' + n, 'Number in series', f.ep ?? '', 'number', false, `min="1" step="1" ${f.series && typeof f.series === 'string' ? '' : 'disabled'}`)}
       </div></fieldset>`;
   }
 
   function openEditor(i = null) {
     editing = i;
-    const v = i === null ? {} : (tab === 'spots' ? spots : tab === 'items' ? items : posts)[i];
-    $('editorTitle').textContent = (i === null ? 'Add ' : 'Edit ') + (tab === 'spots' ? 'restaurant' : tab === 'items' ? 'food item' : 'blog post');
+    const v = i === null ? {} : (tab === 'spots' ? spots : items)[i];
+    $('editorTitle').textContent = (i === null ? 'Add ' : 'Edit ') + (tab === 'spots' ? 'restaurant' : 'food item');
 
     if (tab === 'spots') {
       const country = v.country || (region === 'hongkong' ? 'Hong Kong' : region === 'newengland' ? 'United States' : '');
@@ -295,7 +288,7 @@
         + field('pin', 'Map pin (latitude, longitude)', Number.isFinite(+v.lat) && v.lat !== undefined ? `${v.lat}, ${v.lng}` : '', 'text', true, 'placeholder="42.3601, -71.0589"')
         + `<small class="hint">In Google Maps, right-click the restaurant and click the numbers at the top to copy them, then paste here. <a href="#" id="findPin">Search Google Maps for this address ↗</a></small>`
         + [1, 2, 3].map(n => foodBlock(n, foods[n - 1])).join('');
-    } else if (tab === 'items') {
+    } else {
       const rs = spots.filter(inRegion).sort((a, b) => a.name.localeCompare(b.name));
       const cat = v.cat || '';
       $('fields').innerHTML =
@@ -308,27 +301,6 @@
             <small class="hint">The item's location and Google Maps address come from its restaurant.</small>
             <div id="spotAddr" class="addrbox"></div></div>`;
       showSpotAddr();
-    } else {
-      $('fields').innerHTML =
-        field('title', 'Post title', v.title, 'text', true)
-        + field('date', 'Publication date', v.date || new Date().toISOString().slice(0, 10), 'date', true)
-        + `<label for="f_region">Show this post in</label><select name="region" id="f_region">${[['all', 'All regions'], ['newengland', 'New England'], ['hongkong', 'Hong Kong'], ['global', 'Global only']].map(([val, lab]) => `<option value="${val}" ${(v.region || (i === null && region !== 'global' ? region : 'all')) === val ? 'selected' : ''}>${lab}</option>`).join('')}</select>`
-        + field('excerpt', 'Short description', v.excerpt, 'textarea', true)
-        + field('body', 'Article content (Markdown supported)', v.body, 'textarea', true)
-        + `<div style="margin-top:10px">
-            <button type="button" id="markdownHelpToggle" aria-expanded="false" aria-controls="markdownHelpPanel">ⓘ Formatting help</button>
-            <div id="markdownHelpPanel" hidden class="helppanel">
-              <strong>How to format your blog post</strong>
-              <pre>## Section heading
-**Bold text**
-*Italic text*
-- First bullet
-- Second bullet
-[Link text](https://example.com)
-![Photo description](/images/photo.jpg)</pre>
-              <p>Leave a blank line between paragraphs.</p>
-            </div></div>`;
-      $('markdownHelpToggle').onclick = () => { const p = $('markdownHelpPanel'); p.hidden = !p.hidden; $('markdownHelpToggle').setAttribute('aria-expanded', String(!p.hidden)); };
     }
     $('editor').hidden = false;
     $('editor').scrollTop = 0;
@@ -352,8 +324,7 @@
       setSelect('city', L.cities[st] || [], '', 'Choose…');
       if (L.neStates.includes(st) && readSel('country') === 'United States') $('f_ne').checked = true;
     }
-    if (/^f_cat\d$/.test(t.id)) { const n = t.id.slice(-1); $('f_series' + n + '_label').textContent = `Part of the ${readSel('cat' + n) || 'category'} series`; }
-    if (/^f_series\d$/.test(t.id)) { const n = t.id.slice(-1); $('f_ep' + n).disabled = !t.checked; if (t.checked) $('f_ep' + n).focus(); }
+    if (/^f_series\d$/.test(t.id)) { const n = t.id.slice(-1); $('f_ep' + n).disabled = !t.value; if (t.value) $('f_ep' + n).focus(); }
     if (t.id === 'f_icat') setSelect('isub', L.itemCats[readSel('icat')] || [], '', 'Choose…');
     if (t.id === 'f_spot') showSpotAddr();
   });
@@ -371,12 +342,11 @@
   const formatters = {
     spots: () => '// Restaurant data managed by Kasey Feasts Admin.\nconst SPOTS = ' + JSON.stringify(spots, null, 2) + ';\n',
     items: () => '// Food item rankings managed by Kasey Feasts Admin.\nconst ITEMS = ' + JSON.stringify(items, null, 2) + ';\n',
-    posts: () => '// Blog posts managed by Kasey Feasts Admin.\nconst POSTS = ' + JSON.stringify(posts, null, 2) + ';\n'
   };
   async function publish(which = tab) {
     const path = FILES[which];
     const body = {
-      message: `Update ${which === 'spots' ? 'restaurants' : which === 'items' ? 'food items' : 'blog posts'} via Kasey Feasts Admin`,
+      message: `Update ${which === 'spots' ? 'restaurants' : 'food items'} via Kasey Feasts Admin`,
       content: enc(formatters[which]()),
       branch: cfg.branch
     };
@@ -399,9 +369,10 @@
       if (!cat) { if (n === 1) throw Error('Food category 1 is required.'); continue; }
       if (rating === '') throw Error(`Choose a rating for ${cat}.`);
       if (foods.some(f => f.cat === cat)) throw Error(`${cat} is listed twice. Use each food category once per restaurant.`);
-      const series = $('f_series' + n).checked;
+      const series = $('f_series' + n).value;
       const ep = $('f_ep' + n).value;
-      foods.push({ cat, rating: +rating, video: $('f_video' + n).value.trim(), series, ep: series && ep ? +ep : null });
+      if (series && !ep) throw Error(`Add the episode number for ${cat} in "${seriesName(series)}".`);
+      foods.push({ cat, rating: +rating, video: $('f_video' + n).value.trim(), series: series || '', ep: series && ep ? +ep : null });
     }
     return {
       id: editing === null ? slug(name) : spots[editing].id,
@@ -420,29 +391,18 @@
       name, rating: +$('f_rating').value, cat, sub: readSel('isub'), spot
     };
   }
-  function buildPost() {
-    return {
-      slug: editing === null ? slug($('f_title').value) : posts[editing].slug,
-      date: $('f_date').value,
-      region: $('f_region').value || 'all',
-      title: $('f_title').value.trim(),
-      excerpt: $('f_excerpt').value.trim(),
-      body: $('f_body').value
-    };
-  }
-
   $('form').addEventListener('submit', async e => {
     e.preventDefault();
     let obj;
     try {
-      obj = tab === 'spots' ? buildSpot() : tab === 'items' ? buildItem() : buildPost();
+      obj = tab === 'spots' ? buildSpot() : buildItem();
     } catch (err) { return note(err.message, true); }
 
-    const arr = tab === 'spots' ? spots : tab === 'items' ? items : posts;
-    const key = tab === 'posts' ? 'slug' : 'id';
+    const arr = tab === 'spots' ? spots : items;
+    const key = 'id';
     if (!obj[key]) return note('Please add a name or title.', true);
     if (arr.some((x, i) => i !== editing && x[key] === obj[key])) {
-      return note(tab === 'spots' ? 'A restaurant with this name already exists.' : tab === 'items' ? 'This item already exists for that restaurant.' : 'A post with this URL slug already exists.', true);
+      return note(tab === 'spots' ? 'A restaurant with this name already exists.' : 'This item already exists for that restaurant.', true);
     }
     const old = arr.slice();
     if (editing === null) arr.unshift(obj); else arr[editing] = obj;
@@ -466,13 +426,13 @@
     if (b.dataset.edit !== undefined) openEditor(Number(b.dataset.edit));
     if (b.dataset.delete !== undefined) {
       const i = Number(b.dataset.delete);
-      const arr = tab === 'spots' ? spots : tab === 'items' ? items : posts;
+      const arr = tab === 'spots' ? spots : items;
       const v = arr[i];
       if (tab === 'spots') {
         const linked = items.filter(it => it.spot === v.id).length;
         if (linked) return note(`${v.name} has ${linked} food item${linked === 1 ? '' : 's'} linked to it. Delete or move those items first.`, true);
       }
-      if (!confirm(`Delete "${v.name || v.title}"?`)) return;
+      if (!confirm(`Delete "${v.name}"?`)) return;
       const old = arr.slice();
       arr.splice(i, 1);
       try { await publish(); render(); }

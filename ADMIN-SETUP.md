@@ -1,6 +1,6 @@
 # Kasey Feasts Admin: setup guide
 
-The admin interface is included at `/admin/` and edits `data/content.js` (restaurants), `data/items.js` (food items) and `data/posts.js` (blog posts). Dropdown lists come from `data/lists.js`. The public website remains on GitHub Pages. **Sign-in will not work until the steps below are completed.**
+The admin interface is included at `/admin/` and edits `data/content.js` (restaurants) and `data/items.js` (food items). Dropdown lists come from `data/lists.js` and series names from `data/series.js`. The public website remains on GitHub Pages. **Sign-in will not work until the steps below are completed.**
 
 ## 1. Upload the updated site
 
@@ -30,17 +30,17 @@ Redeploy if needed. Note the Worker URL and set it as the GitHub OAuth App callb
 
 Edit `admin/config.js` in GitHub and set `oauthWorker` to your deployed Worker URL (without `/callback`). Check `repoOwner`, `repoName`, `branch`, and `allowedLogin` match the real repository/account. Commit changes.
 
-Visit `https://kaseyfeasts.com/admin/` and click Sign in with GitHub. Approve the requested repository access. You should see your existing posts and restaurants.
+Visit `https://kaseyfeasts.com/admin/` and click Sign in with GitHub. Approve the requested repository access. You should see the "I'M HERE FOR" screen, then your restaurants and food items.
 
 ## 5. Test safely
 
-Choose New England, add a test restaurant with a real map pin, save, wait for GitHub Pages to deploy, and check the map, list and rankings. Then delete the test entry. Also test editing the welcome blog post.
+Choose New England, add a test restaurant with a real map pin, save, wait for GitHub Pages to deploy, and check the map, list and rankings. Then delete the test entry.
 
 ## Important security and maintenance notes
 
 - This is a **first version**, designed for a single trusted owner. It uses GitHub OAuth and temporarily stores the GitHub token in the browser tab's `sessionStorage`. The token is removed when signing out and typically when the tab session ends. Use a trusted computer and avoid untrusted scripts or browser extensions. GitHub OAuth Apps can request broad `repo` permissions, not repository-scoped access.
 - The Worker holds the OAuth client secret, never the public site. The login page checks the GitHub username after authentication. **The OAuth app itself is not restricted to a particular GitHub account; the dashboard's username check prevents other accounts from using its editor, but GitHub permissions remain authoritative.**
 - Because the admin uses the GitHub API directly, GitHub authorization tokens are visible to the signed-in browser session. For a more secure production implementation, use a server-side session and API proxy with repository-scoped GitHub App permissions.
-- The admin uses a content-file rewrite when publishing. It preserves the data, but reformats the edited file. It supports the existing restaurant fields and blog-post fields. It does not upload images yet. Blog Markdown can reference images already uploaded to GitHub.
+- The admin uses a content-file rewrite when publishing. It preserves the data, but reformats the edited file. It does not upload images.
 - The admin currently expects the existing JavaScript data files to remain simple data declarations. Avoid inserting arbitrary executable code in them.
 - GitHub Pages is public: `/admin/` is a public page, but content publishing requires GitHub authorization. Do not put passwords or secrets in the repository.
