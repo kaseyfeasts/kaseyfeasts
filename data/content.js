@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "tilton-house-of-pizza",
+    "name": "Tilton House of Pizza",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Tilton",
+    "address": "298 Main St, Tilton, NH 03276",
+    "lat": 43.44286183838886,
+    "lng": -71.59122584763739,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 67.5,
+        "video": "https://www.instagram.com/reels/DRMt279EQsV/",
+        "series": "best-pizza",
+        "ep": 3
+      }
+    ]
+  },
+  {
     "id": "joanie-s-pizza",
     "name": "Joanie's Pizza",
     "country": "United States",
