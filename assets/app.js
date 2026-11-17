@@ -11,48 +11,69 @@ const BG = {Donuts:"#FBD7E5",Pizza:"#F9D4CE",Sandwiches:"#FBEBC3",Bakery:"#D7EBD
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const $ = s => document.querySelector(s);
 const price = p => "$".repeat(p);
-const EMPTY = SPOTS.length===0;
-const badge = s => `<span class="badge" style="background:${BG[s.cat]||"var(--soft)"}">${ICON[s.cat]?art(s.cat):""}</span>`;
-const vlink = s => s.video||IG;
 const art = (cat,ph) => ICON[cat].replace('var(--ph,#fff)',ph||BG[cat]);
 
 /* ===================== AVATAR ===================== */
 const avatarSVG = (id) => `
 <svg ${id?`id="${id}"`:""} viewBox="0 0 400 440" role="img" aria-label="Cartoon Kasey holding a slice of pizza and a donut">
+ <defs>
+  <radialGradient id="${id}-skin" cx="36%" cy="26%" r="77%">
+   <stop stop-color="#ffe5bf"/><stop offset=".57" stop-color="#eeb18b"/><stop offset="1" stop-color="#b96e56"/>
+  </radialGradient>
+  <radialGradient id="${id}-hood" cx="32%" cy="14%" r="87%">
+   <stop stop-color="#e3e9ef"/><stop offset=".5" stop-color="#9caabd"/><stop offset="1" stop-color="#505d73"/>
+  </radialGradient>
+  <radialGradient id="${id}-cap" cx="33%" cy="23%" r="80%">
+   <stop stop-color="#b8cda1"/><stop offset=".5" stop-color="#789275"/><stop offset="1" stop-color="#354e46"/>
+  </radialGradient>
+  <radialGradient id="${id}-icing" cx="34%" cy="15%" r="86%">
+   <stop stop-color="#ffc0dc"/><stop offset=".53" stop-color="#f276ac"/><stop offset="1" stop-color="#bd3b78"/>
+  </radialGradient>
+  <radialGradient id="${id}-dough" cx="34%" cy="23%" r="81%">
+   <stop stop-color="#ffda8b"/><stop offset=".62" stop-color="#db9346"/><stop offset="1" stop-color="#985020"/>
+  </radialGradient>
+  <linearGradient id="${id}-cheese" x2=".8" y2="1">
+   <stop stop-color="#fff0a2"/><stop offset="1" stop-color="#ed9d31"/>
+  </linearGradient>
+  <radialGradient id="${id}-iris" cx="38%" cy="34%" r="65%">
+   <stop stop-color="#a66d3b"/><stop offset="1" stop-color="#342015"/>
+  </radialGradient>
+ </defs>
  <g class="bob">
   <!-- body / hoodie -->
-  <path d="M106 440L98 336C98 316 108 304 128 300L170 290H230L272 300C292 304 302 316 302 336L294 440z" fill="#A3A7AC"/>
+  <path d="M106 440L98 336C98 316 108 304 128 300L170 290H230L272 300C292 304 302 316 302 336L294 440z" fill="url(#${id}-hood)"/>
   <path d="M150 292c10 26 30 40 50 40s40-14 50-40l-16-6c-6 18-20 28-34 28s-28-10-34-28z" fill="#8A8E93"/>
   <path d="M190 312v52M210 312v52" stroke="#E6E6E6" stroke-width="4" stroke-linecap="round"/>
   <circle cx="190" cy="366" r="4" fill="#E6E6E6"/><circle cx="210" cy="366" r="4" fill="#E6E6E6"/>
   <!-- neck -->
-  <path d="M178 250h44v40c0 10-10 16-22 16s-22-6-22-16z" fill="#D9A07C"/>
+  <path d="M178 250h44v40c0 10-10 16-22 16s-22-6-22-16z" fill="url(#${id}-skin)"/>
   <!-- left arm with pizza -->
   <g class="armL">
-   <path d="M126 314L68 346L70 272" stroke="#A3A7AC" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M58 274l30-4" stroke="#8A8E93" stroke-width="6" stroke-linecap="round"/>
+   <path d="M126 314Q60 380 64 322L70 272" stroke="url(#${id}-hood)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M58 274l30-4" stroke="#8A8E93" stroke-width="6" stroke-linecap="round"/>
    <g transform="rotate(-14 70 200)">
-    <path d="M70 258L22 140c30-16 66-16 96 0z" fill="#F5C04A"/>
-    <path d="M22 140c30-16 66-16 96 0l-6 13c-26-12-58-12-84 0z" fill="#C9822F"/>
+    <path d="M70 258L22 140c30-16 66-16 96 0z" fill="url(#${id}-cheese)"/>
+    <path d="M22 140c30-16 66-16 96 0l-6 13c-26-12-58-12-84 0z" fill="url(#${id}-dough)"/>
     <circle cx="62" cy="176" r="9" fill="#D93A2B"/><circle cx="84" cy="196" r="8" fill="#D93A2B"/><circle cx="64" cy="216" r="6" fill="#D93A2B"/>
-    <path d="M44 168c-2 14 2 22 0 30" stroke="#F5C04A" stroke-width="6" stroke-linecap="round"/>
+    <path d="M44 168c-2 14 2 22 0 30" stroke="url(#${id}-cheese)" stroke-width="6" stroke-linecap="round"/>
    </g>
-   <ellipse cx="70" cy="252" rx="22" ry="20" fill="#E3AF8A"/>
+   <ellipse cx="70" cy="252" rx="22" ry="20" fill="url(#${id}-skin)"/>
    <path d="M54 246c6-6 26-6 32 0" stroke="#B57A52" stroke-width="3" fill="none" stroke-linecap="round"/>
   </g>
   <!-- right arm with donut -->
   <g class="armR">
-   <path d="M274 314L332 346L330 272" stroke="#A3A7AC" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M342 274l-30-4" stroke="#8A8E93" stroke-width="6" stroke-linecap="round"/>
-   <circle cx="334" cy="196" r="48" fill="#D9964C"/>
-   <path d="M288 192c4-26 24-40 46-40s42 12 46 36c1 10-6 8-10 13-5 6-3 12-11 12-7 0-7-7-14-6-9 1-10 10-19 8-7-2-4-10-11-12-7-2-13 6-19 1-5-4-8-6-8-12z" fill="#E8679A"/>
-   <circle cx="334" cy="192" r="14" fill="#161616"/>
+   <path d="M274 314Q340 380 336 322L330 272" stroke="url(#${id}-hood)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M342 274l-30-4" stroke="#8A8E93" stroke-width="6" stroke-linecap="round"/>
+   <circle cx="334" cy="196" r="48" fill="url(#${id}-dough)"/>
+   <path d="M288 192c4-26 24-40 46-40s42 12 46 36c1 10-6 8-10 13-5 6-3 12-11 12-7 0-7-7-14-6-9 1-10 10-19 8-7-2-4-10-11-12-7-2-13 6-19 1-5-4-8-6-8-12z" fill="url(#${id}-icing)"/>
+   <circle cx="334" cy="192" r="13" fill="#592a24"/><path d="M298 182q10-17 26-18M350 217q14-4 20-15" fill="none" stroke="#fff0f7" stroke-width="3" opacity=".5" stroke-linecap="round"/>
    <g stroke-width="5" stroke-linecap="round"><path d="M306 172l6 3" stroke="#fff"/><path d="M346 164l6-2" stroke="#E9A923"/><path d="M360 182l3 6" stroke="#5BC0EB"/><path d="M302 196l1 6" stroke="#E9A923"/><path d="M326 162l-5 3" stroke="#5BC0EB"/><path d="M352 206l6 2" stroke="#fff"/></g>
-   <ellipse cx="330" cy="252" rx="22" ry="20" fill="#E3AF8A"/>
+   <ellipse cx="330" cy="252" rx="22" ry="20" fill="url(#${id}-skin)"/>
    <path d="M314 246c6-6 26-6 32 0" stroke="#B57A52" stroke-width="3" fill="none" stroke-linecap="round"/>
   </g>
   <!-- head -->
-  <ellipse cx="133" cy="190" rx="13" ry="21" fill="#D9A07C"/><path d="M130 180c5 4 6 14 2 20" stroke="#B9805C" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <ellipse cx="267" cy="190" rx="13" ry="21" fill="#D9A07C"/><path d="M270 180c-5 4-6 14-2 20" stroke="#B9805C" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <path d="M138 150c0-56 124-56 124 0v46c0 44-26 78-62 80-36-2-62-36-62-80z" fill="#E3AF8A"/>
+  <g transform="translate(-34 -39) scale(1.17 1.15)">
+  <ellipse cx="133" cy="190" rx="13" ry="21" fill="url(#${id}-skin)"/><path d="M130 180c5 4 6 14 2 20" stroke="#B9805C" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <ellipse cx="267" cy="190" rx="13" ry="21" fill="url(#${id}-skin)"/><path d="M270 180c-5 4-6 14-2 20" stroke="#B9805C" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M138 150c0-56 124-56 124 0v46c0 44-26 78-62 80-36-2-62-36-62-80z" fill="url(#${id}-skin)"/>
   <!-- smile cheeks -->
   <ellipse cx="160" cy="203" rx="15" ry="9" fill="#E8907A" opacity=".35"/><ellipse cx="240" cy="203" rx="15" ry="9" fill="#E8907A" opacity=".35"/>
   <!-- beard: full, trimmed, sharp cheek line -->
@@ -68,9 +89,9 @@ const avatarSVG = (id) => `
   <path d="M202 170c-1 16-2 28-8 36 5 6 14 6 20 0" stroke="#B9805C" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <!-- smiling eyes -->
   <g class="eyes">
-   <ellipse cx="174" cy="178" rx="10" ry="9" fill="#fff"/><ellipse cx="226" cy="178" rx="10" ry="9" fill="#fff"/>
-   <circle cx="175" cy="178" r="6" fill="#3B2618"/><circle cx="227" cy="178" r="6" fill="#3B2618"/><circle cx="177" cy="176" r="2" fill="#fff"/><circle cx="229" cy="176" r="2" fill="#fff"/>
-   <path d="M163 173q11-8 22 0M215 173q11-8 22 0" stroke="#2B211B" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+   <ellipse cx="174" cy="178" rx="15" ry="12" fill="#fff"/><ellipse cx="226" cy="178" rx="15" ry="12" fill="#fff"/>
+   <circle cx="175" cy="178" r="8.5" fill="url(#${id}-iris)"/><circle cx="227" cy="178" r="8.5" fill="url(#${id}-iris)"/><circle cx="175" cy="179" r="4.5" fill="#271812"/><circle cx="227" cy="179" r="4.5" fill="#271812"/><circle cx="177" cy="176" r="2" fill="#fff"/><circle cx="229" cy="176" r="2" fill="#fff"/>
+   <path d="M159 176q15-20 30 0M211 176q15-20 30 0" stroke="#2B211B" stroke-width="2.6" fill="none" stroke-linecap="round"/>
   </g>
   <path d="M164 189q10 4 20 0M216 189q10 4 20 0" stroke="#C88E68" stroke-width="2.2" fill="none" stroke-linecap="round"/>
   <path d="M155 180l-7-3M155 184l-7 1M245 180l7-3M245 184l7 1" stroke="#C88E68" stroke-width="2" stroke-linecap="round"/>
@@ -79,7 +100,7 @@ const avatarSVG = (id) => `
   <path d="M210 159q20-5 38 3" stroke="#221A15" stroke-width="8" fill="none" stroke-linecap="round"/>
   <!-- backwards trucker cap -->
   <path d="M137 176v-30c0-4 2-6 5-6v40z M263 176v-30c0-4-2-6-5-6v40z" fill="#2B211B"/>
-  <path d="M130 166C122 108 150 58 200 56C250 56 278 108 270 166C252 151 228 144 200 144C172 144 148 151 130 166z" fill="#6E8570"/>
+  <path d="M130 166C122 108 150 58 200 56C250 56 278 108 270 166C252 151 228 144 200 144C172 144 148 151 130 166z" fill="url(#${id}-cap)"/>
   <path d="M200 58C186 80 180 112 182 144M200 58C214 80 220 112 218 144M200 58C168 72 146 104 140 156M200 58C232 72 254 104 260 156" stroke="#5B705D" stroke-width="2.5" fill="none"/>
   <path d="M138 150C150 140 172 134 200 134C228 134 250 140 262 150" stroke="#86A088" stroke-width="2" fill="none" opacity=".6"/>
   <path d="M162 146C162 122 178 106 200 106C222 106 238 122 238 146C226 143 214 142 200 142C186 142 174 143 162 146z" fill="#2B211B"/>
@@ -89,12 +110,13 @@ const avatarSVG = (id) => `
   <g fill="#4C5F4E"><circle cx="162" cy="131" r="2"/><circle cx="171" cy="131" r="2"/><circle cx="180" cy="131" r="2"/><circle cx="189" cy="131" r="2"/><circle cx="242" cy="131" r="2"/></g>
   <g fill="none" stroke="#5B705D" stroke-width="1.8"><circle cx="205" cy="131" r="2.6"/><circle cx="214" cy="131" r="2.6"/><circle cx="223" cy="131" r="2.6"/></g>
   <circle cx="200" cy="58" r="6" fill="#5B705D"/>
+  </g>
  </g>
 </svg>`;
 
 document.getElementById("avStage").innerHTML = avatarSVG("av");
-document.getElementById("aboutAv").innerHTML = avatarSVG("");
-$("#aboutAv svg").id="av2";
+document.getElementById("aboutAv").innerHTML = avatarSVG("av2");
+document.getElementById("landAv").innerHTML = avatarSVG("av3");
 
 
 function hearts(){
@@ -112,204 +134,373 @@ function hearts(){
 $("#avStage").addEventListener("click",hearts);
 setTimeout(hearts,700);
 
+/* ===================== DATA MODEL ===================== */
+// Restaurants: {id,name,country,ne,state,city,address,lat,lng,foods:[{cat,rating,video,series,ep}]}
+// Items:       {id,name,rating,cat,sub,spot}
+const CAT_COLORS = {Donuts:"var(--frosting)",Sandwiches:"var(--mustard)",Pizza:"var(--sauce)",Bakery:"var(--basil)",Seafood:"var(--other)"};
+const PALETTE = ["#6C8EBF","#9B6BB3","#3E8E8E","#C9772E","#5E7D3A","#B5476B"];
+const catColor = c => CAT_COLORS[c] || PALETTE[Math.abs([...String(c)].reduce((a,ch)=>a*31+ch.charCodeAt(0),7))%PALETTE.length];
+const ABBR = {MA:"Massachusetts",NH:"New Hampshire",ME:"Maine",VT:"Vermont",RI:"Rhode Island",CT:"Connecticut"};
+function normSpot(s){ // also accepts the older one-category format
+  if(Array.isArray(s.foods)) return s;
+  const state=ABBR[s.st]||s.st||"";
+  return {...s, country:s.country||(ABBR[s.st]?"United States":""), ne:s.ne??!!ABBR[s.st], state, city:s.city||s.town||"",
+    foods:s.cat?[{cat:s.cat,rating:s.rating,video:s.video||"",series:false,ep:null}]:[]};
+}
+const PLACES = (typeof SPOTS!=="undefined"?SPOTS:[]).map(normSpot).filter(s=>s&&s.id&&Number.isFinite(+s.lat)&&Number.isFinite(+s.lng));
+PLACES.forEach(s=>{s.lat=+s.lat;s.lng=+s.lng;s.foods=(s.foods||[]).filter(f=>f&&f.cat)});
+const PLACE_BY_ID = Object.fromEntries(PLACES.map(s=>[s.id,s]));
+const ALL_ITEMS = (typeof ITEMS!=="undefined"?ITEMS:[]).filter(i=>i&&PLACE_BY_ID[i.spot]);
+const where = s => [s.city,s.state,s.country==="United States"?"":s.country].filter(Boolean).join(", ");
+const stateLabel = s => s.state||s.country||"";
+
+/* ---------- stamps (the number is never shown) ---------- */
+function stampOf(r){
+  r=+r; if(!Number.isFinite(r)) return null;
+  for(const [min,label] of RATING_STAMPS) if(r>=min) return label;
+  return null;
+}
+const stampClass = l => "st-"+String(l).toLowerCase().replace(/[^a-z]+/g,"");
+const stampHTML = (r,small) => { const l=stampOf(r); return l?`<span class="stamp ${stampClass(l)}${small?" sm":""}">${l==="All-Star"?"★ ":""}${esc(l)}${l==="All-Star"?" ★":""}</span>`:""; };
+const foodRating = (s,cat) => { const f=s.foods.find(f=>f.cat===cat); return f?+f.rating:NaN; };
+const bestFood = s => [...s.foods].sort((a,b)=>(+b.rating||0)-(+a.rating||0))[0];
+const byRating = get => (a,b)=>((get(b)||0)-(get(a)||0))||a.name.localeCompare(b.name);
+const badge = cat => `<span class="badge" style="background:${BG[cat]||"var(--soft)"}">${ICON[cat]?art(cat):`<b style="font-family:var(--display);font-size:15px">${esc(String(cat||"?").slice(0,1))}</b>`}</span>`;
+const vlink = s => (s.foods.find(f=>f.video)||{}).video||IG;
+const slugify = t => String(t).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+
+/* ===================== REGIONS & CLEAN PATHS ===================== */
+let region=null;
+const R=()=>REGIONS[region]||REGIONS.newengland;
+function placeInRegion(s,r=region){
+  if(r==="newengland") return !!s.ne;
+  if(r==="hongkong") return s.country==="Hong Kong";
+  return true; // global = everything
+}
+const inRegion = s => placeInRegion(s);
+const rSpots=()=>PLACES.filter(inRegion);
+const rItems=()=>ALL_ITEMS.filter(i=>inRegion(PLACE_BY_ID[i.spot]));
+const isEmpty=()=>rSpots().length===0;
+const P=(p="/")=>`/${region||"newengland"}${p}`;
+function go(url,replace){ history[replace?"replaceState":"pushState"](null,"",url); route(); }
+function sitePath(u){ // "/next" or "#/next" -> "/<region>/next"
+  if(/^#\//.test(u)) u=u.slice(1);
+  if(!/^\/(?!\/)/.test(u)) return u;
+  const first=u.split("/")[1]||"";
+  if(REGIONS[first]||["admin","images","assets","data"].includes(first)) return u;
+  return P(u);
+}
+async function copyText(text,btn){
+  try{ await navigator.clipboard.writeText(text); }catch{ const t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select(); try{document.execCommand("copy")}catch{} t.remove(); }
+  if(btn){ const o=btn.textContent; btn.textContent="Copied!"; setTimeout(()=>btn.textContent=o,1800); }
+}
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-copy]"); if(b){ e.preventDefault(); copyText(b.dataset.copy,b); } });
+const addrButtons = s => s.address?`<button class="btn ghost sm" type="button" data-copy="${esc(s.address)}">Copy address</button><a class="btn ghost sm" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.address)}" target="_blank" rel="noopener">Open in Maps</a>`:"";
+
 /* ===================== MAP ===================== */
 const NS="http://www.w3.org/2000/svg";
-const proj = (lng,lat) => [(lng-MAP.lon0)*MAP.k*MAP.S,(MAP.lat1-lat)*MAP.S];
-SPOTS.forEach(s=>{[s.x,s.y]=proj(s.lng,s.lat)});
 const svg = $("#map"), box = $("#mapbox");
-const gWorld = document.createElementNS(NS,"g"), gLbl=document.createElementNS(NS,"g"), gMk=document.createElementNS(NS,"g");
-let html = `<rect x="-2000" y="-2000" width="5000" height="5000" fill="transparent"/>`;
-html += `<path class="st ctx" d="${MAP.states.NY}"/>`;
-for (const k of ["CT","RI","MA","VT","NH","ME"]) html += `<path class="st" d="${MAP.states[k]}"/>`;
-html += `<path class="cty" d="${MAP.counties}"/>`;
-gWorld.innerHTML = html;
-svg.append(gWorld,gLbl,gMk);
-const STLBL = [["MAINE",-69.3,45.4],["NEW HAMPSHIRE",-71.6,43.75],["VERMONT",-72.75,44.05],["MASSACHUSETTS",-71.9,42.45],["CONNECTICUT",-72.75,41.62],["R.I.",-71.55,41.65],["NEW YORK",-73.95,43.2]];
-const CITIES = [["Boston",-71.06,42.36],["Worcester",-71.80,42.26],["Springfield",-72.59,42.10],["Providence",-71.41,41.82],["Hartford",-72.67,41.76],["New Haven",-72.92,41.31],["Portland",-70.26,43.66],["Portsmouth",-70.76,43.07],["Manchester",-71.46,42.99],["Burlington",-73.21,44.48],["Bangor",-68.77,44.80],["Cape Cod",-70.30,41.70],["Concord",-71.54,43.21]];
-const stEls = STLBL.map(([t,lng,lat])=>{const [x,y]=proj(lng,lat);const e=document.createElementNS(NS,"text");e.setAttribute("class","stlbl");e.setAttribute("x",x);e.setAttribute("y",y);e.setAttribute("text-anchor","middle");e.textContent=t;gLbl.appendChild(e);return e});
-const cityEls = CITIES.map(([t,lng,lat])=>{const [x,y]=proj(lng,lat);const e=document.createElementNS(NS,"text");e.setAttribute("class","lbl");e.setAttribute("x",x);e.setAttribute("y",y);e.textContent=t;gLbl.appendChild(e);return {e,x,y}});
+const projection = d3.geoOrthographic();
+const path = d3.geoPath(projection);
+const mk=(cls)=>{const e=document.createElementNS(NS,"path");e.setAttribute("class",cls);return e};
+const ocean=mk("globe-ocean"), land=mk("globe-land"), dMask=mk("globe-mask"), dLand=mk("globe-detail"), dCoast=mk("globe-coast"), graticule=mk("globe-grid");
+const gMk = document.createElementNS(NS,"g");
+const sphere = {type:"Sphere"};
+const grid = d3.geoGraticule10();
+svg.append(ocean,land,dMask,dLand,dCoast,graticule,gMk);
+const HAS_DETAIL = typeof DETAIL!=="undefined";
 
-let mapCat = new Set(Object.keys(CATS));
+let mapCat = null; // null = all food
 const mkEls = {};
-SPOTS.forEach(s=>{
+PLACES.forEach(s=>{
   const c=document.createElementNS(NS,"circle");
-  c.setAttribute("class","mk"+(s.hit?" star":""));c.setAttribute("cx",s.x);c.setAttribute("cy",s.y);c.setAttribute("fill",CATS[s.cat]);
-  c.setAttribute("tabindex","0");c.setAttribute("role","button");c.setAttribute("aria-label",`${s.name}, ${s.town}`);
+  c.setAttribute("class","mk");
+  c.setAttribute("tabindex","0");c.setAttribute("role","button");c.setAttribute("aria-label",`${s.name}, ${where(s)}`);
   c.addEventListener("click",e=>{if(!moved){openPop(s);}});
   c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openPop(s)}});
   c.addEventListener("pointerenter",()=>hl(s.id,true));c.addEventListener("pointerleave",()=>hl(s.id,false));
   gMk.appendChild(c);mkEls[s.id]=c;
 });
+const showsCat = s => !mapCat || s.foods.some(f=>f.cat===mapCat);
 
-const [c0x,c0y]=proj(-71.05,42.75);
-let vb = {x:c0x-260,y:c0y-230,w:520,h:460};
-let scale = 1, popSpot=null;
-function fit(){ const r=box.getBoundingClientRect(); if(!r.width) return; const cx=vb.x+vb.w/2, cy=vb.y+vb.h/2; vb.h = vb.w*r.height/r.width; vb.y=cy-vb.h/2; scale=r.width/vb.w; }
-let raf=0;
-function render(){
-  cancelAnimationFrame(raf);
-  raf=requestAnimationFrame(()=>{
-    const r=box.getBoundingClientRect(); if(!r.width) return;
-    scale=r.width/vb.w; vb.h=vb.w*r.height/r.width;
-    svg.setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
-    const u=1/scale;
-    for (const s of SPOTS){const c=mkEls[s.id];c.setAttribute("r",(s.hit?9:7.5)*u);c.style.display=mapCat.has(s.cat)?"":"none";}
-    stEls.forEach(e=>{e.setAttribute("font-size",11*u);e.style.display=scale<2.6?"":"none"});
-    const showCity=scale>0.9;
-    cityEls.forEach(({e,x,y})=>{e.setAttribute("font-size",12.5*u);e.setAttribute("dx",10*u);e.setAttribute("dy",-8*u);e.style.display=showCity?"":"none"});
-    placePop(); updateSide();
-  });
+let longitude=-38, latitude=22, zoom=1, popSpot=null, raf=0;
+const clampZoom = value => Math.max(1, Math.min(900, value));
+function visible(s){
+  return inRegion(s) && d3.geoDistance([longitude,latitude],[s.lng,s.lat]) < Math.PI/2
+    && s.x>=0 && s.x<=box.clientWidth && s.y>=0 && s.y<=box.clientHeight;
 }
-function clampVb(){ vb.w=Math.max(30,Math.min(1100,vb.w)); }
-function toWorld(px,py){const r=box.getBoundingClientRect();return [vb.x+(px-r.left)/scale, vb.y+(py-r.top)/scale]}
-function zoomAt(f,px,py){ const [wx,wy]=toWorld(px,py); const nw=Math.max(30,Math.min(1100,vb.w*f)); const k=nw/vb.w; vb.x=wx-(wx-vb.x)*k; vb.y=wy-(wy-vb.y)*k; vb.w=nw; vb.h*=k; render(); }
+function draw(){
+  const {clientWidth:w,clientHeight:h}=box;
+  if(!w||!h)return;
+  projection.translate([w/2,h/2]).scale(Math.min(w,h)*.46*zoom).rotate([-longitude,-latitude]);
+  svg.setAttribute("viewBox",`0 0 ${w} ${h}`);
+  ocean.setAttribute("d",path(sphere));
+  land.setAttribute("d",path(WORLD_LAND)||"");
+  const detail=HAS_DETAIL&&zoom>=5;
+  dMask.setAttribute("d",detail?path(DETAIL.mask)||"":"");
+  dLand.setAttribute("d",detail?path(DETAIL.land)||"":"");
+  dCoast.setAttribute("d",detail?path(DETAIL.coast)||"":"");
+  graticule.setAttribute("d",zoom<8?path(grid)||"":"");
+  for(const s of PLACES){
+    [s.x,s.y]=projection([s.lng,s.lat]);
+    const c=mkEls[s.id];
+    c.setAttribute("cx",s.x);c.setAttribute("cy",s.y);c.setAttribute("r",8);
+    c.setAttribute("fill",catColor(mapCat||(s.foods[0]||{}).cat));
+    c.style.display=visible(s)&&showsCat(s)?"":"none";
+  }
+  placePop();updateSide();
+}
+function render(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(draw); }
+function flyTo(lng,lat,level){ longitude=lng;latitude=lat;zoom=level;render(); }
 
-const ptrs=new Map(); let moved=false, start=null, pinch0=null;
+/* slow spin for the Global globe */
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let spinOn=false, spinLast=0, idleUntil=0;
+const pauseSpin = (ms=6000) => { idleUntil=performance.now()+ms; };
+function spinLoop(t){
+  if(!spinOn) return;
+  const homeShown=!$('[data-view="home"]').hidden && !$("#mapPane").hidden;
+  if(homeShown && t>idleUntil && !popSpot && !pointers.size){
+    const dt=spinLast?Math.min(t-spinLast,50):16;
+    longitude=((longitude+dt*0.004+180)%360+360)%360-180;
+    draw();
+  }
+  spinLast=t; requestAnimationFrame(spinLoop);
+}
+function setSpin(on){ const want=on&&!REDUCED; if(want&&!spinOn){spinOn=true;spinLast=0;requestAnimationFrame(spinLoop);} else if(!want) spinOn=false; }
+
+const pointers=new Map();
+let moved=false;
 box.addEventListener("pointerdown",e=>{
-  if(e.target.closest(".pop,.map-ui,.map-top,.soon")) return;
-  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
-  moved=false; start={x:e.clientX,y:e.clientY,vx:vb.x,vy:vb.y};
-  if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,vx:vb.x,vy:vb.y}}
-  $("#mapHint").hidden=true;
+  if(e.target.closest(".pop,.map-ui,.map-top,.soon"))return;
+  if(!pointers.size)moved=false;
+  pointers.set(e.pointerId,[e.clientX,e.clientY]);
+  $("#mapHint").hidden=true; pauseSpin();
 });
 box.addEventListener("pointermove",e=>{
-  if(!ptrs.has(e.pointerId)) return;
-  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
-  if(ptrs.size===2&&pinch0){
-    const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);
-    const nw=Math.max(30,Math.min(1100,pinch0.w*pinch0.d/d));
-    const r=box.getBoundingClientRect();
-    const wx=pinch0.vx+(pinch0.mx-r.left)*pinch0.w/r.width, wy=pinch0.vy+(pinch0.my-r.top)*pinch0.w/r.width;
-    const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
-    vb.w=nw; vb.x=wx-(mx-r.left)*nw/r.width; vb.y=wy-(my-r.top)*nw/r.width; if(!moved){moved=true;for(const id of ptrs.keys()){try{box.setPointerCapture(id)}catch{}}} render(); return;
+  const previous=pointers.get(e.pointerId);
+  if(!previous)return;
+  const next=[e.clientX,e.clientY];
+  const dx=next[0]-previous[0],dy=next[1]-previous[1];
+  if(!moved&&Math.abs(dx)+Math.abs(dy)<4)return;
+  if(!moved){
+    moved=true;
+    box.classList.add("dragging");
+    for(const id of pointers.keys())box.setPointerCapture(id);
   }
-  const dx=e.clientX-start.x, dy=e.clientY-start.y;
-  if(!moved&&Math.abs(dx)+Math.abs(dy)>4){moved=true;box.classList.add("dragging");try{box.setPointerCapture(e.pointerId)}catch{}}
-  if(moved){vb.x=start.vx-dx/scale; vb.y=start.vy-dy/scale; render();}
+  const other=[...pointers].find(([id])=>id!==e.pointerId)?.[1];
+  if(other){
+    const before=Math.hypot(previous[0]-other[0],previous[1]-other[1]);
+    const after=Math.hypot(next[0]-other[0],next[1]-other[1]);
+    if(before&&after)zoom=clampZoom(zoom*after/before);
+  }else{
+    const sensitivity=90/(Math.min(box.clientWidth,box.clientHeight)*.46*zoom);
+    longitude=((longitude-dx*sensitivity+180)%360+360)%360-180;
+    latitude=Math.max(-90,Math.min(90,latitude+dy*sensitivity));
+  }
+  pointers.set(e.pointerId,next); pauseSpin();
+  closePop();render();
 });
-const endPtr=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(ptrs.size===1){const p=[...ptrs.values()][0];start={x:p.x,y:p.y,vx:vb.x,vy:vb.y}}box.classList.remove("dragging");setTimeout(()=>{if(!ptrs.size)moved=false},0)};
-box.addEventListener("pointerup",endPtr);box.addEventListener("pointercancel",endPtr);
-box.addEventListener("click",e=>{ if(!moved && !e.target.closest(".mk,.pop,.map-ui,.map-top")) closePop(); });
-box.addEventListener("wheel",e=>{e.preventDefault();zoomAt(Math.exp(e.deltaY*0.0016),e.clientX,e.clientY)},{passive:false});
-function zoomCenter(f){const r=box.getBoundingClientRect();zoomAt(f,r.left+r.width/2,r.top+r.height/2)}
-$("#zin").onclick=()=>zoomCenter(0.6);$("#zout").onclick=()=>zoomCenter(1.6);
-$("#zall").onclick=()=>flyTo(-71.0,43.9,700);
-
-function flyTo(lng,lat,w){
-  const [cx,cy]=proj(lng,lat); const r=box.getBoundingClientRect(); const aspect=r.height/r.width||1;
-  const from={...vb}, to={w, x:cx-w/2, y:cy-w*aspect/2};
-  if(matchMedia("(prefers-reduced-motion: reduce)").matches){Object.assign(vb,to);render();return}
-  const t0=performance.now();
-  (function step(t){const p=Math.min(1,(t-t0)/600), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
-    vb.w=from.w+(to.w-from.w)*e; vb.x=from.x+(to.x-from.x)*e; vb.y=from.y+(to.y-from.y)*e; render(); if(p<1)requestAnimationFrame(step)})(t0);
+function endPointer(e){
+  pointers.delete(e.pointerId);
+  if(!pointers.size)box.classList.remove("dragging");
 }
-const JUMPS=[["Boston area",-71.15,42.38,150],["North Shore & Seacoast",-70.85,42.85,190],["Cape Cod",-70.35,41.8,180],["Maine coast",-69.7,43.9,360],["Western MA & VT",-72.8,43.3,330],["RI & CT",-72.2,41.6,250],["All",-71.0,43.9,700]];
-$("#jumps").innerHTML=JUMPS.map((j,i)=>`<button class="chip" data-j="${i}">${j[0]}</button>`).join("");
-$("#jumps").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;const j=JUMPS[b.dataset.j];closePop();flyTo(j[1],j[2],j[3])};
+box.addEventListener("pointerup",endPointer);
+box.addEventListener("pointercancel",endPointer);
+box.addEventListener("click",e=>{
+  if(!moved&&!e.target.closest(".mk,.pop,.map-ui,.map-top,.soon"))closePop();
+});
+function zoomBy(factor){zoom=clampZoom(zoom*factor);pauseSpin();render()}
+box.addEventListener("wheel",e=>{e.preventDefault();zoomBy(Math.exp(-e.deltaY*.0016))},{passive:false});
+$("#zin").onclick=()=>zoomBy(1.6);
+$("#zout").onclick=()=>zoomBy(1/1.6);
+$("#zall").onclick=()=>{closePop();idleUntil=0;flyTo(...R().view)};
+$("#jumps").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;const j=R().jumps[b.dataset.j];closePop();pauseSpin(15000);flyTo(j[1],j[2],j[3])};
 
-$("#mapCats").innerHTML=Object.keys(CATS).map(c=>`<button class="chip" aria-pressed="false" data-c="${c}"><span class="dot" style="background:${CATS[c]}"></span>${c}</button>`).join("");
+function fillMapCats(){
+  const cats=[...new Set(rSpots().flatMap(s=>s.foods.map(f=>f.cat)))];
+  const ordered=[...FOOD_CATEGORIES.filter(c=>cats.includes(c)),...cats.filter(c=>!FOOD_CATEGORIES.includes(c))];
+  mapCat=null;
+  $("#mapCats").innerHTML=ordered.map(c=>`<button class="chip" aria-pressed="false" data-c="${esc(c)}"><span class="dot" style="background:${catColor(c)}"></span>${esc(c)}</button>`).join("");
+  $("#mapCats").style.display=ordered.length?"":"none";
+}
 $("#mapCats").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;
   const on=b.getAttribute("aria-pressed")==="true";
   $("#mapCats").querySelectorAll("[data-c]").forEach(x=>x.setAttribute("aria-pressed","false"));
-  if(on){mapCat=new Set(Object.keys(CATS))}else{b.setAttribute("aria-pressed","true");mapCat=new Set([b.dataset.c])}
-  if(popSpot&&!mapCat.has(popSpot.cat))closePop(); render();};
+  if(on){mapCat=null}else{b.setAttribute("aria-pressed","true");mapCat=b.dataset.c}
+  if(popSpot&&!showsCat(popSpot))closePop(); sideKey=null; render();};
 
+const foodLine = s => s.foods.map(f=>`<span class="fl"><span class="dot" style="background:${catColor(f.cat)}"></span>${esc(f.cat)} ${stampHTML(f.rating,true)}</span>`).join("");
 function openPop(s){
   popSpot=s; const p=$("#pop");
   p.innerHTML=`<button class="x" aria-label="Close">×</button><h4>${esc(s.name)}</h4>
-   <div class="meta">${esc(s.town)}, ${s.st} · ${esc(s.cat)}</div>
-   ${s.verdict?`<p>${esc(s.verdict)}</p>`:'<div style="height:10px"></div>'}
-   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><a class="btn red" style="padding:8px 14px;font-size:14px" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch review</a><a class="btn ghost" style="padding:8px 14px;font-size:14px" href="#/spot/${s.id}">Details</a></div>`;
+   <div class="meta">${esc(where(s))}</div>
+   <div class="foods">${foodLine(s)}</div>
+   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><a class="btn red sm" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch review</a><a class="btn ghost sm" href="${P('/spot/'+s.id)}">Details</a></div>`;
   p.hidden=false; p.querySelector(".x").onclick=closePop;
-  const r=box.getBoundingClientRect(); const px=(s.x-vb.x)*scale, py=(s.y-vb.y)*scale;
-  if(py<230||px<130||px>r.width-130||py>r.height-20){ vb.x=s.x-vb.w/2; vb.y=s.y-vb.h*0.62; }
   render();
 }
 function closePop(){popSpot=null;$("#pop").hidden=true}
-function placePop(){ if(!popSpot)return; const p=$("#pop"); p.style.left=((popSpot.x-vb.x)*scale)+"px"; p.style.top=((popSpot.y-vb.y)*scale-6)+"px"; }
+function placePop(){
+  if(!popSpot)return;
+  const p=$("#pop");
+  p.hidden=!visible(popSpot);
+  const half=p.offsetWidth/2;
+  p.style.left=Math.max(half+6,Math.min(box.clientWidth-half-6,popSpot.x))+"px";
+  p.style.top=Math.max(p.offsetHeight+24,popSpot.y-6)+"px";
+}
 function hl(id,on){ mkEls[id]?.classList.toggle("hl",on); document.querySelector(`#inView [data-id="${id}"]`)?.classList.toggle("hl",on); }
 
 let sideKey=null;
 function updateSide(){
-  const inView=SPOTS.filter(s=>mapCat.has(s.cat)&&s.x>=vb.x&&s.x<=vb.x+vb.w&&s.y>=vb.y&&s.y<=vb.y+vb.h).sort((a,b)=>a.name.localeCompare(b.name));
-  const key=inView.map(s=>s.id).join();
+  let inView=PLACES.filter(s=>showsCat(s)&&visible(s));
+  inView.sort(mapCat?byRating(s=>foodRating(s,mapCat)):(a,b)=>a.name.localeCompare(b.name));
+  const key=region+":"+mapCat+":"+inView.map(s=>s.id).join();
   if(key===sideKey)return; sideKey=key;
-  $("#inViewCount").textContent=EMPTY?"Places I've been":`${inView.length} ${inView.length===1?"spot":"spots"} in this area`;
-  $("#inView").innerHTML=inView.length?inView.map(s=>`<li><button data-id="${s.id}">${badge(s)}<span><span class="nm">${esc(s.name)}</span><span class="tw">${esc(s.town)}, ${s.st} · ${s.cat}</span></span></button></li>`).join("")
-   :(EMPTY?`<li class="empty"><strong style="color:var(--text)">Reviews coming soon.</strong><br>I'm pinning every place I've been. Follow along on <a href="${IG}" target="_blank" rel="noopener">Instagram</a> or <a href="#/next">tell me where to go</a>.</li>`:`<li class="empty">No spots here yet. Zoom out, or <a href="#/next">tell me where to go</a>.</li>`);
+  const empty=isEmpty();
+  $("#inViewCount").textContent=empty?"Places I've been":`${inView.length} ${inView.length===1?"spot":"spots"} in this area${mapCat?` · best ${mapCat.toLowerCase()} first`:""}`;
+  $("#inView").innerHTML=inView.length?inView.map(s=>{const f=mapCat?s.foods.find(f=>f.cat===mapCat):bestFood(s);return `<li><button data-id="${s.id}">${badge(f?f.cat:"")}<span><span class="nm">${esc(s.name)}</span><span class="tw">${esc(where(s))}</span>${f?stampHTML(f.rating,true):""}</span></button></li>`}).join("")
+   :(empty?`<li class="empty"><strong style="color:var(--text)">${esc(R().name)} reviews coming soon.</strong><br>I'm pinning every place I've been. Follow along on <a href="${IG}" target="_blank" rel="noopener">Instagram</a> or <a href="${P('/next')}">tell me where to go</a>.</li>`:`<li class="empty">No spots here yet. Zoom out, or <a href="${P('/next')}">tell me where to go</a>.</li>`);
 }
-$("#inView").addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b)openPop(SPOTS.find(s=>s.id===b.dataset.id))});
+$("#inView").addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b){pauseSpin(15000);openPop(PLACE_BY_ID[b.dataset.id])}});
 $("#inView").addEventListener("pointerover",e=>{const b=e.target.closest("[data-id]");if(b)hl(b.dataset.id,true)});
 $("#inView").addEventListener("pointerout",e=>{const b=e.target.closest("[data-id]");if(b)hl(b.dataset.id,false)});
 new ResizeObserver(()=>render()).observe(box);
-if(EMPTY){ $("#mapSoon").hidden=false; $(".side-h small").textContent="Jump to an area"; $("#mapCats").style.display="none"; $("#mapHint").hidden=true;
-  $("#dirLede").textContent="The map is ready. The pins are coming soon: every place I've been, each linked to my review.";
-  $("#mapSoon .x").onclick=()=>{$("#mapSoon").hidden=true;$("#mapHint").hidden=false};
-  $("#mapSoon").addEventListener("pointerdown",e=>e.stopPropagation()); }
+$("#mapSoon .x").onclick=()=>{$("#mapSoon").hidden=true;$("#mapHint").hidden=false};
+$("#mapSoon").addEventListener("pointerdown",e=>e.stopPropagation());
 
-/* ===================== LIST ===================== */
-const cats=Object.keys(CATS), sts=Object.keys(STATES);
-$("#fst").innerHTML+=sts.map(s=>`<option value="${s}">${STATES[s]}</option>`).join("");
-$("#fcat").innerHTML+=cats.map(c=>`<option>${c}</option>`).join("");
-function renderList(){
-  if(EMPTY){ $("#listPane .filters").style.display="none"; $("#fcount").textContent="";
-    $("#frows").outerHTML=`<div id="frows" class="soon-block"><h3>Reviews coming soon</h3><p>Every place I've been will be listed here, searchable by town, state and food, with a link to the review.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a></div>`; return; }
-  const q=$("#fq").value.trim().toLowerCase(), st=$("#fst").value, c=$("#fcat").value, hit=$("#fhit").checked;
-  let r=SPOTS.filter(s=>(!q||[s.name,s.town,s.cat,...(s.order||[])].join(" ").toLowerCase().includes(q))&&(!st||s.st===st)&&(!c||s.cat===c)&&(!hit||s.hit));
-  r.sort((a,b)=>a.name.localeCompare(b.name));
-  $("#fcount").textContent=`${r.length} of ${SPOTS.length} places`;
-  $("#frows").innerHTML=r.length?r.map(rowHTML).join("")
-   :`<p class="empty">Nothing matches those filters. Try removing one, or <a href="#/next">suggest a spot</a>.</p>`;
+/* ===================== LIST (restaurants) ===================== */
+const opts = (arr,all) => `<option value="">${all}</option>`+arr.map(v=>`<option>${esc(v)}</option>`).join("");
+const uniq = arr => [...new Set(arr.filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+function fillListFilters(){
+  const list=rSpots();
+  $("#fst").innerHTML=opts(uniq(list.map(stateLabel)),"All");
+  $("#fcity").innerHTML=opts(uniq(list.map(s=>s.city)),"All");
+  const cats=uniq(list.flatMap(s=>s.foods.map(f=>f.cat)));
+  $("#fcat").innerHTML=opts(cats,"All food");
+  $("#fst").closest("label").style.display=$("#fst").options.length>2?"":"none";
 }
-const rowHTML = s => `<a class="rowi" href="#/spot/${s.id}">${badge(s)}<span><span class="nm">${esc(s.name)}</span>${s.hit?' <span class="tag" style="background:var(--frosting);color:#161616">Hit list</span>':''}<br><span class="tw">${esc(s.town)}, ${s.st} · ${esc(s.cat)}</span></span><span class="tag go">View review ›</span></a>`;
-["fq","fst","fcat","fhit"].forEach(id=>$("#"+id).addEventListener("input",renderList));
-renderList();
+$("#fst").addEventListener("change",()=>{ const st=$("#fst").value; const list=rSpots().filter(s=>!st||stateLabel(s)===st); const cur=$("#fcity").value; $("#fcity").innerHTML=opts(uniq(list.map(s=>s.city)),"All"); if([...$("#fcity").options].some(o=>o.value===cur)) $("#fcity").value=cur; });
+function renderList(){
+  const rows=$("#frows"), list=rSpots();
+  if(!list.length){ $("#listPane .filters").style.display="none"; $("#fcount").textContent="";
+    rows.className="soon-block"; rows.innerHTML=`<h3>${esc(R().name)} reviews coming soon</h3><p>Every place I've been will be listed here, searchable by area and food, with a link to the review.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a>`; return; }
+  $("#listPane .filters").style.display=""; rows.className="rows";
+  const q=$("#fq").value.trim().toLowerCase(), st=$("#fst").value, city=$("#fcity").value, c=$("#fcat").value, sort=$("#fsort").value;
+  let r=list.filter(s=>(!q||[s.name,s.city,s.state,s.country,...s.foods.map(f=>f.cat)].join(" ").toLowerCase().includes(q))&&(!st||stateLabel(s)===st)&&(!city||s.city===city)&&(!c||s.foods.some(f=>f.cat===c)));
+  r.sort(sort==="best"?byRating(s=>c?foodRating(s,c):+(bestFood(s)||{}).rating):(a,b)=>a.name.localeCompare(b.name));
+  $("#fcount").textContent=`${r.length} of ${list.length} places`+(sort==="best"?(c?` · best ${c.toLowerCase()} first`:" · best first"):"");
+  rows.innerHTML=r.length?r.map(s=>rowHTML(s,c)).join("")
+   :`<p class="empty">Nothing matches those filters. Try removing one, or <a href="${P('/next')}">suggest a spot</a>.</p>`;
+}
+const rowHTML = (s,cat) => { const f=cat?s.foods.find(f=>f.cat===cat):bestFood(s);
+  return `<a class="rowi" href="${P('/spot/'+s.id)}">${badge(f?f.cat:"")}<span><span class="nm">${esc(s.name)}</span><br><span class="tw">${esc(where(s))} · ${esc(s.foods.map(f=>f.cat).join(", "))}</span></span><span class="rowstamp">${f?stampHTML(f.rating,true):""}</span></a>`; };
+["fq","fst","fcity","fcat","fsort"].forEach(id=>$("#"+id).addEventListener("input",renderList));
 function tab(which){
   $("#tabMap").setAttribute("aria-selected",which==="map");$("#tabList").setAttribute("aria-selected",which==="list");
   $("#mapPane").hidden=which!=="map";$("#listPane").hidden=which!=="list"; if(which==="map")render();
 }
 $("#tabMap").onclick=()=>tab("map");$("#tabList").onclick=()=>tab("list");
 
-/* ===================== HIT LIST ===================== */
-const hitCard = s => `<a class="hit" href="#/spot/${s.id}"><div class="art" style="background:${BG[s.cat]}">${art(s.cat)}</div><div class="bd"><div class="nm">${esc(s.name)}</div><div class="tw">${esc(s.town)}, ${s.st} · ${esc(s.cat)}</div>${s.verdict?`<q>${esc(s.verdict)}</q>`:""}</div></a>`;
-const SOON_HITS=`<div class="soon-block" style="grid-column:1/-1"><h3>The hit list is coming soon</h3><p>My top recommendations across New England, the places worth a two-hour drive. Follow along on Instagram to see them as they drop.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a></div>`;
-const hitsNow=SPOTS.filter(s=>s.hit);
-$("#hitPreview").innerHTML=hitsNow.length?hitsNow.slice(0,4).map(hitCard).join(""):SOON_HITS;
-if(!hitsNow.length){ $("#hlCats").style.display="none"; $("#hlStates").style.display="none"; }
-let hlCat="",hlSt="";
-$("#hlCats").innerHTML=`<button class="chip" aria-pressed="true" data-c="">All food</button>`+cats.filter(c=>SPOTS.some(s=>s.hit&&s.cat===c)).map(c=>`<button class="chip" aria-pressed="false" data-c="${c}"><span class="dot" style="background:${CATS[c]}"></span>${c}</button>`).join("");
-$("#hlStates").innerHTML=`<button class="chip" aria-pressed="true" data-s="">All states</button>`+sts.filter(t=>SPOTS.some(s=>s.hit&&s.st===t)).map(t=>`<button class="chip" aria-pressed="false" data-s="${t}">${STATES[t]}</button>`).join("");
-function renderHits(){const r=SPOTS.filter(s=>s.hit&&(!hlCat||s.cat===hlCat)&&(!hlSt||s.st===hlSt));
-  $("#hitAll").innerHTML=r.length?r.map(hitCard).join(""):(hitsNow.length?`<p class="empty">No hit list spots for that combo yet.</p>`:SOON_HITS)}
-$("#hlCats").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;hlCat=b.dataset.c;$("#hlCats").querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderHits()};
-$("#hlStates").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;hlSt=b.dataset.s;$("#hlStates").querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderHits()};
-renderHits();
+/* ===================== SERIES (built from the admin's series boxes) ===================== */
+function renderSeries(){
+  const groups={};
+  for(const s of rSpots()) for(const f of s.foods) if(f.series) (groups[f.cat]=groups[f.cat]||[]).push({s,f});
+  const names=[...FOOD_CATEGORIES.filter(c=>groups[c]),...Object.keys(groups).filter(c=>!FOOD_CATEGORIES.includes(c))];
+  $("#seriesLede").textContent=`Pick what you're craving and catch up on every ${R().name} episode.`;
+  $("#seriesGrid").innerHTML=names.length?names.map(cat=>{
+    const eps=groups[cat].sort((a,b)=>(+a.f.ep||999)-(+b.f.ep||999)||a.s.name.localeCompare(b.s.name));
+    return `<section class="series-card">
+    <div class="series-art" style="background:${BG[cat]||"var(--soft)"}">${ICON[cat]?art(cat):`<span class="series-letter">${esc(cat.slice(0,1))}</span>`}</div>
+    <div class="series-body"><h2>${esc(cat)}</h2><ol class="eps">${eps.map(({s,f})=>`<li><span class="epn">${f.ep?"Ep "+esc(f.ep):"Ep"}</span><span class="ept"><a href="${P('/spot/'+s.id)}">${esc(s.name)}</a><small>${esc(where(s))}</small></span>${f.video?`<a class="btn ghost sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch</a>`:""}</li>`).join("")}</ol></div>
+  </section>`;
+  }).join(""):`<div class="soon-block" style="grid-column:1/-1"><h3>${esc(R().name)} series coming soon</h3><p>New episodes will show up here as they drop.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a></div>`;
+}
+
+/* ===================== FOOD ITEM RANKINGS ===================== */
+const itemCats = () => [...new Set([...Object.keys(ITEM_CATEGORIES),...rItems().map(i=>i.cat)])].filter(Boolean);
+function fillRankMenu(){
+  $("#rankMenu").innerHTML=`<a href="${P('/rankings')}">All items</a>`+itemCats().map(c=>`<a href="${P('/rankings/'+slugify(c))}">${esc(c)}</a>`).join("");
+}
+function renderRankings(catSlug){
+  const cats=itemCats(); const cat=catSlug?cats.find(c=>slugify(c)===catSlug)||"":"";
+  const items=rItems();
+  const el=$("#rankBody");
+  if(!el.dataset.ready||el.dataset.region!==region){
+    el.dataset.ready="1"; el.dataset.region=region;
+    el.innerHTML=`<h1 class="big">Food item rankings</h1>
+      <p class="lede" id="rankLede"></p>
+      <div class="filters rankfilters">
+        <label>Food<select class="field" id="rcat"></select></label>
+        <label>Type<select class="field" id="rsub"></select></label>
+        <label>State / area<select class="field" id="rst"></select></label>
+        <label>City / district<select class="field" id="rcity"></select></label>
+        <label>Show<select class="field" id="rtop"><option value="5">Top 5</option><option value="10">Top 10</option><option value="0" selected>All</option></select></label>
+      </div>
+      <p class="count" id="rcount"></p><ol class="ranklist" id="rlist"></ol>`;
+    ["rcat","rsub","rst","rcity","rtop"].forEach(id=>$("#"+id).addEventListener("input",e=>{
+      if(id==="rcat"){ const c=$("#rcat").value; history.replaceState(null,"",P(c?"/rankings/"+slugify(c):"/rankings")); fillSub(); }
+      if(id==="rst") fillCity();
+      drawRank();
+    }));
+  }
+  $("#rankLede").textContent=`Every ${R().name} item I've ranked, best first. Filter down to find, say, the five best glazed donuts in one state.`;
+  $("#rcat").innerHTML=opts(cats,"All food"); $("#rcat").value=cat;
+  const st=uniq(items.map(i=>stateLabel(PLACE_BY_ID[i.spot])));
+  $("#rst").innerHTML=opts(st,"Everywhere"); $("#rst").closest("label").style.display=st.length>1?"":"none";
+  fillSub(); fillCity(); drawRank();
+}
+function fillSub(){
+  const c=$("#rcat").value, items=rItems().filter(i=>!c||i.cat===c);
+  const subs=c?[...(ITEM_CATEGORIES[c]||[]),...items.map(i=>i.sub)]:items.map(i=>i.sub);
+  $("#rsub").innerHTML=opts([...new Set(subs.filter(Boolean))],"All types");
+}
+function fillCity(){
+  const st=$("#rst").value;
+  $("#rcity").innerHTML=opts(uniq(rItems().map(i=>PLACE_BY_ID[i.spot]).filter(s=>!st||stateLabel(s)===st).map(s=>s.city)),"All");
+}
+function drawRank(){
+  const c=$("#rcat").value, sub=$("#rsub").value, st=$("#rst").value, city=$("#rcity").value, top=+$("#rtop").value;
+  const all=rItems();
+  let r=all.filter(i=>{const s=PLACE_BY_ID[i.spot];return (!c||i.cat===c)&&(!sub||i.sub===sub)&&(!st||stateLabel(s)===st)&&(!city||s.city===city)});
+  r.sort(byRating(i=>+i.rating));
+  const shown=top?r.slice(0,top):r;
+  $("#rcount").textContent=all.length?`${shown.length} of ${r.length} ${r.length===1?"item":"items"}`:"";
+  $("#rlist").innerHTML=!all.length?`<li class="soon-block"><h3>${esc(R().name)} rankings coming soon</h3><p>Glazed donuts, Italian subs, pepperoni slices: every item I rate will be ranked here, best first.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a></li>`
+    :shown.length?shown.map((i,n)=>{const s=PLACE_BY_ID[i.spot];const f=s.foods.find(f=>f.cat===i.cat);return `<li class="rank">
+      <span class="rn">${n+1}</span>${badge(i.cat)}
+      <span class="ri"><span class="nm">${esc(i.name)}</span><span class="tw">${esc(i.sub?i.cat+" · "+i.sub:i.cat)}</span><a class="rr" href="${P('/spot/'+s.id)}">${esc(s.name)}</a><span class="tw">${esc(where(s))}</span></span>
+      <span class="ra">${stampHTML(i.rating)}<span class="rbtns">${s.address?`<button class="btn ghost sm" type="button" data-copy="${esc(s.address)}">Copy address</button>`:""}${f&&f.video?`<a class="btn ghost sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch</a>`:""}</span></span></li>`}).join("")
+    :`<li class="empty">Nothing matches those filters yet. Try widening them.</li>`;
+}
 
 /* ===================== SPOT PAGE ===================== */
 function renderSpot(id){
-  const s=SPOTS.find(x=>x.id===id); const el=$("#spotBody");
-  if(!s){el.innerHTML=`<a class="back" href="#/">‹ Back to the map</a><p>That spot isn't on the map. <a href="#/">See all spots</a>.</p>`;return}
-  const near=SPOTS.filter(x=>x.id!==s.id).map(x=>({x,d:Math.hypot(x.lat-s.lat,(x.lng-s.lng)*0.73)})).sort((a,b)=>a.d-b.d).slice(0,3).map(o=>o.x);
-  const q=encodeURIComponent(`${s.name} ${s.town} ${STATES[s.st]}`);
-  el.innerHTML=`<a class="back" href="#/">‹ Back to the map</a>
-   <div class="spot-head">${badge(s).replace('class="badge"','class="badge" style="width:64px;height:64px;border-radius:16px;background:'+(BG[s.cat]||"var(--soft)")+'"')}<div><h1>${esc(s.name)}</h1><div class="tw">${esc(s.town)}, ${STATES[s.st]||s.st} · ${esc(s.cat)}${s.hit?' · <strong style="color:var(--sauce)">On the hit list</strong>':''}</div></div></div>
+  const s=PLACE_BY_ID[id]; const el=$("#spotBody");
+  if(!s){el.innerHTML=`<a class="back" href="${P('/')}">‹ Back to the map</a><p>That spot isn't on the map. <a href="${P('/')}">See all spots</a>.</p>`;return}
+  const near=rSpots().filter(x=>x.id!==s.id).map(x=>({x,d:Math.hypot(x.lat-s.lat,(x.lng-s.lng)*Math.cos(s.lat*Math.PI/180))})).sort((a,b)=>a.d-b.d).slice(0,3).map(o=>o.x);
+  const here=ALL_ITEMS.filter(i=>i.spot===s.id).sort(byRating(i=>+i.rating));
+  const main=bestFood(s);
+  el.innerHTML=`<a class="back" href="${P('/')}">‹ Back to the map</a>
+   <div class="spot-head">${badge(main?main.cat:"").replace('class="badge"','class="badge" style="width:64px;height:64px;border-radius:16px"')}<div><h1>${esc(s.name)}</h1><div class="tw">${esc(where(s))}</div></div></div>
    <div class="spot-grid">
-     <div class="vid"><div class="art">${ICON[s.cat]?art(s.cat,"#161616"):""}</div><div class="cap">My ${esc(s.name)} review</div><a class="btn" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch the review</a></div>
+     <div class="vid"><div class="art">${main&&ICON[main.cat]?art(main.cat,"#161616"):""}</div><div class="cap">My ${esc(s.name)} review</div><a class="btn" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch the review</a></div>
      <div>
-       ${s.verdict?`<p class="verdict">“${esc(s.verdict)}”</p>`:""}
-       ${s.order&&s.order.length?`<h3 class="sub">What to order</h3><ol class="order">${s.order.map((o,i)=>`<li><b>${i+1}</b>${esc(o)}</li>`).join("")}</ol>`:""}
-       ${s.tags&&s.tags.length?`<div class="facts"><div><small>Good to know</small><strong>${s.tags.map(esc).join(", ")}</strong></div></div>`:""}
-       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px"><a class="btn red" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch the review</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">Get directions</a></div>
-       ${near.length?`<h3 class="sub">Nearby on the map</h3><div class="rows">${near.map(rowHTML).join("")}</div>`:""}
+       <div class="foodcards">${s.foods.map(f=>`<div class="foodcard"><div class="fc-top">${badge(f.cat)}<div><h3>${esc(f.cat)}</h3>${f.series?`<small>${f.ep?"Episode "+esc(f.ep)+" of the ":"Part of the "}<a href="${P('/series')}">${esc(f.cat)} series</a></small>`:""}</div>${stampHTML(f.rating)}</div>${f.video?`<a class="btn red sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch the ${esc(f.cat.toLowerCase())} review</a>`:""}</div>`).join("")}</div>
+       ${here.length?`<h3 class="sub">What I've ranked here</h3><ol class="ranklist compact">${here.map(i=>`<li class="rank"><span class="ri"><span class="nm">${esc(i.name)}</span><span class="tw">${esc(i.sub?i.cat+" · "+i.sub:i.cat)}</span></span><span class="ra">${stampHTML(i.rating,true)}</span></li>`).join("")}</ol>`:""}
+       ${s.address?`<h3 class="sub">Address</h3><p class="addr">${esc(s.address)}</p>`:""}
+       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px">${addrButtons(s)||`<a class="btn ghost" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name+" "+where(s))}" target="_blank" rel="noopener">Open in Maps</a>`}</div>
+       ${near.length?`<h3 class="sub">Nearby on the map</h3><div class="rows">${near.map(x=>rowHTML(x)).join("")}</div>`:""}
      </div>
    </div>`;
+  document.title=`${s.name} · Kasey Feasts`;
 }
 
 /* ===================== BLOG ===================== */
 function mdInline(t){
   return esc(t)
-    .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,(m,alt,u)=>`<img src="${u}" alt="${alt}" loading="lazy">`)
-    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,(m,txt,u)=>`<a href="${u}"${/^https?:/.test(u)?' target="_blank" rel="noopener"':''}>${txt}</a>`)
+    .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,(m,alt,u)=>`<img src="${/^(https?:|\/)/.test(u)?u:"/"+u}" alt="${alt}" loading="lazy">`)
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,(m,txt,u)=>`<a href="${sitePath(u)}"${/^https?:/.test(u)?' target="_blank" rel="noopener"':''}>${txt}</a>`)
     .replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>")
     .replace(/\*([^*]+)\*/g,"<em>$1</em>");
 }
@@ -323,45 +514,98 @@ function md(text){
   }).join("");
 }
 const fmt=d=>new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+const postInRegion=p=>{const r=p.region||"all"; return region==="global"||r==="all"||r===region||(Array.isArray(r)&&r.includes(region));};
 function renderBlog(slug){
-  const el=$("#blogBody"); const posts=[...POSTS].sort((a,b)=>b.date.localeCompare(a.date));
-  const p=slug&&posts.find(x=>x.slug===slug);
-  if(slug&&!p){el.innerHTML=`<a class="back" href="#/blog">‹ All posts</a><p>That post doesn't exist. <a href="#/blog">See all posts</a>.</p>`;return}
+  const el=$("#blogBody"); const all=[...POSTS].sort((a,b)=>b.date.localeCompare(a.date));
+  const posts=all.filter(postInRegion);
+  const p=slug&&all.find(x=>x.slug===slug);
+  if(slug&&!p){el.innerHTML=`<a class="back" href="${P('/blog')}">‹ All posts</a><p>That post doesn't exist. <a href="${P('/blog')}">See all posts</a>.</p>`;return}
   if(p){
     const body=Array.isArray(p.body)?p.body.join("\n\n"):p.body;
-    el.innerHTML=`<a class="back" href="#/blog">‹ All posts</a><article class="post"><time>${fmt(p.date)}</time><h1>${esc(p.title)}</h1>${md(body)}<p class="signoff">Love you, XOXO</p></article>`;
+    el.innerHTML=`<a class="back" href="${P('/blog')}">‹ All posts</a><article class="post"><time>${fmt(p.date)}</time><h1>${esc(p.title)}</h1>${md(body)}<p class="signoff">Love you, XOXO</p></article>`;
     document.title=`${p.title} · Kasey Feasts`; return;
   }
-  el.innerHTML=`<h2 class="big">Blog</h2><p class="lede">Longer takes, road trips and news from the road.</p><div class="posts" style="margin-top:26px">${posts.map(p=>`<a class="post-row" href="#/blog/${p.slug}"><time>${fmt(p.date)}</time><div><h3>${esc(p.title)}</h3><p>${esc(p.excerpt||p.ex||"")}</p></div></a>`).join("")}</div>`;
+  el.innerHTML=`<h2 class="big">${esc(R().name)} blog</h2><p class="lede">Longer takes, road trips and news from the road.</p>`+(posts.length?`<div class="posts" style="margin-top:26px">${posts.map(p=>`<a class="post-row" href="${P('/blog/'+p.slug)}"><time>${fmt(p.date)}</time><div><h3>${esc(p.title)}</h3><p>${esc(p.excerpt||p.ex||"")}</p></div></a>`).join("")}</div>`:`<div class="soon-block" style="margin-top:26px"><h3>Posts coming soon</h3><p>${esc(R().name)} stories will show up here.</p></div>`);
 }
 
+/* ===================== LANDING + SWITCHER ===================== */
+$("#regionCards").innerHTML=REGION_ORDER.map(k=>{const r=REGIONS[k];return `<a class="rcard" href="/${k}/" style="--c:${r.color};--i:${r.text}">
+  <span class="co">${esc(r.coords)}</span><span class="go" aria-hidden="true">→</span>
+  <h2>${esc(r.name.toUpperCase())}</h2><p>${esc(r.tagline)}</p></a>`}).join("");
+$("#switchBubbles").innerHTML=REGION_ORDER.map(k=>`<a class="sbub" data-region="${k}" href="/${k}/" style="--c:${REGIONS[k].color};--i:${REGIONS[k].text}">${esc(REGIONS[k].name)}</a>`).join("");
+
 /* ===================== ROUTER ===================== */
+const TITLES={home:"",series:"Series",rankings:"Food Item Rankings",blog:"Blog",about:"About",work:"Work with Me",next:"Where Next?"};
+function applyRegion(r){
+  if(region===r) return;
+  region=r; const cfg=R();
+  $("#heroCopy").textContent=cfg.hero;
+  $("#dirTitle").textContent=r==="global"?"Places I've been around the world":`Places I've been in ${cfg.name}`;
+  document.querySelectorAll(".sbub").forEach(b=>{const on=b.dataset.region===r;b.classList.toggle("on",on);on?b.setAttribute("aria-current","true"):b.removeAttribute("aria-current")});
+  $("#jumps").innerHTML=cfg.jumps.map((j,i)=>`<button class="chip" data-j="${i}">${esc(j[0])}</button>`).join("");
+  const empty=isEmpty();
+  $("#mapSoon").hidden=!empty; $("#mapHint").hidden=empty;
+  $("#mapHint").textContent=cfg.spin?"Drag to spin · scroll or pinch to zoom":"Drag to move · scroll or pinch to zoom";
+  $("#mapSoonText").textContent=`Every place I review${r==="global"?"":" in "+cfg.name} will be pinned here with a link to the video. ${cfg.spin?"Watch the globe spin":"Look around"} while you wait.`;
+  $(".side-h small").textContent=empty?"Jump to an area":"Updates as you move the map";
+  $("#dirLede").textContent=empty?`The map is ready. The ${cfg.name} pins are coming soon, each linked to my review.`:"Drag the map to your area, then tap a dot to watch my review.";
+  $("#fq").value=""; $("#fsort").value="name"; fillMapCats(); fillListFilters(); renderList(); renderSeries(); fillRankMenu();
+  closePop(); sideKey=null; idleUntil=0; flyTo(...cfg.view); setSpin(!!cfg.spin);
+}
 function route(){
-  const h=location.hash||"#/";
-  if(!h.startsWith("#/")) return;  // in-page anchors like #directory
-  const [,a,b]=h.split("/");
-  const view = !a ? "home" : a==="spot" ? "spot" : a;
-  const known=["home","hitlist","spot","blog","about","work","next"];
-  const v=known.includes(view)?view:"home";
+  const segs=location.pathname.split("/").filter(Boolean);
+  const r=REGIONS[segs[0]]?segs[0]:null;
+  const landing=!r;
+  if(landing && segs.length){ history.replaceState(null,"","/"); }
+  let v=landing?"landing":(segs[1]||"home"); const arg=segs[2];
+  if(v==="hitlist") v="rankings";
+  if(!landing&&!["home","series","rankings","spot","blog","about","work","next"].includes(v)) v="home";
+  if(r) applyRegion(r); else setSpin(false);
+  // a restaurant opened from a region it isn't part of moves to its own region
+  if(v==="spot"){ const s=PLACE_BY_ID[arg]; if(s&&!inRegion(s)){ const home=s.country==="Hong Kong"?"hongkong":s.ne?"newengland":"global"; history.replaceState(null,"",`/${home}/spot/${s.id}`); return route(); } }
+  document.body.classList.toggle("is-landing",landing);
+  $("#switchbar").hidden=landing; $("#menuBtn").hidden=landing;
   document.querySelectorAll("[data-view]").forEach(s=>s.hidden=s.dataset.view!==v);
-  document.querySelectorAll("nav.main a[data-r]").forEach(l=>l.toggleAttribute("aria-current",false));
-  const cur=document.querySelector(`nav.main a[data-r="${v==="home"?"":v}"]`); if(cur&&v!=="spot") cur.setAttribute("aria-current","page");
-  if(v==="spot") renderSpot(b);
-  document.title="Kasey Feasts — New England food, honestly reviewed";
-  if(v==="blog") renderBlog(b);
+  document.querySelectorAll("[data-path]").forEach(a=>a.setAttribute("href",P(a.dataset.path)));
+  $(".logo").setAttribute("href",landing?"/":P("/"));
+  document.querySelectorAll("nav.main [data-r]").forEach(l=>l.removeAttribute("aria-current"));
+  const cur=document.querySelector(`nav.main [data-r="${v}"]`); if(cur&&!landing) cur.setAttribute("aria-current","page");
+  document.title=landing?"Kasey Feasts · New England, Hong Kong & beyond":`${TITLES[v]?TITLES[v]+" · ":""}Kasey Feasts ${R().name}`;
+  if(v==="spot") renderSpot(arg);
+  if(v==="blog") renderBlog(arg);
+  if(v==="rankings") renderRankings(arg);
   if(v==="home") { closePop(); render(); }
-  $("#nav").classList.remove("open"); $("#menuBtn").setAttribute("aria-expanded","false");
+  closeMenus();
   window.scrollTo(0,0);
 }
-addEventListener("hashchange",route);
+function closeMenus(){ $("#nav").classList.remove("open"); $("#menuBtn").setAttribute("aria-expanded","false"); $("#rankDrop").classList.remove("open"); $("#rankBtn").setAttribute("aria-expanded","false"); }
+addEventListener("popstate",route);
+// Old links like kaseyfeasts.com/#/blog/welcome go to the New England version.
+if(/^#\/./.test(location.hash)||location.hash==="#/"){
+  let old=location.hash.slice(1).replace(/^\/hitlist/,"/rankings");
+  history.replaceState(null,"",old==="/"?"/":"/newengland"+old);
+}
+// Internal links change the page without reloading.
+document.addEventListener("click",e=>{
+  if(!e.target.closest("#rankDrop")) { $("#rankDrop").classList.remove("open"); $("#rankBtn").setAttribute("aria-expanded","false"); }
+  if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return;
+  const a=e.target.closest("a[href]"); if(!a||a.target) return;
+  const href=a.getAttribute("href");
+  if(href==="#directory"){
+    e.preventDefault(); closeMenus();
+    if($('[data-view="home"]').hidden){ go(P("/")); }
+    setTimeout(()=>$("#directory").scrollIntoView({behavior:"smooth"}),50); return;
+  }
+  if(!href.startsWith("/")||href.startsWith("//")||href.startsWith("/admin")) return;
+  e.preventDefault(); go(href);
+});
+$("#rankBtn").onclick=e=>{ e.stopPropagation(); const o=$("#rankDrop").classList.toggle("open"); $("#rankBtn").setAttribute("aria-expanded",o); };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeMenus(); });
 $("#menuBtn").onclick=()=>{const o=$("#nav").classList.toggle("open");$("#menuBtn").setAttribute("aria-expanded",o)};
-document.addEventListener("click",e=>{const a=e.target.closest('a[href="#directory"]');if(!a)return;e.preventDefault();
-  if(a.getAttribute("href")==="#directory"&&$('[data-view="home"]').hidden){location.hash="#/";setTimeout(()=>$("#directory").scrollIntoView({behavior:"smooth"}),50);return}
-  document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:"smooth"}); $("#nav").classList.remove("open");});
 route();
 
 /* ===================== FORMS → EMAIL ===================== */
-const MAIL = "kaseyfeasts@delmgmt.com";
+const MAIL = "kaseyfeasts@gmail.com";
 function openEmail(subject, lines){
   const body = lines.filter(x=>x!=null).join("\n");
   const url = `mailto:${MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -385,4 +629,4 @@ $("#recForm").addEventListener("submit",e=>{
   ]);
   sentNote($("#recMsg"),"tip");
 });
-$("#copyMail").onclick=async()=>{const b=$("#copyMail");try{await navigator.clipboard.writeText("kaseyfeasts@delmgmt.com");b.textContent="Copied!"}catch{b.textContent="kaseyfeasts@delmgmt.com"}setTimeout(()=>b.textContent="Copy address",2200)};
+$("#copyMail").onclick=async()=>{const b=$("#copyMail");try{await navigator.clipboard.writeText(MAIL);b.textContent="Copied!"}catch{b.textContent=MAIL}setTimeout(()=>b.textContent="Copy address",2200)};

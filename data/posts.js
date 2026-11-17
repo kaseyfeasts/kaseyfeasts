@@ -6,8 +6,10 @@ const POSTS = [
    To add a post, copy the block below and paste it at the TOP of this list
    (newest first). Then change the details.
 
-   slug     the post's web address: kaseyfeasts.com/#/blog/<slug>
+   slug     the post's web address: kaseyfeasts.com/newengland/blog/<slug>
             lowercase, words-joined-by-dashes, unique
+   region   which section it appears in: "newengland", "hongkong",
+            "global", or "all" to show it in every region
    date     "YYYY-MM-DD"
    title    the headline
    excerpt  one sentence shown on the blog page
@@ -21,6 +23,7 @@ const POSTS = [
    ==================================================== */
 {
   slug: "welcome",
+  region: "all",
   date: "2026-10-06",
   title: "Welcome to Kasey Feasts",
   excerpt: "A home base for every review, every hidden gem and every tip you send my way.",
@@ -31,7 +34,7 @@ Until now my reviews have lived only in my videos. That works great right up unt
 
 One thing isn't changing: **nobody pays for my opinion.** If I post about a place, it's because I went, paid for my food and liked it enough to tell you about it. If I ever do sponsored work, it'll always be clearly labeled.
 
-This is where you come in. Most of my favorite finds came from followers, so if there's a spot I need to try, [tell me where to go next](#/next). And if you're a brand, a restaurant or a student who wants to work together, [here's how](#/work). Or just [email me](mailto:kaseyfeasts@delmgmt.com).
+This is where you come in. Most of my favorite finds came from followers, so if there's a spot I need to try, [tell me where to go next](/next). And if you're a brand, a restaurant or a student who wants to work together, [here's how](/work). Or just [email me](mailto:kaseyfeasts@gmail.com).
 
 More soon.
 `

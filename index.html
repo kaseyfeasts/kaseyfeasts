@@ -3,34 +3,54 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kasey Feasts — New England food, honestly reviewed</title>
+<title>Kasey Feasts · New England, Hong Kong & beyond</title>
+<script>
+// Puts clean links like /newengland/blog back in the address bar after 404.html sends them here.
+(function(l){var m=l.search.match(/[?&]p=([^&]*)/);if(m){history.replaceState(null,"","/"+decodeURIComponent(m[1]).replace(/^\/+/,"")+l.hash);}})(location);
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Krona+One&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="/assets/styles.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍩</text></svg>">
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <a class="logo" href="#/" aria-label="Kasey Feasts home"><span class="k">KASEY</span><span class="f">FEASTS</span></a>
+    <a class="logo" href="/" aria-label="Kasey Feasts home"><span class="k">KASEY</span><span class="f">FEASTS</span></a>
     <button class="menu-btn" aria-label="Menu" aria-expanded="false" id="menuBtn">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
     <nav class="main" id="nav">
-      <a href="#/" data-r="">Map</a>
-      <a href="#/series" data-r="series">Series</a>
-      <a href="#/blog" data-r="blog">Blog</a>
-      <a href="#/about" data-r="about">About</a>
-      <a href="#/work" data-r="work">Work with me</a>
-      <a href="#/next" data-r="next">Where next?</a>
-      <a href="mailto:kaseyfeasts@gmail.com" class="btn red" style="margin-left:6px">Email me</a>
+      <a href="/newengland/series" data-path="/series" data-r="series">Series</a>
+      <div class="drop" id="rankDrop" data-r="rankings">
+        <button type="button" class="dropbtn" id="rankBtn" aria-expanded="false" aria-haspopup="true">Food Item Rankings <span aria-hidden="true">▾</span></button>
+        <div class="dropmenu" id="rankMenu"></div>
+      </div>
+      <a href="/newengland/about" data-path="/about" data-r="about">About</a>
+      <a href="/newengland/work" data-path="/work" data-r="work">Work with Me</a>
+      <a href="/newengland/next" data-path="/next" data-r="next">Where Next?</a>
+      <a href="mailto:kaseyfeasts@gmail.com" class="btn red" style="margin-left:6px">Email Me</a>
     </nav>
+  </div>
+  <div class="switchbar" id="switchbar" hidden>
+    <div class="wrap"><span class="sl">Switch to</span><nav class="sbubs" id="switchBubbles" aria-label="Switch region"></nav></div>
   </div>
 </header>
 
 <main id="app">
+
+<!-- ================= LANDING: choose a region ================= -->
+<div data-view="landing" hidden>
+  <section class="landing">
+    <div class="wrap">
+      <div class="landing-av" id="landAv"></div>
+      <h1 class="here">I'M HERE FOR</h1>
+      <nav class="region-cards" id="regionCards" aria-label="Choose a region"></nav>
+    </div>
+  </section>
+</div>
 
 <!-- ================= HOME ================= -->
 <div data-view="home">
@@ -41,10 +61,10 @@
       </div>
       <div class="hero-copy">
         <h1 class="xoxo" aria-label="Love you, XOXO"><span class="l1">LOVE YOU</span><span class="l2">XOXO</span></h1>
-        <p>Independent reviews of New England's best donuts, sandwiches and pizza. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.</p>
+        <p id="heroCopy">Independent reviews of New England's best donuts, sandwiches and pizza. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.</p>
         <div class="row">
           <a class="btn red" href="#directory">Explore the map</a>
-          <a class="btn ghost" href="#/series">Watch the series</a>
+          <a class="btn ghost" href="/newengland/series" data-path="/series">Watch the series</a>
         </div>
       </div>
     </div>
@@ -54,7 +74,7 @@
     <div class="wrap">
       <div class="head-row">
         <div>
-          <h2 class="big">Places I've been</h2>
+          <h2 class="big" id="dirTitle">Places I've been</h2>
           <p class="lede" id="dirLede">Drag the map to your area, then tap a dot to watch my review.</p>
         </div>
         <div class="tabs" role="tablist">
@@ -75,7 +95,7 @@
             </div>
             <div class="map-hint" id="mapHint">Drag to spin · scroll or pinch to zoom</div>
             <div class="pop" id="pop" hidden></div>
-            <div class="soon" id="mapSoon" hidden><button class="x" aria-label="Hide this and explore the map">×</button><span class="eyebrow">COMING SOON</span><h3>Reviews are on the way</h3><p>Every place I review will be pinned here with a link to the video. Spin the globe while you wait.</p><div class="row"><a class="btn red" href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Follow for updates</a><a class="btn ghost" href="#/next">Suggest a spot</a></div></div>
+            <div class="soon" id="mapSoon" hidden><button class="x" aria-label="Hide this and explore the map">×</button><span class="eyebrow">COMING SOON</span><h3>Reviews are on the way</h3><p id="mapSoonText">Every place I review will be pinned here with a link to the video. Spin the globe while you wait.</p><div class="row"><a class="btn red" href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Follow for updates</a><a class="btn ghost" href="/newengland/next" data-path="/next">Suggest a spot</a></div></div>
           </div>
           <aside class="side">
             <div class="side-h"><strong id="inViewCount">Spots in this area</strong><small>Updates as you move the map</small></div>
@@ -87,10 +107,11 @@
 
       <div id="listPane" hidden>
         <div class="filters">
-          <label>Search<input class="field" id="fq" type="search" placeholder="Name, town or dish"></label>
-          <label>Region<select class="field" id="fst"><option value="">All regions</option></select></label>
+          <label>Search<input class="field" id="fq" type="search" placeholder="Name, city or food"></label>
+          <label>State / area<select class="field" id="fst"><option value="">All</option></select></label>
+          <label>City / district<select class="field" id="fcity"><option value="">All</option></select></label>
           <label>Food<select class="field" id="fcat"><option value="">All food</option></select></label>
-          <label class="check"><input type="checkbox" id="fhit"> Hit list only</label>
+          <label>Sort<select class="field" id="fsort"><option value="name">A to Z</option><option value="best">Best to worst</option></select></label>
         </div>
         <p class="count" id="fcount"></p>
         <div class="rows" id="frows"></div>
@@ -99,16 +120,21 @@
   </section>
 
   <section class="block" style="padding-top:0"><div class="wrap">
-    <div class="head-row"><div><h2 class="big">The series</h2><p class="lede">Donuts, pizza and sandwiches, one episode at a time.</p></div><a class="btn ghost" href="#/series">Browse the series</a></div>
+    <div class="head-row"><div><h2 class="big">The series</h2><p class="lede">Donuts, pizza and sandwiches, one episode at a time.</p></div><a class="btn ghost" href="/newengland/series" data-path="/series">Browse the series</a></div>
   </div></section>
 </div>
 
 <div data-view="series" hidden>
   <section class="block"><div class="wrap">
     <h1 class="big">The series</h1>
-    <p class="lede">Pick what you're craving and catch up on every episode.</p>
+    <p class="lede" id="seriesLede">Pick what you're craving and catch up on every episode.</p>
     <div class="series-grid" id="seriesGrid"></div>
   </div></section>
+</div>
+
+<!-- ================= FOOD ITEM RANKINGS ================= -->
+<div data-view="rankings" hidden>
+  <section class="block"><div class="wrap" id="rankBody"></div></section>
 </div>
 
 <!-- ================= SPOT ================= -->
@@ -132,14 +158,14 @@
         <p>Every review is my own money and my own opinion. If a place isn't good, it doesn't make the map. If it's great, you'll hear about it, loudly.</p>
         <div class="stat-line">
           <span class="tag">41K followers on Instagram</span>
-          <span class="tag">MA · NH · Beyond</span>
+          <span class="tag">New England · Hong Kong · Global</span>
         </div>
       </div>
     </div>
     <div class="policy"><strong>No paid praise.</strong> Restaurants can't buy a review. Sponsored work is always labeled, and it never touches the map or the hit list.</div>
     <div class="two">
       <div class="panel"><h3>How I pick</h3><p style="margin:0">If it's on the map, I went, I paid, and I'd send a friend there. Each spot links to my video so you can see exactly what I ate and decide for yourself.</p></div>
-      <div class="panel"><h3>Got a tip?</h3><p style="margin:0 0 14px">Most of my best finds came from followers. Tell me where to go next.</p><a class="btn" href="#/next">Suggest a spot</a></div>
+      <div class="panel"><h3>Got a tip?</h3><p style="margin:0 0 14px">Most of my best finds came from followers. Tell me where to go next.</p><a class="btn" href="/newengland/next" data-path="/next">Suggest a spot</a></div>
     </div>
   </div></section>
 </div>
@@ -242,14 +268,17 @@
 <footer>
   <div class="wrap">
     <div class="sign">LOVE YOU XOXO</div>
-    <div>Independent reviews, no paid praise · <a href="mailto:kaseyfeasts@gmail.com">kaseyfeasts@gmail.com</a> · Newsletter coming soon · <a href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Instagram</a></div>
+    <div>Independent reviews, no paid praise · <a href="mailto:kaseyfeasts@gmail.com">kaseyfeasts@gmail.com</a> · Newsletter coming soon · <a href="https://www.instagram.com/kaseyfeasts/" target="_blank" rel="noopener">Instagram</a> · <a href="/newengland/blog" data-path="/blog">Blog</a></div>
   </div>
 </footer>
-<script src="assets/d3.min.js"></script>
-<script src="data/map-data.js"></script>
-<script src="data/content.js"></script>
-<script src="data/series.js"></script>
-<script src="data/posts.js"></script>
-<script src="assets/app.js"></script>
+<script src="/assets/d3.min.js"></script>
+<script src="/data/map-data.js"></script>
+<script src="/data/map-detail.js"></script>
+<script src="/data/regions.js"></script>
+<script src="/data/lists.js"></script>
+<script src="/data/content.js"></script>
+<script src="/data/items.js"></script>
+<script src="/data/posts.js"></script>
+<script src="/assets/app.js"></script>
 </body>
 </html>

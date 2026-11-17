@@ -1,6 +1,6 @@
 # Kasey Feasts Admin: setup guide
 
-The admin interface is included at `/admin/` and works with the existing `data/content.js` and `data/posts.js`. The public website remains on GitHub Pages. **Sign-in will not work until the steps below are completed.**
+The admin interface is included at `/admin/` and edits `data/content.js` (restaurants), `data/items.js` (food items) and `data/posts.js` (blog posts). Dropdown lists come from `data/lists.js`. The public website remains on GitHub Pages. **Sign-in will not work until the steps below are completed.**
 
 ## 1. Upload the updated site
 
@@ -34,7 +34,7 @@ Visit `https://kaseyfeasts.com/admin/` and click Sign in with GitHub. Approve th
 
 ## 5. Test safely
 
-Add a test restaurant with real latitude and longitude, save, wait for GitHub Pages to deploy, verify the map and Hit List, then delete the test entry. Also test editing the welcome blog post.
+Choose New England, add a test restaurant with a real map pin, save, wait for GitHub Pages to deploy, and check the map, list and rankings. Then delete the test entry. Also test editing the welcome blog post.
 
 ## Important security and maintenance notes
 

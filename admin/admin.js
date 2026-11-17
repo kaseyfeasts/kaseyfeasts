@@ -1,4 +1,3 @@
-
 (() => {
   'use strict';
 
@@ -6,18 +5,20 @@
   const $ = id => document.getElementById(id);
 
   let token = sessionStorage.getItem('kf_token');
-  let tab = 'spots';
+  let region = sessionStorage.getItem('kf_region') || null; // newengland | hongkong | global
+  let tab = 'spots';                                         // spots | items | posts
   let spots = [];
+  let items = [];
   let posts = [];
   let editing = null;
   let sha = {};
 
+  const FILES = { spots: 'data/content.js', items: 'data/items.js', posts: 'data/posts.js' };
+  const REGION_NAMES = { newengland: 'New England', hongkong: 'Hong Kong', global: 'Global' };
+  const RATINGS = []; for (let r = 100; r >= 60; r -= 2.5) RATINGS.push(r);
+
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[c]));
 
   const slug = s => String(s)
@@ -28,17 +29,11 @@
     .replace(/^-|-$/g, '');
 
   const enc = s => btoa(
-    Array.from(
-      new TextEncoder().encode(s),
-      b => String.fromCharCode(b)
-    ).join('')
+    Array.from(new TextEncoder().encode(s), b => String.fromCharCode(b)).join('')
   );
 
   const dec = s => new TextDecoder().decode(
-    Uint8Array.from(
-      atob(s.replace(/\s/g, '')),
-      c => c.charCodeAt(0)
-    )
+    Uint8Array.from(atob(s.replace(/\s/g, '')), c => c.charCodeAt(0))
   );
 
   function note(s, error = false) {
@@ -57,11 +52,11 @@
       }
     }).then(async r => {
       const j = await r.json();
-
       if (!r.ok) {
-        throw Error(j.message || 'GitHub request failed');
+        const err = Error(j.message || 'GitHub request failed');
+        err.status = r.status;
+        throw err;
       }
-
       return j;
     });
   }
@@ -69,421 +64,397 @@
   const file = p =>
     `/repos/${encodeURIComponent(cfg.repoOwner)}/${encodeURIComponent(cfg.repoName)}/contents/${p}`;
 
+  /* ---------- lists (from /data/lists.js) ---------- */
+  const L = {
+    countries: typeof COUNTRIES !== 'undefined' ? COUNTRIES : ['United States', 'Hong Kong'],
+    states: typeof STATES !== 'undefined' ? STATES : {},
+    cities: typeof CITIES !== 'undefined' ? CITIES : {},
+    neStates: typeof NEW_ENGLAND_STATES !== 'undefined' ? NEW_ENGLAND_STATES : ['Connecticut', 'Maine', 'Massachusetts', 'New Hampshire', 'Rhode Island', 'Vermont'],
+    foods: typeof FOOD_CATEGORIES !== 'undefined' ? FOOD_CATEGORIES : ['Donuts', 'Pizza', 'Sandwiches'],
+    itemCats: typeof ITEM_CATEGORIES !== 'undefined' ? ITEM_CATEGORIES : {},
+    stamps: typeof RATING_STAMPS !== 'undefined' ? RATING_STAMPS : [[100, 'All-Star'], [90, 'Fantastic'], [80, 'Great'], [70, 'Very Good'], [60, 'Good']]
+  };
+  const stampOf = r => { r = +r; if (!Number.isFinite(r)) return ''; for (const [min, l] of L.stamps) if (r >= min) return l; return ''; };
+  const ratingLabel = r => Number.isFinite(+r) && r !== '' && r != null ? `${+r} · ${stampOf(r)}` : '';
+
+  /* ---------- data shape ---------- */
+  const ABBR = { MA: 'Massachusetts', NH: 'New Hampshire', ME: 'Maine', VT: 'Vermont', RI: 'Rhode Island', CT: 'Connecticut' };
+  function normSpot(s) { // converts the older one-category format
+    if (Array.isArray(s.foods)) return s;
+    const state = ABBR[s.st] || s.st || '';
+    return {
+      id: s.id, name: s.name, country: ABBR[s.st] ? 'United States' : (s.country || ''),
+      ne: s.ne ?? !!ABBR[s.st], state, city: s.city || s.town || '', address: s.address || '',
+      lat: s.lat, lng: s.lng,
+      foods: s.cat ? [{ cat: s.cat, rating: s.rating ?? null, video: s.video || '', series: false, ep: null }] : []
+    };
+  }
+  const inRegion = s => region === 'newengland' ? !!s.ne : region === 'hongkong' ? s.country === 'Hong Kong' : true;
+  const spotById = id => spots.find(s => s.id === id);
+  const itemInRegion = i => { const s = spotById(i.spot); return s ? inRegion(s) : region === 'global'; };
+  const postInRegion = p => { const r = p.region || 'all'; return region === 'global' || r === 'all' || r === region; };
+  const where = s => [s.city, s.state, s.country].filter(Boolean).join(', ');
+
+  async function getFile(path) {
+    try {
+      const f = await api(file(path) + '?ref=' + cfg.branch);
+      sha[path] = f.sha;
+      return dec(f.content);
+    } catch (e) {
+      if (e.status === 404) { sha[path] = undefined; return null; }
+      throw e;
+    }
+  }
+
   async function load() {
     try {
       note('Loading content...');
-
-      const [user, a, b] = await Promise.all([
-        api('/user'),
-        api(file('data/content.js') + '?ref=' + cfg.branch),
-        api(file('data/posts.js') + '?ref=' + cfg.branch)
-      ]);
-
-      if (
-        user.login.toLowerCase() !==
-        cfg.allowedLogin.toLowerCase()
-      ) {
-        throw Error(
-          'This GitHub account is not authorized. Sign in as ' +
-          cfg.allowedLogin
-        );
+      const user = await api('/user');
+      if (user.login.toLowerCase() !== cfg.allowedLogin.toLowerCase()) {
+        throw Error('This GitHub account is not authorized. Sign in as ' + cfg.allowedLogin);
       }
-
       $('who').textContent = '@' + user.login;
 
-      sha = {
-        'data/content.js': a.sha,
-        'data/posts.js': b.sha
-      };
-
-      const s = dec(a.content);
-      const p = dec(b.content);
-
-      spots = Function(
-        '"use strict";' + s + ';return SPOTS'
-      )();
-
-      posts = Function(
-        '"use strict";' + p + ';return POSTS'
-      )();
-
-      if (!Array.isArray(spots) || !Array.isArray(posts)) {
-        throw Error('Unexpected content format');
-      }
+      const [s, it, p] = await Promise.all([getFile(FILES.spots), getFile(FILES.items), getFile(FILES.posts)]);
+      spots = s ? Function('"use strict";' + s + ';return SPOTS')() : [];
+      items = it ? Function('"use strict";' + it + ';return ITEMS')() : [];
+      posts = p ? Function('"use strict";' + p + ';return POSTS')() : [];
+      if (!Array.isArray(spots) || !Array.isArray(items) || !Array.isArray(posts)) throw Error('Unexpected content format');
+      spots = spots.map(normSpot);
 
       $('login').hidden = true;
-      $('dashboard').hidden = false;
       $('logout').hidden = false;
-
-      render();
+      if (region) openRegion(region); else showChooser();
       note('Connected to GitHub.');
-
     } catch (e) {
       note(e.message, true);
-
-      if (!$('dashboard').hidden) return;
-
+      if (!$('dashboard').hidden || !$('chooser').hidden) return;
       alert('Unable to connect: ' + e.message);
     }
   }
 
+  /* ---------- "I'M HERE FOR" chooser + switcher ---------- */
+  function showChooser() {
+    $('dashboard').hidden = true;
+    $('chooser').hidden = false;
+  }
+  function openRegion(r) {
+    region = r;
+    sessionStorage.setItem('kf_region', r);
+    $('chooser').hidden = true;
+    $('dashboard').hidden = false;
+    $('editor').hidden = true;
+    document.querySelectorAll('[data-region]').forEach(b => b.classList.toggle('on', b.dataset.region === r));
+    $('regionTitle').textContent = REGION_NAMES[r] + (r === 'global' ? ' database (everything)' : ' database');
+    $('regionNote').textContent = r === 'newengland'
+      ? 'Only restaurants in New England, and their food items.'
+      : r === 'hongkong'
+        ? 'Only restaurants in Hong Kong, and their food items.'
+        : 'Every restaurant and food item, from every country.';
+    resetFilters();
+    render();
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-region]');
+    if (b) { e.preventDefault(); openRegion(b.dataset.region); }
+  });
+  $('changeRegion').onclick = showChooser;
+
+  /* ---------- filters ---------- */
+  const uniq = a => [...new Set(a.filter(Boolean))].sort((x, y) => x.localeCompare(y));
+  const optList = (arr, all, val) => `<option value="">${all}</option>` + arr.map(v => `<option ${v === val ? 'selected' : ''}>${esc(v)}</option>`).join('');
+  function resetFilters() { ['fCountry', 'fState', 'fCity', 'fCat', 'fSub'].forEach(id => { $(id).value = ''; }); $('search').value = ''; $('fSort').value = 'name'; }
+  function fillFilters() {
+    const rs = spots.filter(inRegion);
+    const keep = id => $(id).value;
+    const c = keep('fCountry'), st = keep('fState'), ci = keep('fCity'), cat = keep('fCat'), sub = keep('fSub');
+    $('fCountry').innerHTML = optList(uniq(rs.map(s => s.country)), 'All countries', c);
+    $('fCountry').hidden = region !== 'global' || tab === 'posts';
+    const byC = rs.filter(s => !c || s.country === c);
+    $('fState').innerHTML = optList(uniq(byC.map(s => s.state)), 'All states / areas', st);
+    const byS = byC.filter(s => !st || s.state === st);
+    $('fCity').innerHTML = optList(uniq(byS.map(s => s.city)), 'All cities / districts', ci);
+    const cats = tab === 'items' ? uniq([...Object.keys(L.itemCats), ...items.map(i => i.cat)]) : uniq([...L.foods, ...rs.flatMap(s => s.foods.map(f => f.cat))]);
+    $('fCat').innerHTML = optList(cats, 'All food categories', cat);
+    const subs = uniq([...(L.itemCats[cat] || []), ...items.filter(i => !cat || i.cat === cat).map(i => i.sub)]);
+    $('fSub').innerHTML = optList(subs, 'All sub-categories', sub);
+    $('fSub').hidden = tab !== 'items';
+    ['fState', 'fCity', 'fCat', 'fSort'].forEach(id => { $(id).hidden = tab === 'posts'; });
+  }
+  ['fCountry', 'fState', 'fCity', 'fCat', 'fSub', 'fSort'].forEach(id => $(id).addEventListener('change', render));
+
+  /* ---------- list ---------- */
   function render() {
-    const arr = tab === 'spots' ? spots : posts;
-
-    $('spotcount').textContent = spots.length;
-    $('postcount').textContent = posts.length;
-
-    $('new').textContent = tab === 'spots'
-      ? '+ Add restaurant'
-      : '+ Add blog post';
+    if (!region) return;
+    fillFilters();
+    const rs = spots.filter(inRegion), ri = items.filter(itemInRegion), rp = posts.filter(postInRegion);
+    $('spotcount').textContent = rs.length;
+    $('itemcount').textContent = ri.length;
+    $('postcount').textContent = rp.length;
+    $('new').textContent = tab === 'spots' ? '+ Add restaurant' : tab === 'items' ? '+ Add food item' : '+ Add blog post';
 
     const q = $('search').value.toLowerCase();
+    const c = $('fCountry').value, st = $('fState').value, ci = $('fCity').value, cat = $('fCat').value, sub = $('fSub').value, sort = $('fSort').value;
+    const locOk = s => s && (!c || s.country === c) && (!st || s.state === st) && (!ci || s.city === ci);
+    let rows;
+    if (tab === 'spots') {
+      rows = spots.map((v, i) => ({ v, i })).filter(({ v }) => inRegion(v) && locOk(v) && (!cat || v.foods.some(f => f.cat === cat)) && JSON.stringify(v).toLowerCase().includes(q));
+      const score = v => cat ? +(v.foods.find(f => f.cat === cat) || {}).rating || 0 : Math.max(0, ...v.foods.map(f => +f.rating || 0));
+      rows.sort(sort === 'best' ? (a, b) => score(b.v) - score(a.v) || a.v.name.localeCompare(b.v.name) : (a, b) => a.v.name.localeCompare(b.v.name));
+    } else if (tab === 'items') {
+      rows = items.map((v, i) => ({ v, i })).filter(({ v }) => itemInRegion(v) && locOk(spotById(v.spot) || {}) && (!cat || v.cat === cat) && (!sub || v.sub === sub) && JSON.stringify(v).toLowerCase().includes(q));
+      rows.sort(sort === 'best' ? (a, b) => (+b.v.rating || 0) - (+a.v.rating || 0) || a.v.name.localeCompare(b.v.name) : (a, b) => a.v.name.localeCompare(b.v.name));
+    } else {
+      rows = posts.map((v, i) => ({ v, i })).filter(({ v }) => postInRegion(v) && JSON.stringify(v).toLowerCase().includes(q));
+    }
+    $('resultcount').textContent = `${rows.length} shown`;
 
-    const items = arr
-      .map((v, i) => ({ ...v, _i: i }))
-      .filter(v =>
-        JSON.stringify(v).toLowerCase().includes(q)
-      );
-
-    $('items').innerHTML = items.length
-      ? items.map(v => `
-        <div class="item">
-          <div>
-            <strong>
-              ${esc(tab === 'spots' ? v.name : v.title)}
-            </strong>
-            <small>
-              ${esc(
-                tab === 'spots'
-                  ? `${v.town || ''}, ${v.st || ''} · ${v.cat || ''}${v.hit ? ' · ★ Hit List' : ''}`
-                  : `${v.date || ''} · ${v.slug || ''}`
-              )}
-            </small>
-          </div>
-          <div>
-            <button data-edit="${v._i}">Edit</button>
-            <button class="delete" data-delete="${v._i}">
-              Delete
-            </button>
-          </div>
-        </div>
-      `).join('')
-      : '<div class="empty">Nothing here yet. Add your first ' +
-        (tab === 'spots' ? 'restaurant' : 'blog post') +
-        '!</div>';
+    $('items').innerHTML = rows.length ? rows.map(({ v, i }) => {
+      let title, meta;
+      if (tab === 'spots') {
+        title = v.name;
+        meta = `${esc(where(v))}${v.ne ? ' · <span class="ne">New England</span>' : ''}<br>${v.foods.map(f => `<span class="pill">${esc(f.cat)} ${esc(ratingLabel(f.rating))}${f.series ? ` · Series #${esc(f.ep || '?')}` : ''}</span>`).join(' ')}`;
+      } else if (tab === 'items') {
+        const s = spotById(v.spot);
+        title = v.name;
+        meta = `${esc(v.cat)}${v.sub ? ' · ' + esc(v.sub) : ''} · <span class="pill">${esc(ratingLabel(v.rating))}</span><br>${s ? esc(s.name) + ' · ' + esc(where(s)) : '<span class="warn">Restaurant missing</span>'}`;
+      } else {
+        title = v.title;
+        meta = `${esc(v.date || '')} · ${esc(v.slug || '')} · ${esc({ all: 'All regions', newengland: 'New England', hongkong: 'Hong Kong', global: 'Global' }[v.region || 'all'] || v.region)}`;
+      }
+      return `<div class="item"><div><strong>${esc(title)}</strong><small>${meta}</small></div>
+        <div><button data-edit="${i}">Edit</button><button class="delete" data-delete="${i}">Delete</button></div></div>`;
+    }).join('') : `<div class="empty">Nothing here yet in ${esc(REGION_NAMES[region])}. Add your first ${tab === 'spots' ? 'restaurant' : tab === 'items' ? 'food item' : 'blog post'}!</div>`;
   }
 
-  function field(
-    name,
-    label,
-    value = '',
-    type = 'text',
-    required = false
-  ) {
-    return `
-      <div>
-        <label for="f_${name}">${label}</label>
-        ${
-          type === 'textarea'
-            ? `<textarea id="f_${name}" name="${name}" ${required ? 'required' : ''}>${esc(value)}</textarea>`
-            : `<input id="f_${name}" name="${name}" type="${type}" value="${esc(value)}" ${required ? 'required' : ''}>`
-        }
-      </div>
-    `;
+  /* ---------- form helpers ---------- */
+  function field(name, label, value = '', type = 'text', required = false, extra = '') {
+    return `<div><label for="f_${name}">${label}</label>${type === 'textarea'
+      ? `<textarea id="f_${name}" name="${name}" ${required ? 'required' : ''} ${extra}>${esc(value)}</textarea>`
+      : `<input id="f_${name}" name="${name}" type="${type}" value="${esc(value)}" ${required ? 'required' : ''} ${extra}>`}</div>`;
+  }
+  // Dropdown with an "Other…" choice that reveals a text box.
+  function selectField(name, label, options, value = '', { required = false, placeholder = 'Choose…', other = true, hint = '' } = {}) {
+    return `<div class="sf" data-sf="${name}"><label for="f_${name}">${label}</label>
+      <select id="f_${name}" ${required ? 'required' : ''}>${selectOptions(options, value, placeholder, other)}</select>
+      <input class="otherinput" id="f_${name}_other" placeholder="Type it here" value="${value && !options.includes(value) ? esc(value) : ''}" ${value && !options.includes(value) ? '' : 'hidden'}>
+      ${hint ? `<small class="hint">${hint}</small>` : ''}</div>`;
+  }
+  function selectOptions(options, value, placeholder = 'Choose…', other = true) {
+    const isOther = value && !options.includes(value);
+    return `<option value="">${esc(placeholder)}</option>` + options.map(o => `<option ${o === value ? 'selected' : ''}>${esc(o)}</option>`).join('')
+      + (other ? `<option value="__other" ${isOther ? 'selected' : ''}>Other (type it)…</option>` : '');
+  }
+  function setSelect(name, options, value, placeholder) {
+    const sel = $('f_' + name); if (!sel) return;
+    sel.innerHTML = selectOptions(options, value, placeholder);
+    const o = $('f_' + name + '_other'); const isOther = value && !options.includes(value);
+    o.hidden = !isOther; o.value = isOther ? value : '';
+  }
+  const readSel = name => { const s = $('f_' + name); if (!s) return ''; return s.value === '__other' ? $('f_' + name + '_other').value.trim() : s.value.trim(); };
+  const ratingSelect = (name, label, value, required) => `<div><label for="f_${name}">${label} <span class="hidden-tag">Hidden</span></label>
+    <select id="f_${name}" name="${name}" ${required ? 'required' : ''}><option value="">Choose a rating…</option>${RATINGS.map(r => `<option value="${r}" ${value !== '' && value != null && +value === r ? 'selected' : ''}>${r} · ${stampOf(r)}</option>`).join('')}</select>
+    <small class="hint">Only the stamp shows on the site. The number is used to rank best to worst.</small></div>`;
+
+  function parsePin(text) {
+    const t = String(text || '');
+    const m = t.match(/@(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/) || t.match(/(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/);
+    if (!m) return null;
+    const lat = +m[1], lng = +m[2];
+    return Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180 ? { lat, lng } : null;
+  }
+
+  /* ---------- editors ---------- */
+  function foodBlock(n, f = {}) {
+    return `<fieldset class="foodset" data-food="${n}"><legend>Food category ${n}${n > 1 ? ' <span class="opt">(optional)</span>' : ''}</legend>
+      ${selectField('cat' + n, 'Food category', L.foods, f.cat || '', { required: n === 1 })}
+      ${ratingSelect('rating' + n, 'Rating', f.rating, false)}
+      ${field('video' + n, 'Instagram video link', f.video || '', 'url', false, 'placeholder="https://www.instagram.com/reel/..."')}
+      <div class="twocol">
+        <div class="checkrow"><input type="checkbox" id="f_series${n}" ${f.series ? 'checked' : ''}><label for="f_series${n}" id="f_series${n}_label">Part of the ${esc(f.cat || 'category')} series</label></div>
+        ${field('ep' + n, 'Number in series', f.ep ?? '', 'number', false, `min="1" step="1" ${f.series ? '' : 'disabled'}`)}
+      </div></fieldset>`;
   }
 
   function openEditor(i = null) {
     editing = i;
+    const v = i === null ? {} : (tab === 'spots' ? spots : tab === 'items' ? items : posts)[i];
+    $('editorTitle').textContent = (i === null ? 'Add ' : 'Edit ') + (tab === 'spots' ? 'restaurant' : tab === 'items' ? 'food item' : 'blog post');
 
-    const v = i === null
-      ? {}
-      : (tab === 'spots' ? spots : posts)[i];
-
-    $('editorTitle').textContent =
-      (i === null ? 'Add ' : 'Edit ') +
-      (tab === 'spots' ? 'restaurant' : 'blog post');
-
-    $('fields').innerHTML = tab === 'spots'
-      ? field(
-          'name',
-          'Restaurant name',
-          v.name,
-          'text',
-          true
-        )
-        + `<div class="twocol">
-            ${field('town', 'Town', v.town, 'text', true)}
-            ${field('st', 'State (MA, NH, ME, VT, RI, CT)', v.st, 'text', true)}
-          </div>`
-        + `<div class="twocol">
-            ${field('lat', 'Latitude', v.lat, 'number', true)}
-            ${field('lng', 'Longitude', v.lng, 'number', true)}
-          </div>`
-        + `<label for="f_cat">Category</label>
-          <select name="cat" id="f_cat">
-            ${[
-              'Donuts',
-              'Sandwiches',
-              'Pizza',
-              'Bakery',
-              'Seafood'
-            ].map(c =>
-              `<option ${v.cat === c ? 'selected' : ''}>${c}</option>`
-            ).join('')}
-          </select>`
-        + field(
-            'video',
-            'Instagram or TikTok review URL',
-            v.video || '',
-            'url'
-          )
-        + field(
-            'verdict',
-            'Your review / verdict',
-            v.verdict || '',
-            'textarea'
-          )
-        + field(
-            'order',
-            'What to order (one item per line)',
-            (v.order || []).join('\n'),
-            'textarea'
-          )
-        + field(
-            'tags',
-            'Tags (one per line)',
-            (v.tags || []).join('\n'),
-            'textarea'
-          )
-        + `<div class="checkrow">
-            <input
-              type="checkbox"
-              name="hit"
-              id="f_hit"
-              ${v.hit ? 'checked' : ''}
-            >
-            <label for="f_hit">Feature on Hit List</label>
-          </div>`
-      : field(
-          'title',
-          'Post title',
-          v.title,
-          'text',
-          true
-        )
-        + field(
-            'date',
-            'Publication date',
-            v.date || new Date().toISOString().slice(0, 10),
-            'date',
-            true
-          )
-        + field(
-            'excerpt',
-            'Short description',
-            v.excerpt,
-            'textarea',
-            true
-          )
-        + field(
-            'body',
-            'Article content (Markdown supported)',
-            v.body,
-            'textarea',
-            true
-          )
+    if (tab === 'spots') {
+      const country = v.country || (region === 'hongkong' ? 'Hong Kong' : region === 'newengland' ? 'United States' : '');
+      const ne = i === null ? region === 'newengland' : !!v.ne;
+      const foods = v.foods || [];
+      $('fields').innerHTML =
+        field('name', 'Restaurant name', v.name, 'text', true)
+        + selectField('country', 'Country', L.countries, country, { required: true })
+        + `<div class="checkrow necheck"><input type="checkbox" id="f_ne" ${ne ? 'checked' : ''}><label for="f_ne">New England <span class="hidden-tag">Hidden</span></label></div>
+           <small class="hint">Ticked = this restaurant shows in the New England section of the site and admin.</small>`
+        + `<div class="twocol">${selectField('state', 'State', L.states[country] || [], v.state || '')}${selectField('city', 'City / District', L.cities[v.state] || [], v.city || '')}</div>`
+        + field('address', 'Google Maps address', v.address || '', 'text', false, 'placeholder="123 Main St, Boston, MA 02110"')
+        + field('pin', 'Map pin (latitude, longitude)', Number.isFinite(+v.lat) && v.lat !== undefined ? `${v.lat}, ${v.lng}` : '', 'text', true, 'placeholder="42.3601, -71.0589"')
+        + `<small class="hint">In Google Maps, right-click the restaurant and click the numbers at the top to copy them, then paste here. <a href="#" id="findPin">Search Google Maps for this address ↗</a></small>`
+        + [1, 2, 3].map(n => foodBlock(n, foods[n - 1])).join('');
+    } else if (tab === 'items') {
+      const rs = spots.filter(inRegion).sort((a, b) => a.name.localeCompare(b.name));
+      const cat = v.cat || '';
+      $('fields').innerHTML =
+        field('name', 'Item name', v.name, 'text', true, 'placeholder="e.g. Honey glazed"')
+        + ratingSelect('rating', 'Rating', v.rating, true)
+        + selectField('icat', 'Category', Object.keys(L.itemCats), cat, { required: true })
+        + selectField('isub', 'Sub-category', L.itemCats[cat] || [], v.sub || '')
+        + `<div><label for="f_spot">Restaurant</label>
+            <select id="f_spot" required><option value="">${rs.length ? 'Choose the restaurant…' : 'Add the restaurant first'}</option>${rs.map(s => `<option value="${esc(s.id)}" ${s.id === v.spot ? 'selected' : ''}>${esc(s.name)} — ${esc([s.city, s.state || s.country].filter(Boolean).join(', '))}</option>`).join('')}</select>
+            <small class="hint">The item's location and Google Maps address come from its restaurant.</small>
+            <div id="spotAddr" class="addrbox"></div></div>`;
+      showSpotAddr();
+    } else {
+      $('fields').innerHTML =
+        field('title', 'Post title', v.title, 'text', true)
+        + field('date', 'Publication date', v.date || new Date().toISOString().slice(0, 10), 'date', true)
+        + `<label for="f_region">Show this post in</label><select name="region" id="f_region">${[['all', 'All regions'], ['newengland', 'New England'], ['hongkong', 'Hong Kong'], ['global', 'Global only']].map(([val, lab]) => `<option value="${val}" ${(v.region || (i === null && region !== 'global' ? region : 'all')) === val ? 'selected' : ''}>${lab}</option>`).join('')}</select>`
+        + field('excerpt', 'Short description', v.excerpt, 'textarea', true)
+        + field('body', 'Article content (Markdown supported)', v.body, 'textarea', true)
         + `<div style="margin-top:10px">
-            <button type="button" id="markdownHelpToggle" aria-expanded="false"
-              aria-controls="markdownHelpPanel"
-              style="cursor:pointer;border:1px solid #ddd;border-radius:8px;padding:9px 12px;background:white;font:inherit">
-              ⓘ Formatting help
-            </button>
-            <div id="markdownHelpPanel" hidden
-              style="margin-top:10px;padding:16px;border:1px solid #e4e4e7;border-radius:10px;background:#fafafa">
+            <button type="button" id="markdownHelpToggle" aria-expanded="false" aria-controls="markdownHelpPanel">ⓘ Formatting help</button>
+            <div id="markdownHelpPanel" hidden class="helppanel">
               <strong>How to format your blog post</strong>
-              <p>Type these symbols in the article box:</p>
-              <pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.8"># Main heading
-## Section heading
+              <pre>## Section heading
 **Bold text**
 *Italic text*
 - First bullet
 - Second bullet
-[Link text](https://example.com)</pre>
-              <p>Leave a blank line between paragraphs. Formatting depends on what the public blog supports.</p>
-            </div>
-          </div>`;
-
-    $('editor').hidden = false;
-
-    const helpToggle = $('markdownHelpToggle');
-    const helpPanel = $('markdownHelpPanel');
-    if (helpToggle && helpPanel) {
-      helpToggle.addEventListener('click', () => {
-        helpPanel.hidden = !helpPanel.hidden;
-        helpToggle.setAttribute('aria-expanded', String(!helpPanel.hidden));
-      });
+[Link text](https://example.com)
+![Photo description](/images/photo.jpg)</pre>
+              <p>Leave a blank line between paragraphs.</p>
+            </div></div>`;
+      $('markdownHelpToggle').onclick = () => { const p = $('markdownHelpPanel'); p.hidden = !p.hidden; $('markdownHelpToggle').setAttribute('aria-expanded', String(!p.hidden)); };
     }
+    $('editor').hidden = false;
+    $('editor').scrollTop = 0;
   }
 
-  function formatSpots() {
-    return '// Restaurant data managed by Kasey Feasts Admin.\n'
-      + 'const IG = "https://www.instagram.com/kaseyfeasts/";\n'
-      + 'const CATS = {Donuts:"var(--frosting)",Sandwiches:"var(--mustard)",Pizza:"var(--sauce)",Bakery:"var(--basil)",Seafood:"var(--other)"};\n'
-      + 'const STATES = {MA:"Massachusetts",NH:"New Hampshire",ME:"Maine",VT:"Vermont",RI:"Rhode Island",CT:"Connecticut"};\n'
-      + 'const SPOTS = ' +
-        JSON.stringify(spots, null, 2) +
-        ';\n';
+  function showSpotAddr() {
+    const box = $('spotAddr'); if (!box) return;
+    const s = spotById($('f_spot').value);
+    box.innerHTML = s ? `${esc(where(s))}${s.address ? `<br>${esc(s.address)} <button type="button" class="mini" data-copyaddr="${esc(s.address)}">Copy address</button>` : ''}` : '';
   }
 
-  function formatPosts() {
-    return '// Blog posts managed by Kasey Feasts Admin.\n'
-      + 'const POSTS = ' +
-        JSON.stringify(posts, null, 2) +
-        ';\n';
-  }
+  // Live updates inside the editor
+  $('fields').addEventListener('change', e => {
+    const t = e.target;
+    if (t.tagName === 'SELECT' && $(t.id + '_other')) {
+      const o = $(t.id + '_other'); o.hidden = t.value !== '__other'; if (!o.hidden) o.focus();
+    }
+    if (t.id === 'f_country') { setSelect('state', L.states[readSel('country')] || [], '', 'Choose…'); setSelect('city', [], '', 'Choose…'); }
+    if (t.id === 'f_state') {
+      const st = readSel('state');
+      setSelect('city', L.cities[st] || [], '', 'Choose…');
+      if (L.neStates.includes(st) && readSel('country') === 'United States') $('f_ne').checked = true;
+    }
+    if (/^f_cat\d$/.test(t.id)) { const n = t.id.slice(-1); $('f_series' + n + '_label').textContent = `Part of the ${readSel('cat' + n) || 'category'} series`; }
+    if (/^f_series\d$/.test(t.id)) { const n = t.id.slice(-1); $('f_ep' + n).disabled = !t.checked; if (t.checked) $('f_ep' + n).focus(); }
+    if (t.id === 'f_icat') setSelect('isub', L.itemCats[readSel('icat')] || [], '', 'Choose…');
+    if (t.id === 'f_spot') showSpotAddr();
+  });
+  $('fields').addEventListener('click', e => {
+    if (e.target.id === 'findPin') {
+      e.preventDefault();
+      const q = $('f_address').value || $('f_name').value;
+      window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q), '_blank', 'noopener');
+    }
+    const c = e.target.closest('[data-copyaddr]');
+    if (c) { navigator.clipboard.writeText(c.dataset.copyaddr).then(() => { c.textContent = 'Copied!'; setTimeout(() => c.textContent = 'Copy address', 1500); }); }
+  });
 
-  async function publish() {
-    const path = tab === 'spots'
-      ? 'data/content.js'
-      : 'data/posts.js';
-
-    const content = tab === 'spots'
-      ? formatSpots()
-      : formatPosts();
-
-    const out = await api(file(path), {
-      method: 'PUT',
-      body: JSON.stringify({
-        message: 'Update ' +
-          (tab === 'spots' ? 'restaurants' : 'blog posts') +
-          ' via Kasey Feasts Admin',
-        content: enc(content),
-        sha: sha[path],
-        branch: cfg.branch
-      })
-    });
-
+  /* ---------- saving ---------- */
+  const formatters = {
+    spots: () => '// Restaurant data managed by Kasey Feasts Admin.\nconst SPOTS = ' + JSON.stringify(spots, null, 2) + ';\n',
+    items: () => '// Food item rankings managed by Kasey Feasts Admin.\nconst ITEMS = ' + JSON.stringify(items, null, 2) + ';\n',
+    posts: () => '// Blog posts managed by Kasey Feasts Admin.\nconst POSTS = ' + JSON.stringify(posts, null, 2) + ';\n'
+  };
+  async function publish(which = tab) {
+    const path = FILES[which];
+    const body = {
+      message: `Update ${which === 'spots' ? 'restaurants' : which === 'items' ? 'food items' : 'blog posts'} via Kasey Feasts Admin`,
+      content: enc(formatters[which]()),
+      branch: cfg.branch
+    };
+    if (sha[path]) body.sha = sha[path];
+    const out = await api(file(path), { method: 'PUT', body: JSON.stringify(body) });
     sha[path] = out.content.sha;
-
-    note(
-      'Published to GitHub! Your site should update after deployment.'
-    );
+    note('Published to GitHub! Your site should update after deployment.');
   }
 
-  function entries(s) {
-    return s
-      .split('\n')
-      .map(x => x.trim())
-      .filter(Boolean);
+  function buildSpot() {
+    const name = $('f_name').value.trim();
+    const pin = parsePin($('f_pin').value);
+    if (!pin) throw Error('Paste the map pin as "latitude, longitude" (for example 42.3601, -71.0589).');
+    const country = readSel('country');
+    if (!country) throw Error('Choose a country.');
+    const foods = [];
+    for (const n of [1, 2, 3]) {
+      const cat = readSel('cat' + n);
+      const rating = $('f_rating' + n).value;
+      if (!cat) { if (n === 1) throw Error('Food category 1 is required.'); continue; }
+      if (rating === '') throw Error(`Choose a rating for ${cat}.`);
+      if (foods.some(f => f.cat === cat)) throw Error(`${cat} is listed twice. Use each food category once per restaurant.`);
+      const series = $('f_series' + n).checked;
+      const ep = $('f_ep' + n).value;
+      foods.push({ cat, rating: +rating, video: $('f_video' + n).value.trim(), series, ep: series && ep ? +ep : null });
+    }
+    return {
+      id: editing === null ? slug(name) : spots[editing].id,
+      name, country, ne: $('f_ne').checked, state: readSel('state'), city: readSel('city'),
+      address: $('f_address').value.trim(), lat: pin.lat, lng: pin.lng, foods
+    };
+  }
+  function buildItem() {
+    const name = $('f_name').value.trim();
+    const spot = $('f_spot').value;
+    if (!spot) throw Error('Choose the restaurant this item is from.');
+    const cat = readSel('icat'); if (!cat) throw Error('Choose a category.');
+    const s = spotById(spot);
+    return {
+      id: editing === null ? slug(name + '-' + (s ? s.name : spot)) : items[editing].id,
+      name, rating: +$('f_rating').value, cat, sub: readSel('isub'), spot
+    };
+  }
+  function buildPost() {
+    return {
+      slug: editing === null ? slug($('f_title').value) : posts[editing].slug,
+      date: $('f_date').value,
+      region: $('f_region').value || 'all',
+      title: $('f_title').value.trim(),
+      excerpt: $('f_excerpt').value.trim(),
+      body: $('f_body').value
+    };
   }
 
   $('form').addEventListener('submit', async e => {
     e.preventDefault();
-
-    const fd = new FormData(e.currentTarget);
-    const v = Object.fromEntries(fd.entries());
-
     let obj;
+    try {
+      obj = tab === 'spots' ? buildSpot() : tab === 'items' ? buildItem() : buildPost();
+    } catch (err) { return note(err.message, true); }
 
-    if (tab === 'spots') {
-      if (
-        !['MA', 'NH', 'ME', 'VT', 'RI', 'CT']
-          .includes(v.st.toUpperCase())
-      ) {
-        return note(
-          'Use a supported state abbreviation.',
-          true
-        );
-      }
-
-      obj = {
-        id: editing === null
-          ? slug(v.name)
-          : spots[editing].id,
-        name: v.name.trim(),
-        town: v.town.trim(),
-        st: v.st.toUpperCase(),
-        lat: Number(v.lat),
-        lng: Number(v.lng),
-        cat: v.cat,
-        video: v.video || '',
-        hit: fd.has('hit'),
-        verdict: v.verdict || '',
-        order: entries(v.order || ''),
-        tags: entries(v.tags || '')
-      };
-
-      if (
-        !Number.isFinite(obj.lat) ||
-        !Number.isFinite(obj.lng) ||
-        Math.abs(obj.lat) > 90 ||
-        Math.abs(obj.lng) > 180
-      ) {
-        return note(
-          'Please enter valid coordinates.',
-          true
-        );
-      }
-
-      if (
-        spots.some(
-          (x, i) => i !== editing && x.id === obj.id
-        )
-      ) {
-        return note(
-          'A restaurant with this ID already exists.',
-          true
-        );
-      }
-
-    } else {
-      obj = {
-        slug: editing === null
-          ? slug(v.title)
-          : posts[editing].slug,
-        date: v.date,
-        title: v.title.trim(),
-        excerpt: v.excerpt.trim(),
-        body: v.body
-      };
-
-      if (
-        posts.some(
-          (x, i) => i !== editing && x.slug === obj.slug
-        )
-      ) {
-        return note(
-          'A post with this URL slug already exists.',
-          true
-        );
-      }
+    const arr = tab === 'spots' ? spots : tab === 'items' ? items : posts;
+    const key = tab === 'posts' ? 'slug' : 'id';
+    if (!obj[key]) return note('Please add a name or title.', true);
+    if (arr.some((x, i) => i !== editing && x[key] === obj[key])) {
+      return note(tab === 'spots' ? 'A restaurant with this name already exists.' : tab === 'items' ? 'This item already exists for that restaurant.' : 'A post with this URL slug already exists.', true);
     }
-
-    const arr = tab === 'spots' ? spots : posts;
     const old = arr.slice();
-
-    if (editing === null) {
-      arr.unshift(obj);
-    } else {
-      arr[editing] = obj;
-    }
+    if (editing === null) arr.unshift(obj); else arr[editing] = obj;
 
     $('save').disabled = true;
-
     try {
       await publish();
       $('editor').hidden = true;
       render();
-
-    } catch (e) {
-      if (tab === 'spots') {
-        spots = old;
-      } else {
-        posts = old;
-      }
-
-      note('Save failed: ' + e.message, true);
-
+    } catch (err) {
+      arr.length = 0; arr.push(...old);
+      note('Save failed: ' + err.message, true);
     } finally {
       $('save').disabled = false;
     }
@@ -491,71 +462,45 @@
 
   $('items').addEventListener('click', async e => {
     const b = e.target.closest('button');
-
     if (!b) return;
-
-    if (b.dataset.edit !== undefined) {
-      openEditor(Number(b.dataset.edit));
-    }
-
+    if (b.dataset.edit !== undefined) openEditor(Number(b.dataset.edit));
     if (b.dataset.delete !== undefined) {
       const i = Number(b.dataset.delete);
-      const arr = tab === 'spots' ? spots : posts;
-
-      if (
-        !confirm(
-          'Permanently delete ' +
-          (arr[i].name || arr[i].title) +
-          '?'
-        )
-      ) {
-        return;
+      const arr = tab === 'spots' ? spots : tab === 'items' ? items : posts;
+      const v = arr[i];
+      if (tab === 'spots') {
+        const linked = items.filter(it => it.spot === v.id).length;
+        if (linked) return note(`${v.name} has ${linked} food item${linked === 1 ? '' : 's'} linked to it. Delete or move those items first.`, true);
       }
-
+      if (!confirm(`Delete "${v.name || v.title}"?`)) return;
       const old = arr.slice();
       arr.splice(i, 1);
-
-      try {
-        await publish();
-        render();
-
-      } catch (err) {
-        if (tab === 'spots') {
-          spots = old;
-        } else {
-          posts = old;
-        }
-
-        note(err.message, true);
-      }
+      try { await publish(); render(); }
+      catch (err) { arr.length = 0; arr.push(...old); note(err.message, true); }
     }
   });
 
   document.querySelectorAll('[data-tab]').forEach(b => {
     b.onclick = () => {
       tab = b.dataset.tab;
-
-      document.querySelectorAll('[data-tab]').forEach(x => {
-        x.classList.toggle('active', x === b);
-      });
-
-      $('search').value = '';
+      document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('active', x === b));
+      resetFilters();
+      $('editor').hidden = true;
       render();
     };
   });
 
   $('search').oninput = render;
-
-  $('new').onclick = () => openEditor();
-
-  $('close').onclick =
-    $('cancel').onclick =
-      () => $('editor').hidden = true;
-
+  $('new').onclick = () => {
+    if (tab === 'items' && !spots.some(inRegion)) return note('Add a restaurant first. Every food item belongs to a restaurant.', true);
+    openEditor();
+  };
+  $('close').onclick = $('cancel').onclick = () => $('editor').hidden = true;
   $('refresh').onclick = load;
 
   $('logout').onclick = () => {
     sessionStorage.removeItem('kf_token');
+    sessionStorage.removeItem('kf_region');
     token = null;
     location.reload();
   };
@@ -657,6 +602,10 @@
       sessionStorage.removeItem(
         'kf_oauth_state'
       );
+
+      // fresh sign-in: start on the "I'M HERE FOR" page
+      sessionStorage.removeItem('kf_region');
+      region = null;
 
       history.replaceState(
         null,

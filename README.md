@@ -1,6 +1,6 @@
 # Kasey Feasts
 
-Independent food reviews across New England. Love you, XOXO.
+Independent food reviews from New England, Hong Kong and beyond. Love you, XOXO.
 
 A static site (plain HTML, CSS and JavaScript, no build step), so it runs on GitHub Pages as is.
 
@@ -11,30 +11,74 @@ A static site (plain HTML, CSS and JavaScript, no build step), so it runs on Git
 3. In the repository, go to **Settings → Pages**, set **Source** to "Deploy from a branch", pick `main` and `/ (root)`, and save.
 4. After a minute your site is live at `https://<your-username>.github.io/kaseyfeasts/`.
 
-To use your own domain (like kaseyfeasts.com), add it under **Settings → Pages → Custom domain** and follow GitHub's DNS instructions.
+To use your own domain (like kaseyfeasts.com), add it under **Settings → Pages → Custom domain** and follow GitHub's DNS instructions. The section links (`/newengland/` and so on) need the site to be at the root of a domain like kaseyfeasts.com.
+
+## How the site is organized
+
+The home page (`kaseyfeasts.com`) asks **"I'M HERE FOR"** with three choices. Each one is its own section with its own address:
+
+| Section | Address | Shows |
+|---|---|---|
+| New England | `/newengland/` | Restaurants with the hidden **New England** box ticked |
+| Hong Kong | `/hongkong/` | Restaurants whose country is **Hong Kong** |
+| Global | `/global/` | **Every** restaurant (the whole database) |
+
+Food items follow the restaurant they belong to, so a New England visitor never sees a Hong Kong item in the rankings, the map, the list, or the series.
+
+Every section page has the same menu (Series, Food Item Rankings, About, Work with me, Where next?, Email me) and a **Switch to** bar at the top left with New England, Hong Kong and Global. The map is the only thing that looks different: New England zoomed on New England, Hong Kong showing all of Hong Kong, and Global a slowly spinning globe (it pauses when someone touches it).
+
+Section pages: `/newengland/series`, `/newengland/rankings`, `/newengland/rankings/donuts`, `/newengland/spot/<id>`, `/newengland/about`, `/newengland/work`, `/newengland/next`, `/newengland/blog` (the blog is linked in the footer).
+
+**Important:** keep `404.html` in the repo. GitHub Pages only has one real page, so links like `/hongkong/rankings` arrive at `404.html` first, which instantly sends them to the right place.
+
+## Ratings and stamps
+
+Ratings are numbers from 60 to 100 in steps of 2.5. The number is never shown on the site. It's used to rank best to worst, and the site shows a stamp instead:
+
+| Rating | Stamp |
+|---|---|
+| 100 | All-Star |
+| 90 to 97.5 | Fantastic |
+| 80 to 87.5 | Great |
+| 70 to 77.5 | Very Good |
+| 60 to 67.5 | Good |
+
+Note: because the site is a public GitHub Pages site, the numbers live in `data/content.js` and `data/items.js`, which anyone can technically open. Visitors won't see them on the pages, but they aren't secret.
+
+## Two databases
+
+**Restaurants** (`data/content.js`, admin tab "Restaurants"): name, country, New England box (hidden), state, city/district, Google Maps address, map pin, and up to three food categories. Each food category has its own rating, Instagram video link, "part of the series" box and number in the series. A place that does pizza and sandwiches is ranked separately for each.
+
+**Food items** (`data/items.js`, admin tab "Food items"): name, rating, category, sub-category and the restaurant it's from. Its location and address come from the restaurant. These power the **Food Item Rankings** pages, for example the top 5 glazed donuts in New Hampshire.
+
+**Series** pages are built automatically from the restaurants' "part of the series" boxes, in episode order.
 
 ## Files
 
 | File | What it's for |
 |---|---|
 | `index.html` | Page structure: header, sections and forms |
-| `data/content.js` | **Edit this.** Places on the globe and directory, Instagram link |
-| `data/series.js` | **Edit this.** Video links for Donuts, Pizza and Sandwiches |
-| `data/posts.js` | **Edit this.** Blog posts |
+| `404.html` | Makes the clean section links work on GitHub Pages. **Don't delete.** |
+| `admin/` | The admin panel at `kaseyfeasts.com/admin/` (see ADMIN-SETUP.md) |
+| `data/lists.js` | **Edit this.** Dropdown lists: countries, states, cities/districts, food categories, item categories and sub-categories, stamp names |
+| `data/regions.js` | **Edit this.** The three sections: names, card text, intro text, map starting views |
+| `data/content.js` | Restaurants. Use the admin to edit. |
+| `data/items.js` | Food items. Use the admin to edit. |
+| `data/posts.js` | Blog posts. Use the admin to edit. |
 | `images/` | Photos for blog posts |
 | `assets/styles.css` | Colors, fonts and layout |
-| `assets/app.js` | Map, filters, page routing, forms, cartoon animation |
-| `data/map-data.js` | Worldwide land outlines from Natural Earth (no need to edit) |
-| `assets/kasey-avatar.svg` | Your cartoon as a standalone image for social or merch |
+| `assets/app.js` | Map, filters, rankings, page routing, forms, cartoon animation |
+| `assets/d3.min.js` | Draws the globe (no need to edit) |
+| `data/map-data.js`, `data/map-detail.js` | Map outlines (no need to edit) |
 
-## Adding a place
+## Adding restaurants and food items
 
-Add a line to `SPOTS` in `data/content.js` (there's a commented example to copy). Until the first place is added, the map and list show "coming soon". To get coordinates, right-click the place in Google Maps and click the numbers to copy them (the first is `lat`, the second is `lng`). Add `video:"https://www.instagram.com/reel/..."` to link that spot's review video. Set `hit:true` to mark a featured recommendation in the directory. There are no scores on the site.
+Use the admin at `kaseyfeasts.com/admin/`. After signing in, choose New England, Hong Kong or Global. That choice filters everything you see, and you can switch at any time with the bubbles at the top.
 
-
-## Adding a Series episode
-
-Publish the video on your preferred platform. Then open `data/series.js` and add a `{ title: "...", url: "https://..." },` entry under Donuts, Pizza or Sandwiches. Use the public video link and keep the entries in viewing order.
+- **Map pin:** in Google Maps, right-click the restaurant and click the numbers at the top to copy them, then paste into "Map pin".
+- **New England box:** it ticks itself when you pick a New England state, and you can change it.
+- **Dropdowns:** if a country, state, city or category isn't in the list, choose "Other (type it)…". To add it to the list for good, edit `data/lists.js`.
+- **Food items:** add the restaurant first, then add its items and pick the restaurant from the list.
 
 ## Writing a blog post
 
@@ -46,9 +90,11 @@ You can do this right on github.com, no software needed.
 4. Write the article between the backticks in `body`. Leave a blank line between paragraphs. You can use `## Subheadings`, `**bold**`, `*italic*`, `[links](https://...)`, `- bullet points` and photos.
 5. Click **Commit changes**. The post is live in about a minute.
 
-**Adding photos:** upload the image to the `images/` folder (Add file → Upload files), then put `![what's in the photo](images/your-photo.jpg)` on its own line in the post. Keep photos under about 1 MB so pages load quickly.
+**Adding photos:** upload the image to the `images/` folder (Add file → Upload files), then put `![what's in the photo](/images/your-photo.jpg)` on its own line in the post. Keep photos under about 1 MB so pages load quickly.
 
-**Linking to a post:** each post lives at `yoursite.com/#/blog/<slug>`.
+**Choosing a section:** add `region: "hongkong"` (or `"newengland"`, `"global"`) to a post to show it only there. `region: "all"` shows it in every section. The admin has a "Show this post in" menu for this.
+
+**Linking to a post:** each post lives at `kaseyfeasts.com/<section>/blog/<slug>`, for example `/newengland/blog/welcome`. Inside a post, a link like `[suggest a spot](/next)` automatically stays in the reader's section.
 
 ## Forms
 
@@ -61,4 +107,4 @@ There's no newsletter yet. The site says "Newsletter coming soon," and the "Emai
 ## Notes
 
 - The globe uses bundled D3 and Natural Earth land data, so it needs no map API key.
-- Pages use hash links (`#/series`, `#/spot/brick-and-basil`), so they work on GitHub Pages without any server setup.
+- Pages use clean links like `/newengland/rankings/donuts`. `404.html` makes these work on GitHub Pages. Old links like `kaseyfeasts.com/#/blog/welcome` still work and open the New England version.
