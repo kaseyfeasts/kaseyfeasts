@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "pie-guys-pizzeria",
+    "name": "Pie Guys Pizzeria",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Meredith",
+    "address": "71 NH-104, Meredith, NH 03253",
+    "lat": 43.641822425399,
+    "lng": -71.51079300345314,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 62.5,
+        "video": "https://www.instagram.com/reels/DSCyn61keny/",
+        "series": "best-pizza",
+        "ep": 4
+      }
+    ]
+  },
+  {
     "id": "tilton-house-of-pizza",
     "name": "Tilton House of Pizza",
     "country": "United States",
