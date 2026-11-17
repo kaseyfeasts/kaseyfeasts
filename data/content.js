@@ -5,7 +5,7 @@ const SPOTS = [
     "name": "Wang Fu",
     "country": "Hong Kong",
     "ne": false,
-    "state": "NA",
+    "state": "",
     "city": "Central",
     "address": "168 Wellington St, Central, Hong Kong",
     "lat": 22.284701014101156,
