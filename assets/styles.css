@@ -515,3 +515,6 @@ h1.big{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,40p
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stamp.st-allstar{border-color:#fff}:root:not([data-theme="light"]) .stamp.st-fantastic{color:#6FA2F2}:root:not([data-theme="light"]) .stamp.st-great{color:#5CC48A}:root:not([data-theme="light"]) .stamp.st-verygood{color:#F2C230}:root:not([data-theme="light"]) .stamp.st-good{color:#FF8E3C}}
 .rankfilters{grid-template-columns:repeat(7,minmax(0,1fr))}
 @media (max-width:900px){.rankfilters{grid-template-columns:1fr 1fr}}
+/* checkbox rows always side by side (the old filter label style was stacking them) */
+.filters .ms-opt,.ms-opt{flex-direction:row!important;align-items:center;color:var(--text);font-size:15px;font-weight:500;gap:10px;white-space:nowrap}
+.filters .ms-label{font-size:13px;font-weight:600;color:var(--muted)}

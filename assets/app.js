@@ -514,17 +514,20 @@ const RF={cat:new Set(),sub:new Set(),country:new Set(),state:new Set(),city:new
   l_country:new Set(),l_state:new Set(),l_city:new Set(),l_cat:new Set(),l_score:new Set()}; // l_ = restaurant list filters
 const itemCats = () => [...new Set([...Object.keys(ITEM_CATEGORIES),...rItems().map(i=>i.cat)])].filter(Boolean);
 function msHTML(key,label){ return `<div class="ms" data-ms="${key}"><span class="ms-label">${label}</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>`; }
+const US_ABBR={"Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","California":"CA","Colorado":"CO","Connecticut":"CT","Delaware":"DE","District of Columbia":"DC","Florida":"FL","Georgia":"GA","Hawaii":"HI","Idaho":"ID","Illinois":"IL","Indiana":"IN","Iowa":"IA","Kansas":"KS","Kentucky":"KY","Louisiana":"LA","Maine":"ME","Maryland":"MD","Massachusetts":"MA","Michigan":"MI","Minnesota":"MN","Mississippi":"MS","Missouri":"MO","Montana":"MT","Nebraska":"NE","Nevada":"NV","New Hampshire":"NH","New Jersey":"NJ","New Mexico":"NM","New York":"NY","North Carolina":"NC","North Dakota":"ND","Ohio":"OH","Oklahoma":"OK","Oregon":"OR","Pennsylvania":"PA","Rhode Island":"RI","South Carolina":"SC","South Dakota":"SD","Tennessee":"TN","Texas":"TX","Utah":"UT","Vermont":"VT","Virginia":"VA","Washington":"WA","West Virginia":"WV","Wisconsin":"WI","Wyoming":"WY"};
+const abbr = v => US_ABBR[v]||v; // MA, NH… (other places keep their name)
+const MS_LABEL = {state:abbr, l_state:abbr};
 function msSet(key,options,allText){
   const box=document.querySelector(`.ms[data-ms="${key}"]`); if(!box) return;
   const sel=RF[key]; [...sel].forEach(v=>{ if(!options.includes(v)) sel.delete(v); });
   box.dataset.all=allText;
-  box.querySelector(".ms-panel").innerHTML=(options.length?options.map(o=>`<label class="ms-opt"><input type="checkbox" value="${esc(o)}" ${sel.has(o)?"checked":""}><span>${esc(o)}</span></label>`).join(""):`<p class="ms-none">Nothing to pick yet</p>`)
+  box.querySelector(".ms-panel").innerHTML=(options.length?options.map(o=>`<label class="ms-opt"><input type="checkbox" value="${esc(o)}" ${sel.has(o)?"checked":""}><span>${esc((MS_LABEL[key]||String)(o))}</span></label>`).join(""):`<p class="ms-none">Nothing to pick yet</p>`)
     +`<div class="ms-actions"><button type="button" data-act="clear">Clear</button><button type="button" data-act="done" class="btn sm">Done</button></div>`;
   msSummary(key);
 }
 function msSummary(key){
   const box=document.querySelector(`.ms[data-ms="${key}"]`), sel=[...RF[key]];
-  box.querySelector(".ms-btn").textContent=!sel.length?box.dataset.all:sel.length<=2?sel.join(", "):`${sel.length} selected`;
+  box.querySelector(".ms-btn").textContent=!sel.length?box.dataset.all:sel.length<=3?sel.map(MS_LABEL[key]||String).join(", "):`${sel.length} selected`;
 }
 // One set of handlers for every checkbox filter on the site (rankings and restaurant list).
 const msChanged = key => key.startsWith("l_") ? onListChange(key) : onRankChange(key);
