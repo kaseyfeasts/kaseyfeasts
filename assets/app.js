@@ -510,7 +510,7 @@ function renderSeries(id){
 }
 
 /* ===================== FOOD ITEM RANKINGS (multi-select filters) ===================== */
-const RF={cat:new Set(),sub:new Set(),country:new Set(),state:new Set(),city:new Set(),
+const RF={cat:new Set(),sub:new Set(),country:new Set(),state:new Set(),city:new Set(),score:new Set(),
   l_country:new Set(),l_state:new Set(),l_city:new Set(),l_cat:new Set(),l_score:new Set()}; // l_ = restaurant list filters
 const itemCats = () => [...new Set([...Object.keys(ITEM_CATEGORIES),...rItems().map(i=>i.cat)])].filter(Boolean);
 function msHTML(key,label){ return `<div class="ms" data-ms="${key}"><span class="ms-label">${label}</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>`; }
@@ -547,7 +547,7 @@ function renderRankings(catSlug){
     el.dataset.ready="1";
     el.innerHTML=`<h1 class="big">Food item rankings</h1>
       <p class="lede" id="rankLede"></p>
-      <div class="rankfilters">${msHTML("cat","Food")}${msHTML("sub","Type")}${msHTML("country","Country")}${msHTML("state","State / area")}${msHTML("city","City / district")}
+      <div class="rankfilters">${msHTML("cat","Food")}${msHTML("sub","Type")}${msHTML("country","Country")}${msHTML("state","State / area")}${msHTML("city","City / district")}${msHTML("score","Score")}
         <label class="ms"><span class="ms-label">Show</span><select class="field" id="rtop"><option value="5">Top 5</option><option value="10">Top 10</option><option value="25">Top 25</option><option value="0" selected>All</option></select></label></div>
       <p class="count" id="rcount"></p><ol class="ranklist" id="rlist"></ol>`;
     $("#rtop").addEventListener("input",drawRank);
@@ -585,11 +585,12 @@ function refreshRankFilters(changed){
   const byState=byCountry.filter(i=>!RF.state.size||RF.state.has(spotOf(i).state));
   const cityBase=(RF.state.size?[...RF.state]:stateBase).flatMap(st=>CITIES[st]||[]);
   if(changed!=="city") msSet("city",ordered([...new Set(cityBase)],byState.map(i=>spotOf(i).city)),"All");
+  if(changed!=="score") msSet("score",RATING_STAMPS.map(x=>x[1]),"All scores");
 }
 function drawRank(){
   const top=+$("#rtop").value, all=rItems();
   let r=all.filter(i=>{const s=PLACE_BY_ID[i.spot];
-    return (!RF.cat.size||RF.cat.has(i.cat))&&(!RF.sub.size||RF.sub.has(i.sub))&&(!RF.country.size||RF.country.has(s.country))&&(!RF.state.size||RF.state.has(s.state))&&(!RF.city.size||RF.city.has(s.city));});
+    return (!RF.cat.size||RF.cat.has(i.cat))&&(!RF.sub.size||RF.sub.has(i.sub))&&(!RF.country.size||RF.country.has(s.country))&&(!RF.state.size||RF.state.has(s.state))&&(!RF.city.size||RF.city.has(s.city))&&(!RF.score.size||RF.score.has(stampOf(i.rating)));});
   r.sort(byRating(i=>+i.rating));
   const shown=top?r.slice(0,top):r;
   $("#rcount").textContent=all.length?`${shown.length} of ${r.length} ${r.length===1?"item":"items"}`:"";

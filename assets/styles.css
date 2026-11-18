@@ -513,3 +513,5 @@ h1.big{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,40p
 .stamp.st-verygood{color:#C99700}
 .stamp.st-good{color:#E8690F}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stamp.st-allstar{border-color:#fff}:root:not([data-theme="light"]) .stamp.st-fantastic{color:#6FA2F2}:root:not([data-theme="light"]) .stamp.st-great{color:#5CC48A}:root:not([data-theme="light"]) .stamp.st-verygood{color:#F2C230}:root:not([data-theme="light"]) .stamp.st-good{color:#FF8E3C}}
+.rankfilters{grid-template-columns:repeat(7,minmax(0,1fr))}
+@media (max-width:900px){.rankfilters{grid-template-columns:1fr 1fr}}
