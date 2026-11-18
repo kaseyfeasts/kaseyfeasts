@@ -176,7 +176,7 @@
     const cats = tab === 'items' ? uniq(items.map(i => i.cat)) : uniq(rs.flatMap(s => s.foods.map(f => f.cat)));
     $('fCat').innerHTML = optList(cats, 'All food categories', cat);
     const subs = uniq(items.filter(i => !cat || i.cat === cat).map(i => i.sub));
-    $('fSub').innerHTML = optList(subs, 'All sub-categories', sub);
+    $('fSub').innerHTML = optList(subs, 'All types', sub);
     $('fSub').hidden = tab !== 'items';
   }
   ['fCountry', 'fState', 'fCity', 'fCat', 'fSub', 'fSort'].forEach(id => $(id).addEventListener('change', render));
@@ -305,8 +305,8 @@
       $('fields').innerHTML =
         field('name', 'Item name', v.name, 'text', true, 'placeholder="e.g. Honey glazed"')
         + ratingSelect('rating', 'Rating', v.rating, true)
-        + selectField('icat', 'Category', used.itemCats(), cat, { required: true })
-        + selectField('isub', 'Sub-category', used.subs(cat), v.sub || '')
+        + selectField('icat', 'Food (category)', used.itemCats(), cat, { required: true, hint: 'For example Pizza or Donuts.' })
+        + selectField('isub', 'Type (sub-category)', used.subs(cat), v.sub || '', { hint: 'For example NY Style Pizza. This is the "Type" filter on the Food Item Rankings page. Pick the food first to see its types.' })
         + `<div><label for="f_spot">Restaurant</label>
             <select id="f_spot" required><option value="">${rs.length ? 'Choose the restaurant…' : 'Add the restaurant first'}</option>${rs.map(s => `<option value="${esc(s.id)}" ${s.id === v.spot ? 'selected' : ''}>${esc(s.name)} — ${esc([s.city, s.state || s.country].filter(Boolean).join(', '))}</option>`).join('')}</select>
             <small class="hint">The item's location and Google Maps address come from its restaurant.</small>
