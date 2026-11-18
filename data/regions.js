@@ -23,6 +23,7 @@ const ABOUT_POLICY = "Restaurants can’t buy a review. I don’t take free food
 const REGIONS = {
   newengland: {
     name: "New England",
+    rankExample: "glazed donuts in NH, MA and ME",   // used on the Food Item Rankings page
     hero: "Independent reviews of New England's best donuts, sandwiches and pizza. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.",
     about: [
       "I drive around New England eating donuts, sandwiches, pizza, and more. Then I tell you which ones are worth the trip. Massachusetts and New Hampshire are home base. I take road trips to Maine, Vermont, Rhode Island and Connecticut as often as possible.",
@@ -34,6 +35,7 @@ const REGIONS = {
   },
   hongkong: {
     name: "Hong Kong",
+    rankExample: "dim sum in Central, Wan Chai and Jordan",   // used on the Food Item Rankings page
     hero: "Independent reviews from Hong Kong. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.",
     about: [
       "I live part-time in Hong Kong and when I am here I spend as much time eating and learning about the local food culture as possible. I also visit many of the western-style food spots so I can stress test how good they actually are. I record all experiences and then I tell you which ones are worth the trip, the hype, and your money.",
@@ -45,6 +47,7 @@ const REGIONS = {
   },
   global: {
     name: "Global",
+    rankExample: "ramen, taiyaki and tsukemen in Tokyo and Kyoto",   // used on the Food Item Rankings page
     hero: "Independent reviews from everywhere I eat. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.",
     about: [
       "When I travel globally I spend as much time eating and learning about the local food culture as possible regardless of where I am. I also visit many of the American-style food spots so I can stress test how good they actually are in other countries. I record all experiences and then I tell you which ones are worth the trip, the hype, and your money.",

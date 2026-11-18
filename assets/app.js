@@ -220,7 +220,7 @@ PLACES.forEach(s=>{
 let mapScore = ""; // "" = all scores
 const foodsFor = s => s.foods.filter(f=>!mapCat||f.cat===mapCat);
 const showsCat = s => foodsFor(s).length>0 && (!mapScore || foodsFor(s).some(f=>stampOf(f.rating)===mapScore));
-const markerColor = s => catColor(mapCat||(s.foods[0]||{}).cat);
+const markerColor = s => "#161616"; // all map dots are black
 
 let longitude=-38, latitude=22, zoom=1, popSpot=null, raf=0;
 const clampZoom = value => Math.max(0.4, Math.min(2000, value));
@@ -430,34 +430,52 @@ new ResizeObserver(()=>{ if(gl) gl.resize(); render(); }).observe(box);
 $("#mapSoon .x").onclick=()=>{$("#mapSoon").hidden=true;$("#mapHint").hidden=false};
 $("#mapSoon").addEventListener("pointerdown",e=>e.stopPropagation());
 
-/* ===================== LIST (restaurants) ===================== */
-const opts = (arr,all) => `<option value="">${all}</option>`+arr.map(v=>`<option>${esc(v)}</option>`).join("");
+/* ===================== LIST (restaurants, checkbox filters) ===================== */
 const uniq = arr => [...new Set(arr.filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-function fillListFilters(){
-  const list=rSpots();
-  $("#fst").innerHTML=opts(uniq(list.map(stateLabel)),"All");
-  $("#fcity").innerHTML=opts(uniq(list.map(s=>s.city)),"All");
-  $("#fcat").innerHTML=opts(uniq(list.flatMap(s=>s.foods.map(f=>f.cat))),"All food");
-  $("#fscore").innerHTML=opts(RATING_STAMPS.map(x=>x[1]),"All scores");
-  $("#fst").closest("label").style.display=$("#fst").options.length>2?"":"none";
+const STAMP_NAMES = () => RATING_STAMPS.map(x=>x[1]);
+function listFiltered(skip){ // restaurants matching every list filter except `skip`
+  const L=RF; return rSpots().filter(s=>
+    (skip==="l_country"||!L.l_country.size||L.l_country.has(s.country))&&
+    (skip==="l_state"||!L.l_state.size||L.l_state.has(s.state))&&
+    (skip==="l_city"||!L.l_city.size||L.l_city.has(s.city)));
 }
-$("#fst").addEventListener("change",()=>{ const st=$("#fst").value; const list=rSpots().filter(s=>!st||stateLabel(s)===st); const cur=$("#fcity").value; $("#fcity").innerHTML=opts(uniq(list.map(s=>s.city)),"All"); if([...$("#fcity").options].some(o=>o.value===cur)) $("#fcity").value=cur; });
+function fillListFilters(changed){
+  const list=rSpots();
+  if(changed!=="l_country") msSet("l_country",uniq(list.map(s=>s.country)),"All countries");
+  document.querySelector('.ms[data-ms="l_country"]').style.display=region==="global"?"":"none";
+  const byC=list.filter(s=>!RF.l_country.size||RF.l_country.has(s.country));
+  if(changed!=="l_state") msSet("l_state",uniq(byC.map(s=>s.state)),"All");
+  const byS=byC.filter(s=>!RF.l_state.size||RF.l_state.has(s.state));
+  if(changed!=="l_city") msSet("l_city",uniq(byS.map(s=>s.city)),"All");
+  const cats=[...new Set(list.flatMap(s=>s.foods.map(f=>f.cat)))];
+  if(changed!=="l_cat") msSet("l_cat",[...FOOD_CATEGORIES.filter(c=>cats.includes(c)),...uniq(cats.filter(c=>!FOOD_CATEGORIES.includes(c)))],"All food");
+  if(changed!=="l_score") msSet("l_score",STAMP_NAMES(),"All scores");
+}
+function onListChange(key){ msSummary(key); fillListFilters(key); renderList(); }
+const pickFood = s => { // best-rated food among the ticked food types (or all)
+  const fs=s.foods.filter(f=>!RF.l_cat.size||RF.l_cat.has(f.cat));
+  return fs.sort((a,b)=>(+b.rating||0)-(+a.rating||0))[0];
+};
 function renderList(){
   const rows=$("#frows"), list=rSpots();
   if(!list.length){ $("#listPane .filters").style.display="none"; $("#fcount").textContent="";
     rows.className="soon-block"; rows.innerHTML=`<h3>${esc(R().name)} reviews coming soon</h3><p>Every place I've been will be listed here, searchable by area and food, with a link to the review.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a>`; return; }
   $("#listPane .filters").style.display=""; rows.className="rows";
-  const q=$("#fq").value.trim().toLowerCase(), st=$("#fst").value, city=$("#fcity").value, c=$("#fcat").value, sort=$("#fsort").value, sc=$("#fscore").value;
-  let r=list.filter(s=>(!q||[s.name,s.city,s.state,s.country,...s.foods.map(f=>f.cat)].join(" ").toLowerCase().includes(q))&&(!st||stateLabel(s)===st)&&(!city||s.city===city)&&(!c||s.foods.some(f=>f.cat===c))
-    &&(!sc||s.foods.some(f=>(!c||f.cat===c)&&stampOf(f.rating)===sc)));
-  r.sort(sort==="best"?byRating(s=>c?foodRating(s,c):+(bestFood(s)||{}).rating):(a,b)=>a.name.localeCompare(b.name));
-  $("#fcount").textContent=`${r.length} of ${list.length} places`+(sort==="best"?(c?` · best ${c.toLowerCase()} first`:" · best first"):"");
-  rows.innerHTML=r.length?r.map(s=>rowHTML(s,c)).join("")
+  const q=$("#fq").value.trim().toLowerCase(), sort=$("#fsort").value;
+  let r=listFiltered().filter(s=>{
+    if(q&&![s.name,s.city,s.state,s.country,...s.foods.map(f=>f.cat)].join(" ").toLowerCase().includes(q)) return false;
+    const fs=s.foods.filter(f=>!RF.l_cat.size||RF.l_cat.has(f.cat));
+    if(!fs.length) return false;
+    return !RF.l_score.size||fs.some(f=>RF.l_score.has(stampOf(f.rating)));
+  });
+  r.sort(sort==="best"?byRating(s=>+(pickFood(s)||{}).rating):(a,b)=>a.name.localeCompare(b.name));
+  $("#fcount").textContent=`${r.length} of ${list.length} places`+(sort==="best"?" · best first":"");
+  rows.innerHTML=r.length?r.map(s=>rowHTML(s,null,pickFood(s))).join("")
    :`<p class="empty">Nothing matches those filters. Try removing one, or <a href="${P('/next')}">suggest a spot</a>.</p>`;
 }
-const rowHTML = (s,cat) => { const f=cat?s.foods.find(f=>f.cat===cat):bestFood(s);
+const rowHTML = (s,cat,pick) => { const f=pick||(cat?s.foods.find(f=>f.cat===cat):bestFood(s));
   return `<a class="rowi" href="${P('/spot/'+s.id)}">${badge(f?f.cat:"")}<span><span class="nm">${esc(s.name)}</span><br><span class="tw">${esc(where(s))} · ${esc(s.foods.map(f=>f.cat).join(", "))}</span></span><span class="rowstamp">${f?stampHTML(f.rating,true):""}</span></a>`; };
-["fq","fst","fcity","fcat","fscore","fsort"].forEach(id=>$("#"+id).addEventListener("input",renderList));
+["fq","fsort"].forEach(id=>$("#"+id).addEventListener("input",renderList));
 function tab(which){
   $("#tabMap").setAttribute("aria-selected",which==="map");$("#tabList").setAttribute("aria-selected",which==="list");
   $("#mapPane").hidden=which!=="map";$("#listPane").hidden=which!=="list"; if(which==="map"){ if(gl) gl.resize(); render(); }
@@ -492,7 +510,8 @@ function renderSeries(id){
 }
 
 /* ===================== FOOD ITEM RANKINGS (multi-select filters) ===================== */
-const RF={cat:new Set(),sub:new Set(),country:new Set(),state:new Set(),city:new Set()};
+const RF={cat:new Set(),sub:new Set(),country:new Set(),state:new Set(),city:new Set(),
+  l_country:new Set(),l_state:new Set(),l_city:new Set(),l_cat:new Set(),l_score:new Set()}; // l_ = restaurant list filters
 const itemCats = () => [...new Set([...Object.keys(ITEM_CATEGORIES),...rItems().map(i=>i.cat)])].filter(Boolean);
 function msHTML(key,label){ return `<div class="ms" data-ms="${key}"><span class="ms-label">${label}</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>`; }
 function msSet(key,options,allText){
@@ -507,6 +526,20 @@ function msSummary(key){
   const box=document.querySelector(`.ms[data-ms="${key}"]`), sel=[...RF[key]];
   box.querySelector(".ms-btn").textContent=!sel.length?box.dataset.all:sel.length<=2?sel.join(", "):`${sel.length} selected`;
 }
+// One set of handlers for every checkbox filter on the site (rankings and restaurant list).
+const msChanged = key => key.startsWith("l_") ? onListChange(key) : onRankChange(key);
+document.addEventListener("click",e=>{
+  const ms=e.target.closest(".ms[data-ms]");
+  if(!ms){ if(!e.target.closest(".ms")) closeMs(); return; }
+  const btn=e.target.closest(".ms-btn");
+  if(btn){ const p=ms.querySelector(".ms-panel"); const open=p.hidden; closeMs(ms); p.hidden=!open; btn.setAttribute("aria-expanded",open); return; }
+  const act=e.target.closest("[data-act]");
+  if(act){ if(act.dataset.act==="clear"){ RF[ms.dataset.ms].clear(); ms.querySelectorAll("input").forEach(i=>i.checked=false); msChanged(ms.dataset.ms); } else closeMs(); }
+});
+document.addEventListener("change",e=>{
+  const cb=e.target.closest('.ms-panel input[type="checkbox"]');
+  if(cb){ const key=cb.closest(".ms").dataset.ms; cb.checked?RF[key].add(cb.value):RF[key].delete(cb.value); msChanged(key); }
+});
 function closeMs(except){ document.querySelectorAll(".ms[data-ms]").forEach(m=>{ if(m!==except){ m.querySelector(".ms-panel").hidden=true; m.querySelector(".ms-btn").setAttribute("aria-expanded","false"); } }); }
 function renderRankings(catSlug){
   const el=$("#rankBody");
@@ -517,23 +550,12 @@ function renderRankings(catSlug){
       <div class="rankfilters">${msHTML("cat","Food")}${msHTML("sub","Type")}${msHTML("country","Country")}${msHTML("state","State / area")}${msHTML("city","City / district")}
         <label class="ms"><span class="ms-label">Show</span><select class="field" id="rtop"><option value="5">Top 5</option><option value="10">Top 10</option><option value="25">Top 25</option><option value="0" selected>All</option></select></label></div>
       <p class="count" id="rcount"></p><ol class="ranklist" id="rlist"></ol>`;
-    el.addEventListener("click",e=>{
-      const btn=e.target.closest(".ms-btn"); const ms=e.target.closest(".ms[data-ms]");
-      if(btn){ const p=ms.querySelector(".ms-panel"); const open=p.hidden; closeMs(ms); p.hidden=!open; btn.setAttribute("aria-expanded",open); return; }
-      const act=e.target.closest("[data-act]");
-      if(act&&ms){ if(act.dataset.act==="clear"){ RF[ms.dataset.ms].clear(); ms.querySelectorAll("input").forEach(i=>i.checked=false); onRankChange(ms.dataset.ms); } else closeMs(); }
-    });
-    el.addEventListener("change",e=>{
-      const cb=e.target.closest('.ms-panel input[type="checkbox"]');
-      if(cb){ const key=cb.closest(".ms").dataset.ms; cb.checked?RF[key].add(cb.value):RF[key].delete(cb.value); onRankChange(key); }
-    });
     $("#rtop").addEventListener("input",drawRank);
-    document.addEventListener("click",e=>{ if(!e.target.closest(".ms")) closeMs(); });
   }
   if(el.dataset.region!==region){ el.dataset.region=region; Object.values(RF).forEach(s=>s.clear()); }
   const cats=itemCats();
   if(catSlug!==undefined){ RF.cat.clear(); const c=cats.find(c=>slugify(c)===catSlug); if(c) RF.cat.add(c); }
-  $("#rankLede").textContent=`Every ${R().name} item I've ranked, best first. Tick as many boxes as you like, for example glazed donuts in NH, MA and ME.`;
+  $("#rankLede").textContent=`Every ${R().name} item I've ranked, best first. Tick as many boxes as you like, for example ${R().rankExample}.`;
   refreshRankFilters(); drawRank();
 }
 function onRankChange(key){
@@ -627,8 +649,7 @@ function applyRegion(r){
   $("#mapSoonText").textContent=`Every place I review${r==="global"?"":" in "+cfg.name} will be pinned here with a link to the video. ${cfg.spin?"Watch the globe spin":"Look around"} while you wait.`;
   $(".side-h small").textContent=empty?"Jump to an area":"Updates as you move the map";
   $("#dirLede").textContent=empty?`The map is ready. The ${cfg.name} pins are coming soon, each linked to my review.`:"Drag the map to your area, then tap a dot to watch my review.";
-  $("#homeSeriesLede").textContent=seriesInRegion().map(x=>x.name).join(" · ");
-  $("#fq").value=""; $("#fsort").value="name"; fillMapCats(); fillListFilters(); renderList(); fillSeriesMenu(); renderAbout();
+  $("#fq").value=""; $("#fsort").value="name"; ["l_country","l_state","l_city","l_cat","l_score"].forEach(k=>RF[k].clear()); fillMapCats(); fillListFilters(); renderList(); fillSeriesMenu(); renderAbout();
   closePop(); sideKey=null; idleUntil=0; setProjectionForRegion(); flyTo(cfg.view,true); setSpin(!!cfg.spin);
 }
 function route(){

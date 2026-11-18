@@ -173,9 +173,9 @@
     $('fState').innerHTML = optList(uniq(byC.map(s => s.state)), 'All states / areas', st);
     const byS = byC.filter(s => !st || s.state === st);
     $('fCity').innerHTML = optList(uniq(byS.map(s => s.city)), 'All cities / districts', ci);
-    const cats = tab === 'items' ? uniq([...Object.keys(L.itemCats), ...items.map(i => i.cat)]) : uniq([...L.foods, ...rs.flatMap(s => s.foods.map(f => f.cat))]);
+    const cats = tab === 'items' ? uniq(items.map(i => i.cat)) : uniq(rs.flatMap(s => s.foods.map(f => f.cat)));
     $('fCat').innerHTML = optList(cats, 'All food categories', cat);
-    const subs = uniq([...(L.itemCats[cat] || []), ...items.filter(i => !cat || i.cat === cat).map(i => i.sub)]);
+    const subs = uniq(items.filter(i => !cat || i.cat === cat).map(i => i.sub));
     $('fSub').innerHTML = optList(subs, 'All sub-categories', sub);
     $('fSub').hidden = tab !== 'items';
   }
@@ -234,8 +234,8 @@
   }
   function selectOptions(options, value, placeholder = 'Choose…', other = true) {
     const isOther = value && !options.includes(value);
-    return `<option value="">${esc(placeholder)}</option>` + options.map(o => `<option ${o === value ? 'selected' : ''}>${esc(o)}</option>`).join('')
-      + (other ? `<option value="__other" ${isOther ? 'selected' : ''}>Other (type it)…</option>` : '');
+    return `<option value="">${esc(options.length ? placeholder : '')}</option>` + options.map(o => `<option ${o === value ? 'selected' : ''}>${esc(o)}</option>`).join('')
+      + (other ? `<option value="__other" ${isOther ? 'selected' : ''}>＋ Add new…</option>` : '');
   }
   function setSelect(name, options, value, placeholder) {
     const sel = $('f_' + name); if (!sel) return;
@@ -256,10 +256,21 @@
     return Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180 ? { lat, lng } : null;
   }
 
+  /* ---------- dropdown choices: only what has been entered before ---------- */
+  const U = arr => [...new Set(arr.filter(Boolean).map(x => String(x).trim()))].sort((a, b) => a.localeCompare(b));
+  const used = {
+    countries: () => U(spots.map(s => s.country)),
+    states: country => U(spots.filter(s => !country || s.country === country).map(s => s.state)),
+    cities: state => U(spots.filter(s => !state || s.state === state).map(s => s.city)),
+    foods: () => U(spots.flatMap(s => (s.foods || []).map(f => f.cat))),
+    itemCats: () => U(items.map(i => i.cat)),
+    subs: cat => U(items.filter(i => !cat || i.cat === cat).map(i => i.sub))
+  };
+
   /* ---------- editors ---------- */
   function foodBlock(n, f = {}) {
     return `<fieldset class="foodset" data-food="${n}"><legend>Food category ${n}${n > 1 ? ' <span class="opt">(optional)</span>' : ''}</legend>
-      ${selectField('cat' + n, 'Food category', L.foods, f.cat || '', { required: n === 1 })}
+      ${selectField('cat' + n, 'Food category', used.foods(), f.cat || '', { required: n === 1 })}
       ${ratingSelect('rating' + n, 'Rating', f.rating, false)}
       ${field('video' + n, 'Instagram video link', f.video || '', 'url', false, 'placeholder="https://www.instagram.com/reel/..."')}
       <div class="twocol">
@@ -280,10 +291,10 @@
       const foods = v.foods || [];
       $('fields').innerHTML =
         field('name', 'Restaurant name', v.name, 'text', true)
-        + selectField('country', 'Country', L.countries, country, { required: true })
+        + selectField('country', 'Country', used.countries(), country, { required: true })
         + `<div class="checkrow necheck"><input type="checkbox" id="f_ne" ${ne ? 'checked' : ''}><label for="f_ne">New England <span class="hidden-tag">Hidden</span></label></div>
            <small class="hint">Ticked = this restaurant shows in the New England section of the site and admin.</small>`
-        + `<div class="twocol">${selectField('state', 'State', L.states[country] || [], v.state || '')}${selectField('city', 'City / District', L.cities[v.state] || [], v.city || '')}</div>`
+        + `<div class="twocol">${selectField('state', 'State', used.states(country), v.state || '')}${selectField('city', 'City / District', used.cities(v.state), v.city || '')}</div>`
         + field('address', 'Google Maps address', v.address || '', 'text', false, 'placeholder="123 Main St, Boston, MA 02110"')
         + field('pin', 'Map pin (latitude, longitude)', Number.isFinite(+v.lat) && v.lat !== undefined ? `${v.lat}, ${v.lng}` : '', 'text', true, 'placeholder="42.3601, -71.0589"')
         + `<small class="hint">In Google Maps, right-click the restaurant and click the numbers at the top to copy them, then paste here. <a href="#" id="findPin">Search Google Maps for this address ↗</a></small>`
@@ -294,8 +305,8 @@
       $('fields').innerHTML =
         field('name', 'Item name', v.name, 'text', true, 'placeholder="e.g. Honey glazed"')
         + ratingSelect('rating', 'Rating', v.rating, true)
-        + selectField('icat', 'Category', Object.keys(L.itemCats), cat, { required: true })
-        + selectField('isub', 'Sub-category', L.itemCats[cat] || [], v.sub || '')
+        + selectField('icat', 'Category', used.itemCats(), cat, { required: true })
+        + selectField('isub', 'Sub-category', used.subs(cat), v.sub || '')
         + `<div><label for="f_spot">Restaurant</label>
             <select id="f_spot" required><option value="">${rs.length ? 'Choose the restaurant…' : 'Add the restaurant first'}</option>${rs.map(s => `<option value="${esc(s.id)}" ${s.id === v.spot ? 'selected' : ''}>${esc(s.name)} — ${esc([s.city, s.state || s.country].filter(Boolean).join(', '))}</option>`).join('')}</select>
             <small class="hint">The item's location and Google Maps address come from its restaurant.</small>
@@ -318,14 +329,14 @@
     if (t.tagName === 'SELECT' && $(t.id + '_other')) {
       const o = $(t.id + '_other'); o.hidden = t.value !== '__other'; if (!o.hidden) o.focus();
     }
-    if (t.id === 'f_country') { setSelect('state', L.states[readSel('country')] || [], '', 'Choose…'); setSelect('city', [], '', 'Choose…'); }
-    if (t.id === 'f_state') {
+    if (t.id === 'f_country' || t.id === 'f_country_other') { setSelect('state', used.states(readSel('country')), '', 'Choose…'); setSelect('city', [], '', 'Choose…'); }
+    if (t.id === 'f_state' || t.id === 'f_state_other') {
       const st = readSel('state');
-      setSelect('city', L.cities[st] || [], '', 'Choose…');
+      setSelect('city', used.cities(st), '', 'Choose…');
       if (L.neStates.includes(st) && readSel('country') === 'United States') $('f_ne').checked = true;
     }
     if (/^f_series\d$/.test(t.id)) { const n = t.id.slice(-1); $('f_ep' + n).disabled = !t.value; if (t.value) $('f_ep' + n).focus(); }
-    if (t.id === 'f_icat') setSelect('isub', L.itemCats[readSel('icat')] || [], '', 'Choose…');
+    if (t.id === 'f_icat' || t.id === 'f_icat_other') setSelect('isub', used.subs(readSel('icat')), '', 'Choose…');
     if (t.id === 'f_spot') showSpotAddr();
   });
   $('fields').addEventListener('click', e => {

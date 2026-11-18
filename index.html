@@ -113,10 +113,11 @@
       <div id="listPane" hidden>
         <div class="filters">
           <label>Search<input class="field" id="fq" type="search" placeholder="Name, city or food"></label>
-          <label>State / area<select class="field" id="fst"><option value="">All</option></select></label>
-          <label>City / district<select class="field" id="fcity"><option value="">All</option></select></label>
-          <label>Food<select class="field" id="fcat"><option value="">All food</option></select></label>
-          <label>Score<select class="field" id="fscore"><option value="">All scores</option></select></label>
+          <div class="ms" data-ms="l_country"><span class="ms-label">Country</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>
+          <div class="ms" data-ms="l_state"><span class="ms-label">State / area</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>
+          <div class="ms" data-ms="l_city"><span class="ms-label">City / district</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>
+          <div class="ms" data-ms="l_cat"><span class="ms-label">Food</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>
+          <div class="ms" data-ms="l_score"><span class="ms-label">Score</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>
           <label>Sort<select class="field" id="fsort"><option value="name">A to Z</option><option value="best">Best to worst</option></select></label>
         </div>
         <p class="count" id="fcount"></p>
@@ -125,9 +126,6 @@
     </div>
   </section>
 
-  <section class="block" style="padding-top:0"><div class="wrap">
-    <div class="head-row"><div><h2 class="big">The series</h2><p class="lede" id="homeSeriesLede"></p></div><a class="btn ghost" href="/newengland/series" data-path="/series">Browse the series</a></div>
-  </div></section>
 </div>
 
 <div data-view="series" hidden>
