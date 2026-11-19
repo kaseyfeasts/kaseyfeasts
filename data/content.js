@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "la-festa-brick-brew",
+    "name": "La Festa Brick & Brew",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Dover",
+    "address": "300 Central Ave, Dover, NH 03820",
+    "lat": 43.194346892440514,
+    "lng": -70.87478291702607,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 82.5,
+        "video": "https://www.instagram.com/reels/DXeMOEbuZBJ/",
+        "series": "best-pizza",
+        "ep": 6
+      }
+    ]
+  },
+  {
     "id": "pizza-lisa",
     "name": "Pizza Lisa",
     "country": "United States",
