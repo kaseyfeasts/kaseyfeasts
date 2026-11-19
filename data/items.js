@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-la-festa-brick-brew",
+    "name": "Pepperoni Pizza",
+    "rating": 82.5,
+    "cat": "Pizza",
+    "sub": "Other Pizza Style",
+    "spot": "la-festa-brick-brew"
+  },
+  {
     "id": "pepperoni-pizza-pizza-lisa",
     "name": "Pepperoni Pizza",
     "rating": 82.5,
