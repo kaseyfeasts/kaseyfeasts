@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-monte-s-fine-foods",
+    "name": "Pepperoni Pizza",
+    "rating": 95,
+    "cat": "Pizza",
+    "sub": "Roman Style Pizza",
+    "spot": "monte-s-fine-foods"
+  },
+  {
     "id": "pepperoni-pizza-peng-s-pizza-pies",
     "name": "Pepperoni Pizza",
     "rating": 87.5,
