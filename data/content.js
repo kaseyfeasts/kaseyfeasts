@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "brewer-s-fork",
+    "name": "Brewer's Fork",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Charlestown",
+    "address": "7 Moulton St, Charlestown, MA 02129",
+    "lat": 42.37689711356876,
+    "lng": -71.05662212077911,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 72.5,
+        "video": "https://www.instagram.com/reels/Dc1DSWhR39a/",
+        "series": "best-pizza",
+        "ep": 11
+      }
+    ]
+  },
+  {
     "id": "garlic-breath-pizza",
     "name": "Garlic Breath Pizza",
     "country": "United States",
