@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "garlic-breath-pizza",
+    "name": "Garlic Breath Pizza",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "North Andover",
+    "address": "733 Turnpike St #7, North Andover, MA 01845",
+    "lat": 42.66122762425114,
+    "lng": -71.11094690356545,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 90,
+        "video": "https://www.instagram.com/reels/DcTSejDuekj/",
+        "series": "best-pizza",
+        "ep": 10
+      }
+    ]
+  },
+  {
     "id": "mickey-s-ny-pizza",
     "name": "Mickey's NY Pizza",
     "country": "United States",
