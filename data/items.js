@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-pizza-lisa",
+    "name": "Pepperoni Pizza",
+    "rating": 82.5,
+    "cat": "Pizza",
+    "sub": "New England Italian-American Style Pizza",
+    "spot": "pizza-lisa"
+  },
+  {
     "id": "pepperoni-pizza-pie-guys-pizzeria",
     "name": "Pepperoni Pizza",
     "rating": 62.5,
