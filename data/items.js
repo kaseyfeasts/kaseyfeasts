@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-american-flatbread",
+    "name": "Pepperoni Pizza",
+    "rating": 67.5,
+    "cat": "Pizza",
+    "sub": "Flatbread Pizza",
+    "spot": "american-flatbread"
+  },
+  {
     "id": "plain-pie-ida",
     "name": "Plain Pie",
     "rating": 92.5,
