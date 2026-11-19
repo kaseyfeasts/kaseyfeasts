@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-tartaglia-s-pizza",
+    "name": "Pepperoni Pizza",
+    "rating": 72.5,
+    "cat": "Pizza",
+    "sub": "Other Pizza Style",
+    "spot": "tartaglia-s-pizza"
+  },
+  {
     "id": "sausage-pizza-brewer-s-fork",
     "name": "Sausage Pizza",
     "rating": 70,
