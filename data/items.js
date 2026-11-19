@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "buffalo-chicken-pizza-mickey-s-ny-pizza",
+    "name": "Buffalo Chicken Pizza",
+    "rating": 70,
+    "cat": "Pizza",
+    "sub": "NY Style Pizza",
+    "spot": "mickey-s-ny-pizza"
+  },
+  {
     "id": "pepperoni-pizza-vintage-pizza",
     "name": "Pepperoni Pizza",
     "rating": 77.5,
