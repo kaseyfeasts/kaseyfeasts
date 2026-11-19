@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-peng-s-pizza-pies",
+    "name": "Pepperoni Pizza",
+    "rating": 87.5,
+    "cat": "Pizza",
+    "sub": "New Haven Style apizza",
+    "spot": "peng-s-pizza-pies"
+  },
+  {
     "id": "spicy-honey-pickled-jalapeno-pizza-peng-s-pizza-pies",
     "name": "Spicy Honey & Pickled Jalapeño Pizza",
     "rating": 90,
