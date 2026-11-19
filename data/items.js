@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-vodka-sauce-pesto-pizza-mickey-s-ny-pizza",
+    "name": "Pepperoni Vodka Sauce & Pesto Pizza",
+    "rating": 65,
+    "cat": "Pizza",
+    "sub": "Sicilian Style Pizza",
+    "spot": "mickey-s-ny-pizza"
+  },
+  {
     "id": "buffalo-chicken-pizza-mickey-s-ny-pizza",
     "name": "Buffalo Chicken Pizza",
     "rating": 70,
