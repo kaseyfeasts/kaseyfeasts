@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "vintage-pizza",
+    "name": "Vintage Pizza",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Manchester",
+    "address": "241 Candia Rd, Manchester, NH 03109",
+    "lat": 42.981018347369954,
+    "lng": -71.4258534612191,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 77.5,
+        "video": "https://www.instagram.com/reels/DYQVPntRPIJ/",
+        "series": "best-pizza",
+        "ep": 8
+      }
+    ]
+  },
+  {
     "id": "square-deli-pizzeria",
     "name": "Square Deli Pizzeria",
     "country": "United States",
