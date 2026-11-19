@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "american-flatbread",
+    "name": "American Flatbread",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "Stowe",
+    "address": "1190 Mountain Rd, Stowe, VT 05672",
+    "lat": 44.47521433888224,
+    "lng": -72.70251640345892,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 67.5,
+        "video": "https://www.instagram.com/reels/DebtJymsKJD/",
+        "series": "best-pizza",
+        "ep": 14
+      }
+    ]
+  },
+  {
     "id": "ida",
     "name": "ida",
     "country": "United States",
