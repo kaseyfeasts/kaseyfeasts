@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "pizza-lisa",
+    "name": "Pizza Lisa",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Windham",
+    "address": "32 Indian Rock Rd, Windham, NH 03087",
+    "lat": 42.80504722841264,
+    "lng": -71.29641525937643,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 82.5,
+        "video": "https://www.instagram.com/reels/DScijTfEUc2/",
+        "series": "best-pizza",
+        "ep": 5
+      }
+    ]
+  },
+  {
     "id": "pie-guys-pizzeria",
     "name": "Pie Guys Pizzeria",
     "country": "United States",
