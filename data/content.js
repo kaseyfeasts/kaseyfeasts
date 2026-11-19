@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "tartaglia-s-pizza",
+    "name": "Tartaglia's Pizza",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Campton",
+    "address": "250 NH-49, Campton, NH 03223",
+    "lat": 43.850631627433565,
+    "lng": -71.64264473233212,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 72.5,
+        "video": "https://www.instagram.com/reels/DdGyWDChJjr/",
+        "series": "best-pizza",
+        "ep": 12
+      }
+    ]
+  },
+  {
     "id": "brewer-s-fork",
     "name": "Brewer's Fork",
     "country": "United States",
