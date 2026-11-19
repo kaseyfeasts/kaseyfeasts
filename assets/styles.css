@@ -518,3 +518,12 @@ h1.big{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,40p
 /* checkbox rows always side by side (the old filter label style was stacking them) */
 .filters .ms-opt,.ms-opt{flex-direction:row!important;align-items:center;color:var(--text);font-size:15px;font-weight:500;gap:10px;white-space:nowrap}
 .filters .ms-label{font-size:13px;font-weight:600;color:var(--muted)}
+.series-bar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+.series-sort{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+.series-sort .field{min-width:180px;height:46px}
+@media (max-width:420px){.sbubs{gap:6px}.sbub{padding:6px 11px;font-size:13.5px}}
+/* backup map lines */
+.map-border{fill:none;stroke:#A99F8A;stroke-width:1.1;stroke-linejoin:round}
+.map-state{fill:none;stroke:#B9AE97;stroke-width:1.2;stroke-dasharray:5 3;stroke-linejoin:round}
+.map-county{fill:none;stroke:var(--county);stroke-width:.8}
+.globe-grid{stroke-opacity:.12}

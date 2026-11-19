@@ -198,10 +198,11 @@ const projection = d3.geoMercator(); // flat map
 const path = d3.geoPath(projection);
 const mk=(cls)=>{const e=document.createElementNS(NS,"path");e.setAttribute("class",cls);return e};
 const ocean=mk("globe-ocean"), land=mk("globe-land"), dMask=mk("globe-mask"), dLand=mk("globe-detail"), dCoast=mk("globe-coast"), graticule=mk("globe-grid");
+const lCounty=mk("map-county"), lState=mk("map-state"), lBorder=mk("map-border");
 const gMk = document.createElementNS(NS,"g");
 const sphere = {type:"Sphere"};
 const grid = d3.geoGraticule10();
-svg.append(ocean,land,dMask,dLand,dCoast,graticule,gMk);
+svg.append(ocean,land,dMask,dLand,lCounty,lState,lBorder,dCoast,graticule,gMk);
 const HAS_DETAIL = typeof DETAIL!=="undefined";
 
 let engine="simple";       // "simple" or "detailed"
@@ -248,6 +249,9 @@ function draw(){
   dMask.setAttribute("d",detail?path(DETAIL.mask)||"":"");
   dLand.setAttribute("d",detail?path(DETAIL.land)||"":"");
   dCoast.setAttribute("d",detail?path(DETAIL.coast)||"":"");
+  lBorder.setAttribute("d",HAS_DETAIL&&DETAIL.borders?path(DETAIL.borders)||"":"");
+  lState.setAttribute("d",HAS_DETAIL&&DETAIL.states&&zoom>=3?path(DETAIL.states)||"":"");
+  lCounty.setAttribute("d",HAS_DETAIL&&DETAIL.counties&&zoom>=12?path(DETAIL.counties)||"":"");
   graticule.setAttribute("d",zoom<8?path(grid)||"":"");
   for(const s of PLACES){
     [s.x,s.y]=projection([s.lng,s.lat]);
@@ -373,7 +377,6 @@ $("#zall").onclick=()=>{ // fit all pins in this region
   }
   flyTo(R().view);
 };
-$("#jumps").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;const j=R().jumps[b.dataset.j];closePop();pauseSpin(20000);flyTo(j.slice(1))};
 
 function fillMapCats(){
   const cats=[...new Set(rSpots().flatMap(s=>s.foods.map(f=>f.cat)))];
@@ -469,7 +472,7 @@ function renderList(){
     return !RF.l_score.size||fs.some(f=>RF.l_score.has(stampOf(f.rating)));
   });
   r.sort(sort==="best"?byRating(s=>+(pickFood(s)||{}).rating):(a,b)=>a.name.localeCompare(b.name));
-  $("#fcount").textContent=`${r.length} of ${list.length} places`+(sort==="best"?" · best first":"");
+  $("#fcount").textContent=`${r.length} of ${list.length} places`+(sort==="best"?" · highest rated first":"");
   rows.innerHTML=r.length?r.map(s=>rowHTML(s,null,pickFood(s))).join("")
    :`<p class="empty">Nothing matches those filters. Try removing one, or <a href="${P('/next')}">suggest a spot</a>.</p>`;
 }
@@ -500,9 +503,16 @@ function renderSeries(id){
   if(one){
     const eps=episodesOf(one.id);
     el.innerHTML=`<a class="back" href="${P('/series')}">‹ All series</a><h1 class="big series-title">${esc(one.name)}</h1>
-      <p class="lede">${eps.length?`${eps.length} ${eps.length===1?"episode":"episodes"} so far, in order.`:"Episodes are on the way."}</p>
-      ${eps.length?`<ol class="eps big-eps">${eps.map(({s,f})=>`<li><span class="epn">${f.ep?"Ep "+esc(f.ep):"Ep"}</span>${badge(f.cat)}<span class="ept"><a href="${P('/spot/'+s.id)}">${esc(s.name)}</a><small>${esc(where(s))} · ${esc(f.cat)}</small></span>${stampHTML(f.rating,true)}${f.video?`<a class="btn ghost sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch</a>`:""}</li>`).join("")}</ol>`
+      <div class="series-bar"><p class="lede">${eps.length?`${eps.length} ${eps.length===1?"episode":"episodes"} so far.`:"Episodes are on the way."}</p>
+      ${eps.length?`<label class="series-sort">Sort<select class="field" id="epSort"><option value="new">Newest First</option><option value="old">Oldest First</option><option value="best">Highest Rated</option></select></label>`:""}</div>
+      ${eps.length?`<ol class="eps big-eps" id="epList"></ol>`
         :`<div class="soon-block"><h3>Episodes coming soon</h3><p>New episodes of ${esc(one.name)} will show up here as they drop.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a></div>`}`;
+    const drawEps=()=>{
+      const mode=$("#epSort").value, ep=x=>+x.f.ep||0;
+      const list=[...eps].sort(mode==="old"?(a,b)=>ep(a)-ep(b):mode==="best"?(a,b)=>(+b.f.rating||0)-(+a.f.rating||0)||ep(b)-ep(a):(a,b)=>ep(b)-ep(a));
+      $("#epList").innerHTML=list.map(({s,f})=>`<li><span class="epn">${f.ep?"Ep "+esc(f.ep):"Ep"}</span>${badge(f.cat)}<span class="ept"><a href="${P('/spot/'+s.id)}">${esc(s.name)}</a><small>${esc(where(s))} · ${esc(f.cat)}</small></span>${stampHTML(f.rating,true)}${f.video?`<a class="btn ghost sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch</a>`:""}</li>`).join("");
+    };
+    if(eps.length){ $("#epSort").addEventListener("input",drawEps); drawEps(); }
     document.title=`${one.name} · Kasey Feasts`; return;
   }
   el.innerHTML=`<h1 class="big">The series</h1><p class="lede">Every ${esc(R().name)} series, one episode at a time.</p>
@@ -566,28 +576,18 @@ function onRankChange(key){
   if(key==="cat"){ const c=[...RF.cat]; history.replaceState(null,"",P(c.length===1?"/rankings/"+slugify(c[0]):"/rankings")); }
   msSummary(key); refreshRankFilters(key); drawRank();
 }
-// Filters always show, using the dropdown lists in data/lists.js plus anything in the data.
-const ordered = (base,extra) => [...base,...uniq(extra).filter(x=>!base.includes(x))];
-function regionStates(countries){
-  if(region==="newengland") return NEW_ENGLAND_STATES;
-  if(region==="hongkong") return STATES["Hong Kong"]||[];
-  const cs=countries.length?countries:["United States","Hong Kong"];
-  return cs.flatMap(c=>STATES[c]||[]);
-}
+// Every filter only lists what has been entered in the admin (no starter lists).
 function refreshRankFilters(changed){
   const items=rItems(), spotOf=i=>PLACE_BY_ID[i.spot];
   if(changed!=="cat") msSet("cat",itemCats(),"All food");
   const byCat=items.filter(i=>!RF.cat.size||RF.cat.has(i.cat));
   if(changed!=="sub") msSet("sub",uniq(byCat.map(i=>i.sub)),"All types");
-  const isGlobal=region==="global";
-  if(changed!=="country") msSet("country",ordered(["United States","Hong Kong"],items.map(i=>spotOf(i).country)),"All countries");
-  document.querySelector('.ms[data-ms="country"]').style.display=isGlobal?"":"none";
+  if(changed!=="country") msSet("country",uniq(items.map(i=>spotOf(i).country)),"All countries");
+  document.querySelector('.ms[data-ms="country"]').style.display=region==="global"?"":"none";
   const byCountry=items.filter(i=>!RF.country.size||RF.country.has(spotOf(i).country));
-  const stateBase=regionStates(isGlobal?[...RF.country]:[]);
-  if(changed!=="state") msSet("state",ordered(stateBase,byCountry.map(i=>spotOf(i).state)),"All");
+  if(changed!=="state") msSet("state",uniq(byCountry.map(i=>spotOf(i).state)),"All");
   const byState=byCountry.filter(i=>!RF.state.size||RF.state.has(spotOf(i).state));
-  const cityBase=(RF.state.size?[...RF.state]:stateBase).flatMap(st=>CITIES[st]||[]);
-  if(changed!=="city") msSet("city",ordered([...new Set(cityBase)],byState.map(i=>spotOf(i).city)),"All");
+  if(changed!=="city") msSet("city",uniq(byState.map(i=>spotOf(i).city)),"All");
   if(changed!=="score") msSet("score",RATING_STAMPS.map(x=>x[1]),"All scores");
 }
 function drawRank(){
@@ -646,12 +646,11 @@ function applyRegion(r){
   $("#heroCopy").textContent=cfg.hero;
   $("#dirTitle").textContent=r==="global"?"Places I've been around the world":`Places I've been in ${cfg.name}`;
   document.querySelectorAll(".sbub").forEach(b=>{const on=b.dataset.region===r;b.classList.toggle("on",on);on?b.setAttribute("aria-current","true"):b.removeAttribute("aria-current")});
-  $("#jumps").innerHTML=cfg.jumps.map((j,i)=>`<button class="chip" data-j="${i}">${esc(j[0])}</button>`).join("");
   const empty=isEmpty();
   $("#mapSoon").hidden=!empty; $("#mapHint").hidden=empty;
   $("#mapHint").textContent=cfg.spin?"Drag to spin · scroll or pinch to zoom":"Drag to move · scroll or pinch to zoom";
   $("#mapSoonText").textContent=`Every place I review${r==="global"?"":" in "+cfg.name} will be pinned here with a link to the video. ${cfg.spin?"Watch the globe spin":"Look around"} while you wait.`;
-  $(".side-h small").textContent=empty?"Jump to an area":"Updates as you move the map";
+  $(".side-h small").textContent=empty?"":"Updates as you move the map";
   $("#dirLede").textContent=empty?`The map is ready. The ${cfg.name} pins are coming soon, each linked to my review.`:"Drag the map to your area, then tap a dot to watch my review.";
   $("#fq").value=""; $("#fsort").value="name"; ["l_country","l_state","l_city","l_cat","l_score"].forEach(k=>RF[k].clear()); fillMapCats(); fillListFilters(); renderList(); fillSeriesMenu(); renderAbout();
   closePop(); sideKey=null; idleUntil=0; setProjectionForRegion(); flyTo(cfg.view,true); setSpin(!!cfg.spin);

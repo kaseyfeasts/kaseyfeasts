@@ -24,7 +24,7 @@ const REGIONS = {
   newengland: {
     name: "New England",
     rankExample: "glazed donuts in NH, MA and ME",   // used on the Food Item Rankings page
-    hero: "Independent reviews of New England's best donuts, sandwiches and pizza. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.",
+    hero: "Independent reviews from New England. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.",
     about: [
       "I drive around New England eating donuts, sandwiches, pizza, and more. Then I tell you which ones are worth the trip. Massachusetts and New Hampshire are home base. I take road trips to Maine, Vermont, Rhode Island and Connecticut as often as possible.",
       "Every review is my own money and my own opinion. If a place isn’t good, it doesn’t make the map."

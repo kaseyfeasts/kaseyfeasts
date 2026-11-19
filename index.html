@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Krona+One&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.0/dist/maplibre-gl.css">
-<link rel="stylesheet" href="/assets/styles.css?v=20261118">
+<link rel="stylesheet" href="/assets/styles.css?v=20261119d">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍩</text></svg>">
 </head>
 <body>
@@ -36,7 +36,7 @@
     </nav>
   </div>
   <div class="switchbar" id="switchbar" hidden>
-    <div class="wrap"><span class="sl">Switch to</span><nav class="sbubs" id="switchBubbles" aria-label="Switch region"></nav></div>
+    <div class="wrap"><nav class="sbubs" id="switchBubbles" aria-label="Switch region"></nav></div>
   </div>
 </header>
 
@@ -62,7 +62,7 @@
       </div>
       <div class="hero-copy">
         <h1 class="xoxo" aria-label="Love you, XOXO"><span class="l1">LOVE YOU</span><span class="l2">XOXO</span></h1>
-        <p id="heroCopy">Independent reviews of New England's best donuts, sandwiches and pizza. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.</p>
+        <p id="heroCopy">Independent reviews from New England. Nobody pays for my opinion. If it's on the map, I ate there and the review is one tap away.</p>
         <div class="row">
           <a class="btn red" href="#directory">Explore the map</a>
           <a class="btn ghost" href="/newengland/series" data-path="/series">Watch the series</a>
@@ -104,7 +104,6 @@
           </div>
           <aside class="side">
             <div class="side-h"><strong id="inViewCount">Spots in this area</strong><small>Updates as you move the map</small></div>
-            <div class="chips" style="padding:10px 14px 0" id="jumps"></div>
             <ul id="inView"></ul>
           </aside>
         </div>
@@ -118,7 +117,7 @@
           <div class="ms" data-ms="l_city"><span class="ms-label">City / district</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>
           <div class="ms" data-ms="l_cat"><span class="ms-label">Food</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>
           <div class="ms" data-ms="l_score"><span class="ms-label">Score</span><button type="button" class="field ms-btn" aria-haspopup="true" aria-expanded="false"></button><div class="ms-panel" hidden></div></div>
-          <label>Sort<select class="field" id="fsort"><option value="name">A to Z</option><option value="best">Best to worst</option></select></label>
+          <label>Sort<select class="field" id="fsort"><option value="name">A to Z</option><option value="best">Highest Rated</option></select></label>
         </div>
         <p class="count" id="fcount"></p>
         <div class="rows" id="frows"></div>
@@ -265,16 +264,16 @@
   </div>
 </footer>
 <script src="/assets/d3.min.js"></script>
-<script src="/data/map-data.js?v=20261118"></script>
-<script src="/data/map-detail.js?v=20261118"></script>
-<script src="/data/regions.js?v=20261118"></script>
-<script src="/data/lists.js?v=20261118"></script>
-<script src="/data/content.js?v=20261118"></script>
-<script src="/data/items.js?v=20261118"></script>
-<script src="/data/series.js?v=20261118"></script>
+<script src="/data/map-data.js?v=20261119d"></script>
+<script src="/data/map-detail.js?v=20261119d"></script>
+<script src="/data/regions.js?v=20261119d"></script>
+<script src="/data/lists.js?v=20261119d"></script>
+<script src="/data/content.js?v=20261119d"></script>
+<script src="/data/items.js?v=20261119d"></script>
+<script src="/data/series.js?v=20261119d"></script>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.0/dist/maplibre-gl.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/brands.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/fontawesome.min.js"></script>
-<script src="/assets/app.js?v=20261118"></script>
+<script src="/assets/app.js?v=20261119d"></script>
 </body>
 </html>
