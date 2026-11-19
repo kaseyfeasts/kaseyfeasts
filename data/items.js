@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "killa-b-brewer-s-fork",
+    "name": "Killa B",
+    "rating": 80,
+    "cat": "Pizza",
+    "sub": "Other Pizza Style",
+    "spot": "brewer-s-fork"
+  },
+  {
     "id": "pepperoni-pizza-garlic-breath-pizza",
     "name": "Pepperoni Pizza",
     "rating": 90,
