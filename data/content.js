@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "ida",
+    "name": "ida",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "Burlington",
+    "address": "662 Riverside Ave., Burlington, VT 05401",
+    "lat": 44.48922198610948,
+    "lng": -73.20734916968445,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 92.5,
+        "video": "https://www.instagram.com/reels/DeO1JTDMf-x/",
+        "series": "best-pizza",
+        "ep": 13
+      }
+    ]
+  },
+  {
     "id": "tartaglia-s-pizza",
     "name": "Tartaglia's Pizza",
     "country": "United States",
