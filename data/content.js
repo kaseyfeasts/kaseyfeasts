@@ -13,7 +13,7 @@ const SPOTS = [
     "foods": [
       {
         "cat": "Pizza",
-        "rating": 72.5,
+        "rating": 75,
         "video": "https://www.instagram.com/reels/Dc1DSWhR39a/",
         "series": "best-pizza",
         "ep": 11
