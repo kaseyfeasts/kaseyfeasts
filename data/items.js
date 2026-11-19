@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "sausage-pizza-brewer-s-fork",
+    "name": "Sausage Pizza",
+    "rating": 70,
+    "cat": "Pizza",
+    "sub": "Other Pizza Style",
+    "spot": "brewer-s-fork"
+  },
+  {
     "id": "killa-b-brewer-s-fork",
     "name": "Killa B",
     "rating": 80,
