@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "plain-pie-ida",
+    "name": "Plain Pie",
+    "rating": 92.5,
+    "cat": "Pizza",
+    "sub": "NY Style Pizza",
+    "spot": "ida"
+  },
+  {
     "id": "pepperoni-pizza-tartaglia-s-pizza",
     "name": "Pepperoni Pizza",
     "rating": 72.5,
