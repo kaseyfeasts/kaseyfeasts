@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-square-deli-pizzeria",
+    "name": "Pepperoni Pizza",
+    "rating": 95,
+    "cat": "Pizza",
+    "sub": "NY Style Pizza",
+    "spot": "square-deli-pizzeria"
+  },
+  {
     "id": "pepperoni-pizza-la-festa-brick-brew",
     "name": "Pepperoni Pizza",
     "rating": 82.5,
