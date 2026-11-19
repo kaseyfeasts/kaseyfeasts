@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-pizza-garlic-breath-pizza",
+    "name": "Pepperoni Pizza",
+    "rating": 90,
+    "cat": "Pizza",
+    "sub": "NY Style Pizza",
+    "spot": "garlic-breath-pizza"
+  },
+  {
     "id": "pepperoni-vodka-sauce-pesto-pizza-mickey-s-ny-pizza",
     "name": "Pepperoni Vodka Sauce & Pesto Pizza",
     "rating": 65,
