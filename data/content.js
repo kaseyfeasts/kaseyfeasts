@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "square-deli-pizzeria",
+    "name": "Square Deli Pizzeria",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Everett",
+    "address": "421 Broadway, Everett, MA 02149",
+    "lat": 42.40658679790189,
+    "lng": -71.05572705939949,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 95,
+        "video": "https://www.instagram.com/reels/DYDYm1oRKNO/",
+        "series": "best-pizza",
+        "ep": 7
+      }
+    ]
+  },
+  {
     "id": "la-festa-brick-brew",
     "name": "La Festa Brick & Brew",
     "country": "United States",
