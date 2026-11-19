@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pepperoni-margherita-pizza-the-parker-pie-company",
+    "name": "Pepperoni Margherita Pizza",
+    "rating": 77.5,
+    "cat": "Pizza",
+    "sub": "Other Pizza Style",
+    "spot": "the-parker-pie-company"
+  },
+  {
     "id": "pepperoni-pizza-american-flatbread",
     "name": "Pepperoni Pizza",
     "rating": 67.5,
