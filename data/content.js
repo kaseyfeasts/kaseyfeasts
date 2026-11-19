@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "peng-s-pizza-pies",
+    "name": "Peng's Pizza Pies",
+    "country": "United States",
+    "ne": true,
+    "state": "Maine",
+    "city": "Biddeford",
+    "address": "128 Main St Ste 102, Biddeford, ME 04005",
+    "lat": 43.49304305435661,
+    "lng": -70.4538910170086,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 90,
+        "video": "https://www.instagram.com/reels/DfhVfYEsXUD/",
+        "series": "best-pizza",
+        "ep": 16
+      }
+    ]
+  },
+  {
     "id": "the-parker-pie-company",
     "name": "The Parker Pie Company",
     "country": "United States",
