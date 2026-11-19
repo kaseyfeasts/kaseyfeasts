@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "mickey-s-ny-pizza",
+    "name": "Mickey's NY Pizza",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Derry",
+    "address": "9 Crystal Ave, Derry, NH 03038",
+    "lat": 42.883835360616025,
+    "lng": -71.32431310355217,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 67.5,
+        "video": "https://www.instagram.com/p/Daizd6QqM33/",
+        "series": "best-pizza",
+        "ep": 9
+      }
+    ]
+  },
+  {
     "id": "vintage-pizza",
     "name": "Vintage Pizza",
     "country": "United States",
