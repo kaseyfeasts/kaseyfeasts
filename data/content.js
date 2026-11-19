@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "monte-s-fine-foods",
+    "name": "Monte's Fine Foods",
+    "country": "United States",
+    "ne": true,
+    "state": "Maine",
+    "city": "Portland",
+    "address": "788 Washington Ave, Portland, ME 04103",
+    "lat": 43.68566135725613,
+    "lng": -70.26851027466977,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 95,
+        "video": "https://www.instagram.com/reels/DftQzd3RN-Y/",
+        "series": "best-pizza",
+        "ep": 17
+      }
+    ]
+  },
+  {
     "id": "peng-s-pizza-pies",
     "name": "Peng's Pizza Pies",
     "country": "United States",
