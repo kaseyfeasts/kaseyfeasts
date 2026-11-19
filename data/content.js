@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "the-parker-pie-company",
+    "name": "The Parker Pie Company",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "West Glover",
+    "address": "161 County Rd, West Glover, VT 05875",
+    "lat": 44.72897413819905,
+    "lng": -72.22726801693538,
+    "foods": [
+      {
+        "cat": "Pizza",
+        "rating": 77.5,
+        "video": "https://www.instagram.com/reels/DemAUMmMSec/",
+        "series": "best-pizza",
+        "ep": 15
+      }
+    ]
+  },
+  {
     "id": "american-flatbread",
     "name": "American Flatbread",
     "country": "United States",
