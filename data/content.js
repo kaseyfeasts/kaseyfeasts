@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "martone-s-market-cafe",
+    "name": "Martone's Market & Café",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "Essex Junction",
+    "address": "16 Main St, Essex Junction, VT 05452",
+    "lat": 44.49144700812512,
+    "lng": -73.11010133229397,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 70,
+        "video": "https://www.instagram.com/reels/DejbfCuMM-P/",
+        "series": "best-sandwiches",
+        "ep": 26
+      }
+    ]
+  },
+  {
     "id": "poppy-cafe-market",
     "name": "Poppy Cafe & Market",
     "country": "United States",
