@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "honey-s-country-store-deli",
+    "name": "Honey's Country Store & Deli",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "South Tamworth",
+    "address": "1004 Bearcamp Hwy, South Tamworth, NH 03883",
+    "lat": 43.82796360440478,
+    "lng": -71.30846684814547,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 62.5,
+        "video": "https://www.instagram.com/reels/Db3ZLfuhpbV/",
+        "series": "best-sandwiches",
+        "ep": 15
+      }
+    ]
+  },
+  {
     "id": "the-boro-baking-co",
     "name": "The Boro Baking Co",
     "country": "United States",
