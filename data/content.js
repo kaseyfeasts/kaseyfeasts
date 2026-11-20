@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "sam-lagrassa-s",
+    "name": "Sam LaGrassa's",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Boston",
+    "address": "44 Province St, Boston, MA 02108",
+    "lat": 42.35701447880687,
+    "lng": -71.05997344768805,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 95,
+        "video": "https://www.instagram.com/reels/DfKDebHs3AP/",
+        "series": "best-sandwiches",
+        "ep": 31
+      }
+    ]
+  },
+  {
     "id": "dave-s-fresh-pasta",
     "name": "Dave's Fresh Pasta",
     "country": "United States",
