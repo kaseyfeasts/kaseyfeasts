@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "cheesesteak-on-seeded-roll-mickey-s-ny-pizza",
+    "name": "Cheesesteak on Seeded Roll",
+    "rating": 80,
+    "cat": "Sandwich (Sub)",
+    "sub": "Steak & Cheese",
+    "spot": "mickey-s-ny-pizza"
+  },
+  {
     "id": "full-belli-sandwich-on-bulky-roll-full-belli-deli",
     "name": "Full Belli Sandwich on Bulky Roll",
     "rating": 67.5,
