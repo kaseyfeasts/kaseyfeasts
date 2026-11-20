@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "calisto-s",
+    "name": "Calisto's",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Boston",
+    "address": "682 Tremont St, Boston, MA 02118",
+    "lat": 42.343558633036615,
+    "lng": -71.077698777876,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 80,
+        "video": "https://www.instagram.com/reels/Dd6WHjWR4ES/",
+        "series": "best-sandwiches",
+        "ep": 22
+      }
+    ]
+  },
+  {
     "id": "gusto-italian-cafe",
     "name": "Gusto Italian Cafe",
     "country": "United States",
