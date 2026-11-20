@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "steak-cheese-benny-s-fresh-eats-market",
+    "name": "Steak & Cheese",
+    "rating": 62.5,
+    "cat": "Sandwich (Sub)",
+    "sub": "Steak & Cheese",
+    "spot": "benny-s-fresh-eats-market"
+  },
+  {
     "id": "the-barnyard-sammy-benny-s-fresh-eats-market",
     "name": "The Barnyard Sammy",
     "rating": 87.5,
