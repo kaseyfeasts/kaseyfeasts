@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "borrelli-s-italian-deli",
+    "name": "Borrelli's Italian Deli",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Methuen",
+    "address": "322 Merrimack St, Methuen, MA 01844",
+    "lat": 42.74328056046822,
+    "lng": -71.13133394218228,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 80,
+        "video": "https://www.instagram.com/reels/DZH0Kx7uOKX/",
+        "series": "best-sandwiches",
+        "ep": 9
+      }
+    ]
+  },
+  {
     "id": "the-shop-at-dovetail",
     "name": "The Shop at Dovetail",
     "country": "United States",
