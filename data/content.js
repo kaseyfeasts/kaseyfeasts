@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "diblasi-s-subs",
+    "name": "DiBlasi's Subs",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Everett",
+    "address": "616 Broadway, Everett, MA 02149",
+    "lat": 42.412283438164366,
+    "lng": -71.0511450053562,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 67.5,
+        "video": "https://www.instagram.com/reels/DfE53s2sPCq/",
+        "series": "best-sandwiches",
+        "ep": 29
+      }
+    ]
+  },
+  {
     "id": "la-cascia-s-bakery",
     "name": "La Cascia's Bakery",
     "country": "United States",
