@@ -42,3 +42,8 @@
 .helppanel pre{white-space:pre-wrap;font-size:13px;line-height:1.8}
 #chooser[hidden]{display:none!important}
 @media(max-width:650px){.choices{grid-template-columns:1fr}.choice{min-height:110px}.filterbar select{flex:1 1 45%;min-width:0}.linkish{margin-left:0}}
+.morerow{display:grid;grid-template-columns:1fr 110px 38px;gap:10px;align-items:end;margin-top:4px}
+.morerow label{margin-top:14px}
+.mv-del{padding:10px 0;font-size:18px;line-height:1;color:#bf3a55;height:46px}
+.addvid{margin-top:14px;padding:9px 14px;font-size:14px;border-style:dashed}
+@media(max-width:650px){.morerow{grid-template-columns:1fr 80px 38px}}

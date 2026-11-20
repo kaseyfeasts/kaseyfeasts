@@ -10,7 +10,16 @@ const BG = {Donuts:"#FBD7E5",Pizza:"#F9D4CE",Sandwiches:"#FBEBC3",Bakery:"#D7EBD
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const $ = s => document.querySelector(s);
 const price = p => "$".repeat(p);
-const art = (cat,ph) => ICON[cat].replace('var(--ph,#fff)',ph||BG[cat]);
+// Picks the drawing for a food, so "Sandwich (Sub)", "Sandwich (Wrap)" etc. all get the sandwich.
+const iconKey = cat => { const c=String(cat||"").toLowerCase();
+  if(ICON[cat]) return cat;
+  if(/donut|doughnut|cruller|fritter/.test(c)) return "Donuts";
+  if(/pizza|apizza|slice|calzone/.test(c)) return "Pizza";
+  if(/sandwich|sub\b|wrap|grinder|hoagie|hero|panini|bagel|burger/.test(c)) return "Sandwiches";
+  if(/bak|pastr|bread|croissant|cookie|muffin|tart|bun|cake/.test(c)) return "Bakery";
+  if(/seafood|lobster|clam|fish|oyster|shrimp|chowder/.test(c)) return "Seafood";
+  return null; };
+const art = (cat,ph) => { const k=iconKey(cat); return k?ICON[k].replace('var(--ph,#fff)',ph||BG[k]):""; };
 
 /* ===================== AVATAR ===================== */
 const avatarSVG = (id) => `
@@ -138,7 +147,7 @@ setTimeout(hearts,700);
 // Items:       {id,name,rating,cat,sub,spot}
 const CAT_COLORS = {Donuts:"var(--frosting)",Sandwiches:"var(--mustard)",Pizza:"var(--sauce)",Bakery:"var(--basil)",Seafood:"var(--other)"};
 const PALETTE = ["#6C8EBF","#9B6BB3","#3E8E8E","#C9772E","#5E7D3A","#B5476B"];
-const catColor = c => CAT_COLORS[c] || PALETTE[Math.abs([...String(c)].reduce((a,ch)=>a*31+ch.charCodeAt(0),7))%PALETTE.length];
+const catColor = c => CAT_COLORS[c] || CAT_COLORS[iconKey(c)] || PALETTE[Math.abs([...String(c)].reduce((a,ch)=>a*31+ch.charCodeAt(0),7))%PALETTE.length];
 const ABBR = {MA:"Massachusetts",NH:"New Hampshire",ME:"Maine",VT:"Vermont",RI:"Rhode Island",CT:"Connecticut"};
 function normSpot(s){ // also accepts the older one-category format
   if(Array.isArray(s.foods)) return s;
@@ -164,8 +173,13 @@ const stampHTML = (r,small) => { const l=stampOf(r); return l?`<span class="stam
 const foodRating = (s,cat) => { const f=s.foods.find(f=>f.cat===cat); return f?+f.rating:NaN; };
 const bestFood = s => [...s.foods].sort((a,b)=>(+b.rating||0)-(+a.rating||0))[0];
 const byRating = get => (a,b)=>((get(b)||0)-(get(a)||0))||a.name.localeCompare(b.name);
-const badge = cat => `<span class="badge" style="background:${BG[cat]||"var(--soft)"}">${ICON[cat]?art(cat):`<b style="font-family:var(--display);font-size:15px">${esc(String(cat||"?").slice(0,1))}</b>`}</span>`;
-const vlink = s => (s.foods.find(f=>f.video)||{}).video||IG;
+const badge = cat => { const k=iconKey(cat); return `<span class="badge" style="background:${BG[k]||"var(--soft)"}">${k?art(k):`<b style="font-family:var(--display);font-size:15px">${esc(String(cat||"?").slice(0,1))}</b>`}</span>`; };
+// Every video for one food category: the main one plus any extra return-visit videos.
+const videosOf = f => [{video:f.video,ep:f.ep},...(f.more||[])].filter(v=>v.video||v.ep);
+const latestVideo = f => { const vs=videosOf(f).filter(v=>v.video); return vs.sort((a,b)=>(+b.ep||0)-(+a.ep||0))[0]; };
+const vlink = s => { for(const f of [...s.foods].sort((a,b)=>(+b.rating||0)-(+a.rating||0))){ const v=latestVideo(f); if(v) return v.video; } return IG; };
+// The restaurant food category a ranked item belongs to ("Sandwich (Sub)" -> "Sandwiches").
+const foodForItem = (s,i) => s.foods.find(f=>f.cat===i.cat) || s.foods.find(f=>iconKey(f.cat)&&iconKey(f.cat)===iconKey(i.cat)) || (s.foods.length===1?s.foods[0]:null);
 const slugify = t => String(t).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 
 /* ===================== REGIONS & CLEAN PATHS ===================== */
@@ -490,7 +504,7 @@ const ALL_SERIES = typeof SERIES!=="undefined"&&Array.isArray(SERIES)?SERIES:[];
 const seriesInRegion = () => ALL_SERIES.filter(x=>region==="global"||x.region===region);
 function episodesOf(id){
   const eps=[];
-  for(const s of rSpots()) for(const f of s.foods) if(f.series===id) eps.push({s,f});
+  for(const s of rSpots()) for(const f of s.foods) if(f.series===id) for(const v of videosOf(f)) eps.push({s,f:{...f,video:v.video,ep:v.ep}});
   return eps.sort((a,b)=>(+a.f.ep||9999)-(+b.f.ep||9999)||a.s.name.localeCompare(b.s.name));
 }
 function fillSeriesMenu(){
@@ -598,7 +612,7 @@ function drawRank(){
   const shown=top?r.slice(0,top):r;
   $("#rcount").textContent=all.length?`${shown.length} of ${r.length} ${r.length===1?"item":"items"}`:"";
   $("#rlist").innerHTML=!all.length?`<li class="soon-block"><h3>${esc(R().name)} rankings coming soon</h3><p>Glazed donuts, Italian subs, pepperoni slices: every item I rate will be ranked here, best first.</p><a class="btn red" href="${IG}" target="_blank" rel="noopener">Follow for updates</a></li>`
-    :shown.length?shown.map((i,n)=>{const s=PLACE_BY_ID[i.spot];const f=s.foods.find(f=>f.cat===i.cat);return `<li class="rank">
+    :shown.length?shown.map((i,n)=>{const s=PLACE_BY_ID[i.spot];const fd=foodForItem(s,i); const f=fd&&latestVideo(fd); return `<li class="rank">
       <span class="rn">${n+1}</span>${badge(i.cat)}
       <span class="ri"><span class="nm">${esc(i.name)}</span><span class="tw">${esc(i.sub?i.cat+" · "+i.sub:i.cat)}</span><a class="rr" href="${P('/spot/'+s.id)}">${esc(s.name)}</a><span class="tw">${esc(where(s))}</span></span>
       <span class="ra">${stampHTML(i.rating)}<span class="rbtns">${s.address?`<button class="btn ghost sm" type="button" data-copy="${esc(s.address)}">Copy address</button>`:""}${f&&f.video?`<a class="btn ghost sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch</a>`:""}</span></span></li>`}).join("")
@@ -616,9 +630,11 @@ function renderSpot(id){
   el.innerHTML=`<a class="back" href="${P('/')}">‹ Back to the map</a>
    <div class="spot-head">${badge(main?main.cat:"").replace('class="badge"','class="badge" style="width:64px;height:64px;border-radius:16px"')}<div><h1>${esc(s.name)}</h1><div class="tw">${esc(where(s))}</div></div></div>
    <div class="spot-grid">
-     <div class="vid"><div class="art">${main&&ICON[main.cat]?art(main.cat,"#161616"):""}</div><div class="cap">My ${esc(s.name)} review</div><a class="btn" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch the review</a></div>
+     <div class="vid"><div class="art">${main?art(main.cat,"#161616"):""}</div><div class="cap">My ${esc(s.name)} review${s.foods.reduce((n,f)=>n+videosOf(f).filter(v=>v.video).length,0)>1?"s":""}</div><a class="btn" href="${esc(vlink(s))}" target="_blank" rel="noopener">▶ Watch the latest review</a></div>
      <div>
-       <div class="foodcards">${s.foods.map(f=>{const sn=seriesName(f.series);return `<div class="foodcard"><div class="fc-top">${badge(f.cat)}<div><h3>${esc(f.cat)}</h3>${sn?`<small>${f.ep?"Episode "+esc(f.ep)+" of ":"Part of "}<a href="${P('/series/'+f.series)}">${esc(sn)}</a></small>`:""}</div>${stampHTML(f.rating)}</div>${f.video?`<a class="btn red sm" href="${esc(f.video)}" target="_blank" rel="noopener">▶ Watch the ${esc(f.cat.toLowerCase())} review</a>`:""}</div>`}).join("")}</div>
+       <div class="foodcards">${s.foods.map(f=>{const sn=seriesName(f.series); const vids=videosOf(f).filter(v=>v.video).sort((a,b)=>(+a.ep||0)-(+b.ep||0)); const eps=vids.map(v=>v.ep).filter(Boolean);
+         return `<div class="foodcard"><div class="fc-top">${badge(f.cat)}<div><h3>${esc(f.cat)}</h3>${sn?`<small>${eps.length?(eps.length>1?"Episodes "+eps.map(esc).join(" & ")+" of ":"Episode "+esc(eps[0])+" of "):"Part of "}<a href="${P('/series/'+f.series)}">${esc(sn)}</a></small>`:""}</div>${stampHTML(f.rating)}</div>
+         ${vids.length?`<div class="vidlist">${vids.map((v,k)=>`<a class="btn ${k===vids.length-1?"red":"ghost"} sm" href="${esc(v.video)}" target="_blank" rel="noopener">▶ ${vids.length>1?(v.ep?"Watch episode "+esc(v.ep):"Watch video "+(k+1)):"Watch the "+esc(f.cat.toLowerCase())+" review"}</a>`).join("")}</div>`:""}</div>`}).join("")}</div>
        ${here.length?`<h3 class="sub">What I've ranked here</h3><ol class="ranklist compact">${here.map(i=>`<li class="rank"><span class="ri"><span class="nm">${esc(i.name)}</span><span class="tw">${esc(i.sub?i.cat+" · "+i.sub:i.cat)}</span></span><span class="ra">${stampHTML(i.rating,true)}</span></li>`).join("")}</ol>`:""}
        ${s.address?`<h3 class="sub">Address</h3><p class="addr">${esc(s.address)}</p>`:""}
        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px">${addrButtons(s)||`<a class="btn ghost" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name+" "+where(s))}" target="_blank" rel="noopener">Open in Maps</a>`}</div>

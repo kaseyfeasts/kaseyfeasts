@@ -208,7 +208,7 @@
       let title, meta;
       if (tab === 'spots') {
         title = v.name;
-        meta = `${esc(where(v))}${v.ne ? ' · <span class="ne">New England</span>' : ''}<br>${v.foods.map(f => `<span class="pill">${esc(f.cat)} ${esc(ratingLabel(f.rating))}${seriesName(f.series) ? ` · ${esc(seriesName(f.series))} #${esc(f.ep || '?')}` : ''}</span>`).join(' ')}`;
+        meta = `${esc(where(v))}${v.ne ? ' · <span class="ne">New England</span>' : ''}<br>${v.foods.map(f => `<span class="pill">${esc(f.cat)} ${esc(ratingLabel(f.rating))}${seriesName(f.series) ? ` · ${esc(seriesName(f.series))} #${esc([f.ep || '?', ...(f.more || []).map(m => m.ep || '?')].join(', #'))}` : ''}${!seriesName(f.series) && (f.more || []).length ? ` · ${1 + f.more.length} videos` : ''}</span>`).join(' ')}`;
       } else {
         const s = spotById(v.spot);
         title = v.name;
@@ -277,7 +277,18 @@
         <div><label for="f_series${n}">Series</label>
           <select id="f_series${n}"><option value="">Not part of a series</option>${L.series.map(x => `<option value="${esc(x.id)}" ${x.id === f.series ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>
         ${field('ep' + n, 'Number in series', f.ep ?? '', 'number', false, `min="1" step="1" ${f.series && typeof f.series === 'string' ? '' : 'disabled'}`)}
-      </div></fieldset>`;
+      </div>
+      <div class="morevids" id="more${n}">${(f.more || []).map(m => moreRow(n, m)).join('')}</div>
+      <button type="button" class="addvid" data-addvid="${n}">＋ Add another video</button>
+      <small class="hint">For a return visit in the same series, add its link and episode number here (as many as you need).</small>
+      </fieldset>`;
+  }
+  function moreRow(n, m = {}) {
+    return `<div class="morerow">
+      <div><label>Another video link</label><input type="url" class="mv-link" value="${esc(m.video || '')}" placeholder="https://www.instagram.com/reel/..."></div>
+      <div><label>Episode #</label><input type="number" class="mv-ep" min="1" step="1" value="${esc(m.ep ?? '')}"></div>
+      <button type="button" class="mv-del" title="Remove this video" aria-label="Remove this video">×</button>
+    </div>`;
   }
 
   function openEditor(i = null) {
@@ -340,6 +351,10 @@
     if (t.id === 'f_spot') showSpotAddr();
   });
   $('fields').addEventListener('click', e => {
+    const add = e.target.closest('[data-addvid]');
+    if (add) { const box = $('more' + add.dataset.addvid); box.insertAdjacentHTML('beforeend', moreRow(add.dataset.addvid)); box.lastElementChild.querySelector('.mv-link').focus(); return; }
+    const del = e.target.closest('.mv-del');
+    if (del) { del.closest('.morerow').remove(); return; }
     if (e.target.id === 'findPin') {
       e.preventDefault();
       const q = $('f_address').value || $('f_name').value;
@@ -383,7 +398,17 @@
       const series = $('f_series' + n).value;
       const ep = $('f_ep' + n).value;
       if (series && !ep) throw Error(`Add the episode number for ${cat} in "${seriesName(series)}".`);
-      foods.push({ cat, rating: +rating, video: $('f_video' + n).value.trim(), series: series || '', ep: series && ep ? +ep : null });
+      const more = [];
+      for (const row of $('more' + n).querySelectorAll('.morerow')) {
+        const video = row.querySelector('.mv-link').value.trim(), mep = row.querySelector('.mv-ep').value;
+        if (!video && !mep) continue;
+        if (!video) throw Error(`Add the link for ${cat} episode ${mep}, or remove that row.`);
+        if (series && !mep) throw Error(`Add the episode number for the extra ${cat} video (${video}).`);
+        more.push({ video, ep: mep ? +mep : null });
+      }
+      const food = { cat, rating: +rating, video: $('f_video' + n).value.trim(), series: series || '', ep: series && ep ? +ep : null };
+      if (more.length) food.more = more;
+      foods.push(food);
     }
     return {
       id: editing === null ? slug(name) : spots[editing].id,

@@ -528,3 +528,4 @@ h1.big{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,40p
 .map-county{fill:none;stroke:var(--county);stroke-width:.8}
 .globe-grid{stroke-opacity:.12}
 @media (max-width:760px){.switchbar .wrap{justify-content:center}}
+.vidlist{display:flex;flex-wrap:wrap;gap:8px}
