@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "sonny-corleone-figaro-s",
+    "name": "Sonny Corleone",
+    "rating": 85,
+    "cat": "Sandwich (Wrap)",
+    "sub": "Other",
+    "spot": "figaro-s"
+  },
+  {
     "id": "the-two-timer-figaro-s",
     "name": "The Two-Timer",
     "rating": 97.5,
