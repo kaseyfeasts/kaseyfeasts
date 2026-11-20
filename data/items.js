@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "buffalo-chicken-wrap-honey-s-country-store-deli",
+    "name": "Buffalo Chicken Wrap",
+    "rating": 67.5,
+    "cat": "Sandwich (Wrap)",
+    "sub": "Buffalo Chicken",
+    "spot": "honey-s-country-store-deli"
+  },
+  {
     "id": "roast-beef-sub-honey-s-country-store-deli",
     "name": "Roast Beef Sub",
     "rating": 70,
