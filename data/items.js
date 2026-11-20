@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "vodka-parmesan-table-mercato",
+    "name": "Vodka Parmesan",
+    "rating": 90,
+    "cat": "Sandwich (Sub)",
+    "sub": "Chicken Cutlet",
+    "spot": "table-mercato"
+  },
+  {
     "id": "the-table-table-mercato",
     "name": "The TABLE",
     "rating": 92.5,
