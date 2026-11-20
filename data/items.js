@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-po-poppy-cafe-market",
+    "name": "The Po",
+    "rating": 87.5,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "poppy-cafe-market"
+  },
+  {
     "id": "hot-italian-gill-s-delicatessen",
     "name": "Hot Italian",
     "rating": 72.5,
