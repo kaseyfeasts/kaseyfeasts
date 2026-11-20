@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "all-antico-vinaio",
+    "name": "All'Antico Vinaio",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Boston",
+    "address": "565 Boylston St, Boston, MA 02116",
+    "lat": 42.35111113520844,
+    "lng": -71.07637776125539,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 75,
+        "video": "https://www.instagram.com/reels/DTFoXGhEWo-/",
+        "series": "best-sandwiches",
+        "ep": 4
+      }
+    ]
+  },
+  {
     "id": "bricco-salumeria-pasta-shop",
     "name": "Bricco Salumeria & Pasta Shop",
     "country": "United States",
