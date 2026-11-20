@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "chichester-country-store",
+    "name": "Chichester Country Store",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Chichester",
+    "address": "257 Main St, Chichester, NH 03258",
+    "lat": 43.25793315599211,
+    "lng": -71.3731876477111,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 85,
+        "video": "https://www.instagram.com/reels/DbLIwXtOU8G/",
+        "series": "best-sandwiches",
+        "ep": 13
+      }
+    ]
+  },
+  {
     "id": "full-belli-deli",
     "name": "Full Belli Deli",
     "country": "United States",
