@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "jimmy-s-chicken-cutlet-borrelli-s-italian-deli",
+    "name": "Jimmy's Chicken Cutlet",
+    "rating": 80,
+    "cat": "Sandwich (Sub)",
+    "sub": "Chicken Cutlet",
+    "spot": "borrelli-s-italian-deli"
+  },
+  {
     "id": "chicken-caesar-salad-wrap-the-shop-at-dovetail",
     "name": "Chicken Caesar Salad Wrap",
     "rating": 67.5,
