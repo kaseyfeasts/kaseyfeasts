@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "underdog-the-boro-baking-co",
+    "name": "Underdog",
+    "rating": 75,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Other Breakfast Sandwich",
+    "spot": "the-boro-baking-co"
+  },
+  {
     "id": "birch-lane-the-boro-baking-co",
     "name": "Birch Lane",
     "rating": 77.5,
