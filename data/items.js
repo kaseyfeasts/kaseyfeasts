@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "carolina-caviar-mike-patty-s",
+    "name": "Carolina Caviar",
+    "rating": 90,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Meat Egg Cheese",
+    "spot": "mike-patty-s"
+  },
+  {
     "id": "buffalo-chicken-wrap-honey-s-country-store-deli",
     "name": "Buffalo Chicken Wrap",
     "rating": 67.5,
