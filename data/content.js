@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "table-mercato",
+    "name": "TABLE Mercato",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Boston",
+    "address": "441 Hanover St, Boston, MA 02109",
+    "lat": 42.3662423848894,
+    "lng": -71.05261601670776,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 92.5,
+        "video": "https://www.instagram.com/reels/DRKJKxlkV2A/",
+        "series": "best-sandwiches",
+        "ep": 1
+      }
+    ]
+  },
+  {
     "id": "monte-s-fine-foods",
     "name": "Monte's Fine Foods",
     "country": "United States",
