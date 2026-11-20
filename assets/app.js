@@ -221,7 +221,7 @@ const HAS_DETAIL = typeof DETAIL!=="undefined";
 
 let engine="simple";       // "simple" or "detailed"
 let gl=null, glMarkers={};
-let mapCat = null;         // null = all food
+const mapCats = new Set();  // empty = all food; tick one or more to filter
 const mkEls = {};
 PLACES.forEach(s=>{
   const c=document.createElementNS(NS,"circle");
@@ -233,7 +233,7 @@ PLACES.forEach(s=>{
   gMk.appendChild(c);mkEls[s.id]=c;
 });
 let mapScore = ""; // "" = all scores
-const foodsFor = s => s.foods.filter(f=>!mapCat||f.cat===mapCat);
+const foodsFor = s => s.foods.filter(f=>!mapCats.size||mapCats.has(f.cat));
 const showsCat = s => foodsFor(s).length>0 && (!mapScore || foodsFor(s).some(f=>stampOf(f.rating)===mapScore));
 const markerColor = s => "#161616"; // all map dots are black
 
@@ -395,16 +395,16 @@ $("#zall").onclick=()=>{ // fit all pins in this region
 function fillMapCats(){
   const cats=[...new Set(rSpots().flatMap(s=>s.foods.map(f=>f.cat)))];
   const ordered=[...FOOD_CATEGORIES.filter(c=>cats.includes(c)),...cats.filter(c=>!FOOD_CATEGORIES.includes(c))];
-  mapCat=null;
-  $("#mapCats").innerHTML=ordered.map(c=>`<button class="chip" aria-pressed="false" data-c="${esc(c)}"><span class="dot" style="background:${catColor(c)}"></span>${esc(c)}</button>`).join("");
+  mapCats.clear();
+  $("#mapCats").innerHTML=(ordered.length>1?`<button class="chip" aria-pressed="true" data-c="">All food</button>`:"")+ordered.map(c=>`<button class="chip" aria-pressed="false" data-c="${esc(c)}"><span class="dot" style="background:${catColor(c)}"></span>${esc(c)}</button>`).join("");
   $("#mapCats").style.display=ordered.length?"":"none";
   mapScore=""; $("#mapScore").value=""; $("#mapScore").style.display=rSpots().length?"":"none";
 }
 $("#mapScore").addEventListener("change",()=>{ mapScore=$("#mapScore").value; if(popSpot&&!showsCat(popSpot))closePop(); sideKey=null; render(); });
 $("#mapCats").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;
-  const on=b.getAttribute("aria-pressed")==="true";
-  $("#mapCats").querySelectorAll("[data-c]").forEach(x=>x.setAttribute("aria-pressed","false"));
-  if(on){mapCat=null}else{b.setAttribute("aria-pressed","true");mapCat=b.dataset.c}
+  const c=b.dataset.c;
+  if(!c) mapCats.clear(); else mapCats.has(c)?mapCats.delete(c):mapCats.add(c);
+  $("#mapCats").querySelectorAll("[data-c]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c?mapCats.has(x.dataset.c):!mapCats.size));
   if(popSpot&&!showsCat(popSpot))closePop(); sideKey=null; render();};
 
 const foodLine = s => s.foods.map(f=>`<span class="fl"><span class="dot" style="background:${catColor(f.cat)}"></span>${esc(f.cat)} ${stampHTML(f.rating,true)}</span>`).join("");
@@ -432,12 +432,12 @@ function hl(id,on){ mkEls[id]?.classList.toggle("hl",on); glMarkers[id]?.getElem
 let sideKey=null;
 function updateSide(){
   let inView=PLACES.filter(s=>showsCat(s)&&visible(s));
-  inView.sort(mapCat?byRating(s=>foodRating(s,mapCat)):(a,b)=>a.name.localeCompare(b.name));
-  const key=region+":"+mapCat+":"+mapScore+":"+inView.map(s=>s.id).join();
+  inView.sort(mapCats.size?byRating(s=>Math.max(0,...foodsFor(s).map(f=>+f.rating||0))):(a,b)=>a.name.localeCompare(b.name));
+  const key=region+":"+[...mapCats]+":"+mapScore+":"+inView.map(s=>s.id).join();
   if(key===sideKey)return; sideKey=key;
   const empty=isEmpty();
-  $("#inViewCount").textContent=empty?"Places I've been":`${inView.length} ${inView.length===1?"spot":"spots"} in this area${mapCat?` · best ${mapCat.toLowerCase()} first`:""}`;
-  $("#inView").innerHTML=inView.length?inView.map(s=>{const f=mapCat?s.foods.find(f=>f.cat===mapCat):bestFood(s);return `<li><button data-id="${s.id}">${badge(f?f.cat:"")}<span><span class="nm">${esc(s.name)}</span><span class="tw">${esc(where(s))}</span>${f?stampHTML(f.rating,true):""}</span></button></li>`}).join("")
+  $("#inViewCount").textContent=empty?"Places I've been":`${inView.length} ${inView.length===1?"spot":"spots"} in this area${mapCats.size?" · highest rated first":""}`;
+  $("#inView").innerHTML=inView.length?inView.map(s=>{const f=mapCats.size?[...foodsFor(s)].sort((a,b)=>(+b.rating||0)-(+a.rating||0))[0]:bestFood(s);return `<li><button data-id="${s.id}">${badge(f?f.cat:"")}<span><span class="nm">${esc(s.name)}</span><span class="tw">${esc(where(s))}</span>${f?stampHTML(f.rating,true):""}</span></button></li>`}).join("")
    :(empty?`<li class="empty"><strong style="color:var(--text)">${esc(R().name)} reviews coming soon.</strong><br>I'm pinning every place I've been. Follow along on <a href="${IG}" target="_blank" rel="noopener">Instagram</a> or <a href="${P('/next')}">tell me where to go</a>.</li>`:`<li class="empty">No spots here yet. Zoom out, or <a href="${P('/next')}">tell me where to go</a>.</li>`);
 }
 $("#inView").addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b){pauseSpin(15000);openPop(PLACE_BY_ID[b.dataset.id])}});
