@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-table-table-mercato",
+    "name": "The TABLE",
+    "rating": 92.5,
+    "cat": "Sandwich",
+    "sub": "Chicken Cutlet",
+    "spot": "table-mercato"
+  },
+  {
     "id": "pepperoni-pizza-monte-s-fine-foods",
     "name": "Pepperoni Pizza",
     "rating": 95,
