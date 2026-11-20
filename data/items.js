@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "hot-italian-gill-s-delicatessen",
+    "name": "Hot Italian",
+    "rating": 72.5,
+    "cat": "Sandwich (Sub)",
+    "sub": "Italian Cold Cut",
+    "spot": "gill-s-delicatessen"
+  },
+  {
     "id": "the-roman-gold-calisto-s",
     "name": "The Roman Gold",
     "rating": 77.5,
