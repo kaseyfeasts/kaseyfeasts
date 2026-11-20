@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "good-ol-boy-the-boro-baking-co",
+    "name": "Good Ol Boy",
+    "rating": 90,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Meat Egg Cheese",
+    "spot": "the-boro-baking-co"
+  },
+  {
     "id": "sausage-egg-cheese-on-english-muffin-chichester-country-store",
     "name": "Sausage Egg & Cheese on English Muffin",
     "rating": 85,
