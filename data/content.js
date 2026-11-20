@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "sub-crazy",
+    "name": "Sub Crazy",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Meredith",
+    "address": "5 Mill St, Meredith, NH 03253",
+    "lat": 43.65221455005256,
+    "lng": -71.49796844583537,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 77.5,
+        "video": "https://www.instagram.com/reels/DYNpP6Hxsf-/",
+        "series": "best-sandwiches",
+        "ep": 6
+      }
+    ]
+  },
+  {
     "id": "all-antico-vinaio",
     "name": "All'Antico Vinaio",
     "country": "United States",
