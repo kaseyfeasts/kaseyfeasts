@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chicken-parmesan-sub-diblasi-s-subs",
+    "name": "Chicken Parmesan Sub",
+    "rating": 67.5,
+    "cat": "Sandwich (Sub)",
+    "sub": "Chicken Cutlet",
+    "spot": "diblasi-s-subs"
+  },
+  {
     "id": "chicken-cutlet-parmesan-sub-la-cascia-s-bakery",
     "name": "Chicken Cutlet Parmesan Sub",
     "rating": 82.5,
