@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "poppy-cafe-market",
+    "name": "Poppy Cafe & Market",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "Burlington",
+    "address": "88 Oak St, Burlington, VT 05401",
+    "lat": 44.48984225968533,
+    "lng": -73.20996735927709,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 85,
+        "video": "https://www.instagram.com/reels/DeMQZaysLPo/",
+        "series": "best-sandwiches",
+        "ep": 24
+      }
+    ]
+  },
+  {
     "id": "gill-s-delicatessen",
     "name": "Gill's Delicatessen",
     "country": "United States",
