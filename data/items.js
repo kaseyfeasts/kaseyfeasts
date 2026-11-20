@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "birch-lane-the-boro-baking-co",
+    "name": "Birch Lane",
+    "rating": 77.5,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "the-boro-baking-co"
+  },
+  {
     "id": "black-cat-the-boro-baking-co",
     "name": "Black Cat",
     "rating": 87.5,
