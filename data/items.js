@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "everything-but-the-kitchen-sink-julie-s-kitchen",
+    "name": "Everything But \"The Kitchen\" Sink",
+    "rating": 80,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "julie-s-kitchen"
+  },
+  {
     "id": "turkey-blt-julie-s-kitchen",
     "name": "Turkey BLT",
     "rating": 80,
