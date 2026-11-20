@@ -529,3 +529,24 @@ h1.big{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,40p
 .globe-grid{stroke-opacity:.12}
 @media (max-width:760px){.switchbar .wrap{justify-content:center}}
 .vidlist{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---------- mobile: centered headings and intro text ---------- */
+@media (max-width:760px){
+  h1.big,h2.big,.lede,.series-title{text-align:center;margin-left:auto;margin-right:auto}
+  .head-row{flex-direction:column;align-items:center;text-align:center}
+  .series-bar{flex-direction:column;align-items:center;text-align:center}
+  .back{display:flex;justify-content:center}
+  .spot-head{flex-direction:column;text-align:center}
+  .about-hero{text-align:center}
+  .about-hero .avbox{margin:0 auto;width:100%;max-width:260px}
+  #aboutText p{margin-left:auto;margin-right:auto}
+  .about-hero .policy{border-left:0;border-top:4px solid var(--sauce);padding:14px 0 0}
+  .two .panel{text-align:center}
+  .two .panel ul{display:inline-block;text-align:left}
+  .news .wrap{text-align:center}
+  .news .row{justify-content:center}
+  footer .wrap{flex-direction:column;align-items:center;text-align:center}
+  .foot-line{justify-content:center}
+  .soon-block,.empty{text-align:center}
+  .count{text-align:center}
+}
