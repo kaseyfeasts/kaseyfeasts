@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "italian-martone-s-market-cafe",
+    "name": "Italian",
+    "rating": 62.5,
+    "cat": "Sandwich",
+    "sub": "Italian Cold Cut",
+    "spot": "martone-s-market-cafe"
+  },
+  {
     "id": "vermonter-martone-s-market-cafe",
     "name": "Vermonter",
     "rating": 72.5,
