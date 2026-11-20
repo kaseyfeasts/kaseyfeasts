@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "dave-s-fresh-pasta",
+    "name": "Dave's Fresh Pasta",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Somerville",
+    "address": "81 Holland St, Somerville, MA 02144",
+    "lat": 42.398930952338,
+    "lng": -71.1241815188514,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 85,
+        "video": "https://www.instagram.com/reels/DfHeoxUsYsc/",
+        "series": "best-sandwiches",
+        "ep": 30
+      }
+    ]
+  },
+  {
     "id": "diblasi-s-subs",
     "name": "DiBlasi's Subs",
     "country": "United States",
