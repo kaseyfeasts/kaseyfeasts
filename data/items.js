@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-barnyard-sammy-benny-s-fresh-eats-market",
+    "name": "The Barnyard Sammy",
+    "rating": 87.5,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Meat Egg Cheese",
+    "spot": "benny-s-fresh-eats-market"
+  },
+  {
     "id": "fiery-chipotle-gilford-village-store",
     "name": "Fiery Chipotle",
     "rating": 75,
