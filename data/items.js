@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "aunty-ann-poppy-cafe-market",
+    "name": "Aunty Ann",
+    "rating": 75,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "poppy-cafe-market"
+  },
+  {
     "id": "the-po-poppy-cafe-market",
     "name": "The Po",
     "rating": 87.5,
