@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "buzz-kill-the-boro-baking-co",
+    "name": "Buzz Kill",
+    "rating": 72.5,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Other Breakfast Sandwich",
+    "spot": "the-boro-baking-co"
+  },
+  {
     "id": "underdog-the-boro-baking-co",
     "name": "Underdog",
     "rating": 75,
