@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "la-cascia-s-bakery",
+    "name": "La Cascia's Bakery",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Medford",
+    "address": "418 Main St, Medford, MA 02155",
+    "lat": 42.403835487145926,
+    "lng": -71.10702533350067,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 92.5,
+        "video": "https://www.instagram.com/reels/De6msR4sq3I/",
+        "series": "best-sandwiches",
+        "ep": 28
+      }
+    ]
+  },
+  {
     "id": "martone-s-market-cafe",
     "name": "Martone's Market & Café",
     "country": "United States",
