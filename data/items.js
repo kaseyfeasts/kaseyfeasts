@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-two-timer-figaro-s",
+    "name": "The Two-Timer",
+    "rating": 97.5,
+    "cat": "Sandwich",
+    "sub": "Steak & Cheese",
+    "spot": "figaro-s"
+  },
+  {
     "id": "goodfella-figaro-s",
     "name": "Goodfella",
     "rating": 92.5,
