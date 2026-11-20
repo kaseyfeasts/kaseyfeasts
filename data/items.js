@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "italian-sub-la-cascia-s-bakery",
+    "name": "Italian Sub",
+    "rating": 95,
+    "cat": "Sandwich (Sub)",
+    "sub": "Italian Cold Cut",
+    "spot": "la-cascia-s-bakery"
+  },
+  {
     "id": "italian-martone-s-market-cafe",
     "name": "Italian",
     "rating": 62.5,
