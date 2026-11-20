@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "julie-s-kitchen",
+    "name": "Julie's Kitchen",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Gilford",
+    "address": "1400 Lake Shore Rd, Gilford, NH 03249",
+    "lat": 43.65071573237168,
+    "lng": -71.4475813810939,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 82.5,
+        "video": "https://www.instagram.com/reels/DZUo0DeuMXA/",
+        "series": "best-sandwiches",
+        "ep": 10
+      }
+    ]
+  },
+  {
     "id": "borrelli-s-italian-deli",
     "name": "Borrelli's Italian Deli",
     "country": "United States",
