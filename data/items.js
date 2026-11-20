@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "curry-chicken-salad-wrap-honey-s-country-store-deli",
+    "name": "Curry Chicken Salad Wrap",
+    "rating": 75,
+    "cat": "Sandwich (Wrap)",
+    "sub": "Other",
+    "spot": "honey-s-country-store-deli"
+  },
+  {
     "id": "buzz-kill-the-boro-baking-co",
     "name": "Buzz Kill",
     "rating": 72.5,
