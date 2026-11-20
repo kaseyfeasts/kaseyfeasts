@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chef-pete-s-famous-meatball-sub-crazy",
+    "name": "Chef Pete’s Famous Meatball",
+    "rating": 72.5,
+    "cat": "Sandwich (Sub)",
+    "sub": "Meatball",
+    "spot": "sub-crazy"
+  },
+  {
     "id": "italian-sub-sub-crazy",
     "name": "Italian Sub",
     "rating": 75,
