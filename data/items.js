@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "bada-bing-sub-crazy",
+    "name": "BADA BING",
+    "rating": 82.5,
+    "cat": "Sandwich (Sub)",
+    "sub": "Chicken Cutlet",
+    "spot": "sub-crazy"
+  },
+  {
     "id": "la-paradiso-all-antico-vinaio",
     "name": "La Paradiso",
     "rating": 75,
