@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "roast-beef-sub-honey-s-country-store-deli",
+    "name": "Roast Beef Sub",
+    "rating": 70,
+    "cat": "Sandwich (Sub)",
+    "sub": "Other",
+    "spot": "honey-s-country-store-deli"
+  },
+  {
     "id": "curry-chicken-salad-wrap-honey-s-country-store-deli",
     "name": "Curry Chicken Salad Wrap",
     "rating": 75,
