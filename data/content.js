@@ -357,6 +357,13 @@ const SPOTS = [
         "video": "https://www.instagram.com/p/Daizd6QqM33/",
         "series": "best-pizza",
         "ep": 9
+      },
+      {
+        "cat": "Sandwiches",
+        "rating": 80,
+        "video": "https://www.instagram.com/reels/DaJZFbZxoY8/",
+        "series": "best-sandwiches",
+        "ep": 12
       }
     ]
   },
