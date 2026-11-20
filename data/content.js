@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "figaro-s",
+    "name": "Figaro's",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Boston",
+    "address": "105 Beach St, Boston, MA 02111",
+    "lat": 42.35105477176272,
+    "lng": -71.05822450358346,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 92.5,
+        "video": "https://www.instagram.com/reels/DR9pCZcjTtG/",
+        "series": "best-sandwiches",
+        "ep": 2
+      }
+    ]
+  },
+  {
     "id": "table-mercato",
     "name": "TABLE Mercato",
     "country": "United States",
