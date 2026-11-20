@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "milano-gusto-italian-cafe",
+    "name": "Milano",
+    "rating": 100,
+    "cat": "Sandwich",
+    "sub": "Chicken Cutlet",
+    "spot": "gusto-italian-cafe"
+  },
+  {
     "id": "steak-cheese-benny-s-fresh-eats-market",
     "name": "Steak & Cheese",
     "rating": 62.5,
