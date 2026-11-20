@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-roman-gold-calisto-s",
+    "name": "The Roman Gold",
+    "rating": 77.5,
+    "cat": "Sandwich (Sub)",
+    "sub": "Chicken Cutlet",
+    "spot": "calisto-s"
+  },
+  {
     "id": "the-south-end-calisto-s",
     "name": "The South End",
     "rating": 80,
