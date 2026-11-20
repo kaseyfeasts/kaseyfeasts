@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "gill-s-delicatessen",
+    "name": "Gill's Delicatessen",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "Rutland",
+    "address": "68 Strongs Ave, Rutland, VT 05701",
+    "lat": 43.60263204732878,
+    "lng": -72.97505364769133,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 70,
+        "video": "https://www.instagram.com/reels/Dd83D0isXyJ/",
+        "series": "best-sandwiches",
+        "ep": 23
+      }
+    ]
+  },
+  {
     "id": "calisto-s",
     "name": "Calisto's",
     "country": "United States",
