@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "beef-boursin-on-toasted-focaccia-dave-s-fresh-pasta",
+    "name": "Beef & Boursin (on Toasted Focaccia)",
+    "rating": 85,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "dave-s-fresh-pasta"
+  },
+  {
     "id": "chicken-parmesan-sub-diblasi-s-subs",
     "name": "Chicken Parmesan Sub",
     "rating": 67.5,
