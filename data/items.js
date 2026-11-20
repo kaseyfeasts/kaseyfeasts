@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "vermonter-martone-s-market-cafe",
+    "name": "Vermonter",
+    "rating": 72.5,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "martone-s-market-cafe"
+  },
+  {
     "id": "italian-hoagie-ida",
     "name": "Italian Hoagie",
     "rating": 95,
