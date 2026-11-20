@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chipotle-pastrami-sam-lagrassa-s",
+    "name": "Chipotle Pastrami",
+    "rating": 100,
+    "cat": "Sandwich",
+    "sub": "Pastrami",
+    "spot": "sam-lagrassa-s"
+  },
+  {
     "id": "beef-boursin-on-toasted-focaccia-dave-s-fresh-pasta",
     "name": "Beef & Boursin (on Toasted Focaccia)",
     "rating": 85,
