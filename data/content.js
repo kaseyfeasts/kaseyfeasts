@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "full-belli-deli",
+    "name": "Full Belli Deli",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Wolfeboro",
+    "address": "15 Mill St, Wolfeboro, NH 03894",
+    "lat": 43.585382428062935,
+    "lng": -71.21508480351143,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 65,
+        "video": "https://www.instagram.com/reels/DZ4r6oqh_vD/",
+        "series": "best-sandwiches",
+        "ep": 11
+      }
+    ]
+  },
+  {
     "id": "julie-s-kitchen",
     "name": "Julie's Kitchen",
     "country": "United States",
