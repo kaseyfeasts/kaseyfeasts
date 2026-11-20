@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "gusto-italian-cafe",
+    "name": "Gusto Italian Cafe",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Center Harbor",
+    "address": "23 Main St #1b, Center Harbor, NH 03226",
+    "lat": 43.70903087984904,
+    "lng": -71.46195060350418,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 95,
+        "video": "https://www.instagram.com/reels/Ddlr6OMscJr/",
+        "series": "best-sandwiches",
+        "ep": 21
+      }
+    ]
+  },
+  {
     "id": "benny-s-fresh-eats-market",
     "name": "Benny's Fresh Eats & Market",
     "country": "United States",
