@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "steak-cheese-w-onion-mayo-sub-crazy",
+    "name": "Steak & Cheese (w/ Onion & Mayo)",
+    "rating": 77.5,
+    "cat": "Sandwich (Sub)",
+    "sub": "Steak & Cheese",
+    "spot": "sub-crazy"
+  },
+  {
     "id": "chef-pete-s-famous-meatball-sub-crazy",
     "name": "Chef Pete’s Famous Meatball",
     "rating": 72.5,
