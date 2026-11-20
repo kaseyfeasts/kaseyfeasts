@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "gilford-village-store",
+    "name": "Gilford Village Store",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Gilford",
+    "address": "7 Belknap Mountain Rd, Gilford, NH 03249",
+    "lat": 43.54802218219663,
+    "lng": -71.40709183234986,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 80,
+        "video": "https://www.instagram.com/reels/DcivLAzhvTz/",
+        "series": "best-sandwiches",
+        "ep": 18
+      }
+    ]
+  },
+  {
     "id": "mike-patty-s",
     "name": "Mike & Patty's",
     "country": "United States",
