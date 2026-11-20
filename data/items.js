@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "black-cat-the-boro-baking-co",
+    "name": "Black Cat",
+    "rating": 87.5,
+    "cat": "Sandwich",
+    "sub": "BLT",
+    "spot": "the-boro-baking-co"
+  },
+  {
     "id": "good-ol-boy-the-boro-baking-co",
     "name": "Good Ol Boy",
     "rating": 90,
