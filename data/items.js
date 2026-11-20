@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "mortadella-focaccia-sandwich-bricco-salumeria-pasta-shop",
+    "name": "Mortadella Focaccia Sandwich",
+    "rating": 85,
+    "cat": "Sandwich",
+    "sub": "Italian Cold Cut",
+    "spot": "bricco-salumeria-pasta-shop"
+  },
+  {
     "id": "sonny-corleone-figaro-s",
     "name": "Sonny Corleone",
     "rating": 85,
