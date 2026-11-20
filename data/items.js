@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chicken-caesar-salad-wrap-the-shop-at-dovetail",
+    "name": "Chicken Caesar Salad Wrap",
+    "rating": 67.5,
+    "cat": "Sandwich (Wrap)",
+    "sub": "Chicken Caesar",
+    "spot": "the-shop-at-dovetail"
+  },
+  {
     "id": "spicy-italian-the-shop-at-dovetail",
     "name": "Spicy Italian",
     "rating": 72.5,
