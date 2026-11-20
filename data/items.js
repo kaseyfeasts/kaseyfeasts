@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "sausage-egg-cheese-on-english-muffin-chichester-country-store",
+    "name": "Sausage Egg & Cheese on English Muffin",
+    "rating": 85,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Grab & Go",
+    "spot": "chichester-country-store"
+  },
+  {
     "id": "cheesesteak-on-seeded-roll-mickey-s-ny-pizza",
     "name": "Cheesesteak on Seeded Roll",
     "rating": 80,
