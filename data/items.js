@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-south-end-calisto-s",
+    "name": "The South End",
+    "rating": 80,
+    "cat": "Sandwich (Sub)",
+    "sub": "Other",
+    "spot": "calisto-s"
+  },
+  {
     "id": "inferno-gusto-italian-cafe",
     "name": "Inferno",
     "rating": 92.5,
