@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "full-belli-sandwich-on-bulky-roll-full-belli-deli",
+    "name": "Full Belli Sandwich on Bulky Roll",
+    "rating": 67.5,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "full-belli-deli"
+  },
+  {
     "id": "everything-but-the-kitchen-sink-julie-s-kitchen",
     "name": "Everything But \"The Kitchen\" Sink",
     "rating": 80,
