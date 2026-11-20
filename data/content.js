@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "the-shop-at-dovetail",
+    "name": "The Shop at Dovetail",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Charlestown",
+    "address": "1 6th St, Charlestown, MA 02129",
+    "lat": 42.37555831779268,
+    "lng": -71.0542695747457,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 70,
+        "video": "https://www.instagram.com/reels/DYwloFzOlqE/",
+        "series": "best-sandwiches",
+        "ep": 8
+      }
+    ]
+  },
+  {
     "id": "sub-crazy",
     "name": "Sub Crazy",
     "country": "United States",
