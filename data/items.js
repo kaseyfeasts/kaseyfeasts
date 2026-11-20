@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "ribeye-steak-and-cheese-square-deli-pizzeria",
+    "name": "Ribeye Steak and Cheese",
+    "rating": 95,
+    "cat": "Sandwich (Sub)",
+    "sub": "Steak & Cheese",
+    "spot": "square-deli-pizzeria"
+  },
+  {
     "id": "steak-cheese-w-onion-mayo-sub-crazy",
     "name": "Steak & Cheese (w/ Onion & Mayo)",
     "rating": 77.5,
