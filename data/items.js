@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "italian-sub-sub-crazy",
+    "name": "Italian Sub",
+    "rating": 75,
+    "cat": "Sandwich (Sub)",
+    "sub": "Italian Cold Cut",
+    "spot": "sub-crazy"
+  },
+  {
     "id": "bada-bing-sub-crazy",
     "name": "BADA BING",
     "rating": 82.5,
