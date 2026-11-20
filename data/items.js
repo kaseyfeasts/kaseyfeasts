@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "italian-hoagie-ida",
+    "name": "Italian Hoagie",
+    "rating": 95,
+    "cat": "Sandwich (Sub)",
+    "sub": "Italian Cold Cut",
+    "spot": "ida"
+  },
+  {
     "id": "aunty-ann-poppy-cafe-market",
     "name": "Aunty Ann",
     "rating": 75,
