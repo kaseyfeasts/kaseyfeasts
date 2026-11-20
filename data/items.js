@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "inferno-gusto-italian-cafe",
+    "name": "Inferno",
+    "rating": 92.5,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Meat Egg Cheese",
+    "spot": "gusto-italian-cafe"
+  },
+  {
     "id": "milano-gusto-italian-cafe",
     "name": "Milano",
     "rating": 100,
