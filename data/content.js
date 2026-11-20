@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "mike-patty-s",
+    "name": "Mike & Patty's",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Boston",
+    "address": "12 Church St, Boston, MA 02116",
+    "lat": 42.34941793324535,
+    "lng": -71.06787766042994,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 92.5,
+        "video": "https://www.instagram.com/reels/DcV3QYWOR4B/",
+        "series": "best-sandwiches",
+        "ep": 17
+      }
+    ]
+  },
+  {
     "id": "honey-s-country-store-deli",
     "name": "Honey's Country Store & Deli",
     "country": "United States",
