@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pastrami-reuben-julie-s-kitchen",
+    "name": "Pastrami Reuben",
+    "rating": 82.5,
+    "cat": "Sandwich",
+    "sub": "Reuben",
+    "spot": "julie-s-kitchen"
+  },
+  {
     "id": "steak-cheese-melt-julie-s-kitchen",
     "name": "Steak & Cheese Melt",
     "rating": 90,
