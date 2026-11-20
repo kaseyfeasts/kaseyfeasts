@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "turkey-blt-julie-s-kitchen",
+    "name": "Turkey BLT",
+    "rating": 80,
+    "cat": "Sandwich",
+    "sub": "BLT",
+    "spot": "julie-s-kitchen"
+  },
+  {
     "id": "pastrami-reuben-julie-s-kitchen",
     "name": "Pastrami Reuben",
     "rating": 82.5,
