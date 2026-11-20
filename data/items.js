@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "la-paradiso-all-antico-vinaio",
+    "name": "La Paradiso",
+    "rating": 75,
+    "cat": "Sandwich",
+    "sub": "Italian Cold Cut",
+    "spot": "all-antico-vinaio"
+  },
+  {
     "id": "panino-bricco-salumeria-pasta-shop",
     "name": "Panino",
     "rating": 92.5,
