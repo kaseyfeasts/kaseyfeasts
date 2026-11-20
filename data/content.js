@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "benny-s-fresh-eats-market",
+    "name": "Benny's Fresh Eats & Market",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Laconia",
+    "address": "1198 Weirs Boulevard, Laconia, NH, USA",
+    "lat": 43.603074422929986,
+    "lng": -71.45494611700184,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 77.5,
+        "video": "https://www.instagram.com/reels/DdJXL3phk_I/",
+        "series": "best-sandwiches",
+        "ep": 20
+      }
+    ]
+  },
+  {
     "id": "gilford-village-store",
     "name": "Gilford Village Store",
     "country": "United States",
