@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "spicy-italian-the-shop-at-dovetail",
+    "name": "Spicy Italian",
+    "rating": 72.5,
+    "cat": "Sandwich",
+    "sub": "Italian Cold Cut",
+    "spot": "the-shop-at-dovetail"
+  },
+  {
     "id": "ribeye-steak-and-cheese-square-deli-pizzeria",
     "name": "Ribeye Steak and Cheese",
     "rating": 95,
