@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "goodfella-figaro-s",
+    "name": "Goodfella",
+    "rating": 92.5,
+    "cat": "Sandwich",
+    "sub": "Italian Cold Cut",
+    "spot": "figaro-s"
+  },
+  {
     "id": "vodka-parmesan-table-mercato",
     "name": "Vodka Parmesan",
     "rating": 90,
