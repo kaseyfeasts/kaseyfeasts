@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "the-boro-baking-co",
+    "name": "The Boro Baking Co",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Moultonborough",
+    "address": "377 Whittier Hwy, Moultonborough, NH 03254",
+    "lat": 43.72318136793487,
+    "lng": -71.43201543048666,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 82.5,
+        "video": "https://www.instagram.com/reels/DbVYdMsOtpz/",
+        "series": "best-sandwiches",
+        "ep": 14
+      }
+    ]
+  },
+  {
     "id": "chichester-country-store",
     "name": "Chichester Country Store",
     "country": "United States",
