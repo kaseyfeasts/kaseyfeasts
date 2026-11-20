@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "bricco-salumeria-pasta-shop",
+    "name": "Bricco Salumeria & Pasta Shop",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Boston",
+    "address": "11 Board Alley, Boston, MA 02113",
+    "lat": 42.36335852886638,
+    "lng": -71.05501701892665,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 90,
+        "video": "https://www.instagram.com/reels/DSH8PEckT4z/",
+        "series": "best-sandwiches",
+        "ep": 3
+      }
+    ]
+  },
+  {
     "id": "figaro-s",
     "name": "Figaro's",
     "country": "United States",
