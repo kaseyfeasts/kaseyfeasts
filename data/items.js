@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "outing-club-gilford-village-store",
+    "name": "Outing Club",
+    "rating": 77.5,
+    "cat": "Sandwich",
+    "sub": "Turkey Club",
+    "spot": "gilford-village-store"
+  },
+  {
     "id": "the-fancy-mike-patty-s",
     "name": "The Fancy",
     "rating": 87.5,
