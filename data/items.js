@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-fancy-mike-patty-s",
+    "name": "The Fancy",
+    "rating": 87.5,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Meat Egg Cheese",
+    "spot": "mike-patty-s"
+  },
+  {
     "id": "carolina-caviar-mike-patty-s",
     "name": "Carolina Caviar",
     "rating": 90,
