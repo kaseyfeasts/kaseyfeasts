@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "steak-cheese-melt-julie-s-kitchen",
+    "name": "Steak & Cheese Melt",
+    "rating": 90,
+    "cat": "Sandwich",
+    "sub": "Steak & Cheese",
+    "spot": "julie-s-kitchen"
+  },
+  {
     "id": "jimmy-s-chicken-cutlet-borrelli-s-italian-deli",
     "name": "Jimmy's Chicken Cutlet",
     "rating": 80,
