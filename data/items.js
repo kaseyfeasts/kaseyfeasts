@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "fiery-chipotle-gilford-village-store",
+    "name": "Fiery Chipotle",
+    "rating": 75,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "gilford-village-store"
+  },
+  {
     "id": "outing-club-gilford-village-store",
     "name": "Outing Club",
     "rating": 77.5,
