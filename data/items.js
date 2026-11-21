@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "fried-chicken-sandwich-palace-diner",
+    "name": "Fried Chicken Sandwich",
+    "rating": 85,
+    "cat": "Sandwich",
+    "sub": "Fried Chicken",
+    "spot": "palace-diner"
+  },
+  {
     "id": "deluxe-sandwich-palace-diner",
     "name": "Deluxe Sandwich",
     "rating": 100,
