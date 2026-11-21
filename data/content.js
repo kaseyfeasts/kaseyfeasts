@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "finestkind",
+    "name": "Finestkind",
+    "country": "United States",
+    "ne": true,
+    "state": "Maine",
+    "city": "Saco",
+    "address": "17 Pepperell Square, Saco, ME 04072",
+    "lat": 43.500853486327806,
+    "lng": -70.44688165847138,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 92.5,
+        "video": "https://www.instagram.com/reels/DfZnFkesNEn/",
+        "series": "best-sandwiches",
+        "ep": 34
+      }
+    ]
+  },
+  {
     "id": "lil-s-cafe",
     "name": "Lil's Cafe",
     "country": "United States",
