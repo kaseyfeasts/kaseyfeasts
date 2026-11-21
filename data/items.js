@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "lox-on-everything-bagel-henry-s-bagel-deli",
+    "name": "Lox on Everything Bagel",
+    "rating": 82.5,
+    "cat": "Sandwich (Open-Faced)",
+    "sub": "Smoked Salmon",
+    "spot": "henry-s-bagel-deli"
+  },
+  {
     "id": "chipotle-pastrami-sam-lagrassa-s",
     "name": "Chipotle Pastrami",
     "rating": 100,
