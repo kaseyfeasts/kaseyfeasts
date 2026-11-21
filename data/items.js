@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-pickle-mac-panini-the-natural-pickle",
+    "name": "The Pickle Mac Panini",
+    "rating": 82.5,
+    "cat": "Sandwich",
+    "sub": "Other",
+    "spot": "the-natural-pickle"
+  },
+  {
     "id": "philly-cheesesteak-pie-guys-pizzeria",
     "name": "Philly Cheesesteak",
     "rating": 82.5,
