@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "the-breakfast-sandwich-w-sausage-finestkind",
+    "name": "The Breakfast Sandwich (w/ Sausage)",
+    "rating": 87.5,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Meat Egg Cheese",
+    "spot": "finestkind"
+  },
+  {
     "id": "dorado-supreme-finestkind",
     "name": "Dorado Supreme",
     "rating": 95,
