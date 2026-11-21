@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "lil-s-cafe",
+    "name": "Lil's Cafe",
+    "country": "United States",
+    "ne": true,
+    "state": "Maine",
+    "city": "Kittery",
+    "address": "7 Wallingford Square, Kittery, ME 03904",
+    "lat": 43.0859998541908,
+    "lng": -70.74359868629446,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 72.5,
+        "video": "https://www.instagram.com/reels/DfXCSBNshi5/",
+        "series": "best-sandwiches",
+        "ep": 33
+      }
+    ]
+  },
+  {
     "id": "henry-s-bagel-deli",
     "name": "Henry's Bagel & Deli",
     "country": "United States",
