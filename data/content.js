@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "henry-s-bagel-deli",
+    "name": "Henry's Bagel & Deli",
+    "country": "United States",
+    "ne": true,
+    "state": "Maine",
+    "city": "Kittery",
+    "address": "445 US-1, Kittery, ME 03904",
+    "lat": 43.12213429051032,
+    "lng": -70.71915746114803,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 77.5,
+        "video": "https://www.instagram.com/reels/DfR4qFGMnNC/",
+        "series": "best-sandwiches",
+        "ep": 32
+      }
+    ]
+  },
+  {
     "id": "sam-lagrassa-s",
     "name": "Sam LaGrassa's",
     "country": "United States",
