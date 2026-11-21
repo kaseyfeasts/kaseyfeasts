@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "palace-diner",
+    "name": "Palace Diner",
+    "country": "United States",
+    "ne": true,
+    "state": "Maine",
+    "city": "Biddeford",
+    "address": "18 Franklin St, Biddeford, ME 04005",
+    "lat": 43.55956755848854,
+    "lng": -70.49015803864323,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 95,
+        "video": "https://www.instagram.com/reels/DfpD5XsMGRr/",
+        "series": "best-sandwiches",
+        "ep": 35
+      }
+    ]
+  },
+  {
     "id": "finestkind",
     "name": "Finestkind",
     "country": "United States",
