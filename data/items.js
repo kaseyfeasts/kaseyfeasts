@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "philly-cheesesteak-pie-guys-pizzeria",
+    "name": "Philly Cheesesteak",
+    "rating": 82.5,
+    "cat": "Sandwich (Sub)",
+    "sub": "Steak & Cheese",
+    "spot": "pie-guys-pizzeria"
+  },
+  {
     "id": "hot-chicken-sandwich-monte-s-fine-foods",
     "name": "Hot Chicken Sandwich",
     "rating": 90,
