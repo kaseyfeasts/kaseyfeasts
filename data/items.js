@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "deluxe-sandwich-palace-diner",
+    "name": "Deluxe Sandwich",
+    "rating": 100,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Meat Egg Cheese",
+    "spot": "palace-diner"
+  },
+  {
     "id": "the-breakfast-sandwich-w-sausage-finestkind",
     "name": "The Breakfast Sandwich (w/ Sausage)",
     "rating": 87.5,
