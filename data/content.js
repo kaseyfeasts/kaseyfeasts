@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "the-natural-pickle",
+    "name": "The Natural Pickle",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Laconia",
+    "address": "92 Court St, Laconia, NH 03246",
+    "lat": 43.52445617387045,
+    "lng": -71.47028436112865,
+    "foods": [
+      {
+        "cat": "Sandwiches",
+        "rating": 82.5,
+        "video": "https://www.instagram.com/p/Df94j74R72W/",
+        "series": "best-sandwiches",
+        "ep": 38
+      }
+    ]
+  },
+  {
     "id": "palace-diner",
     "name": "Palace Diner",
     "country": "United States",
