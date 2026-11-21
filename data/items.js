@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "sausage-egg-cheese-on-a-biscuit-lil-s-cafe",
+    "name": "Sausage/Egg/Cheese on a Biscuit",
+    "rating": 72.5,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Grab & Go",
+    "spot": "lil-s-cafe"
+  },
+  {
     "id": "maine-maple-sausage-egg-cheese-on-sesame-bagel-henry-s-bagel-deli",
     "name": "Maine Maple Sausage/Egg/Cheese on Sesame Bagel",
     "rating": 77.5,
