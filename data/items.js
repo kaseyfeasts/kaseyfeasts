@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "dorado-supreme-finestkind",
+    "name": "Dorado Supreme",
+    "rating": 95,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Other Breakfast Sandwich",
+    "spot": "finestkind"
+  },
+  {
     "id": "sausage-egg-cheese-on-a-biscuit-lil-s-cafe",
     "name": "Sausage/Egg/Cheese on a Biscuit",
     "rating": 72.5,
