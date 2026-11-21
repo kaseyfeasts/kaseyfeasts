@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maine-maple-sausage-egg-cheese-on-sesame-bagel-henry-s-bagel-deli",
+    "name": "Maine Maple Sausage/Egg/Cheese on Sesame Bagel",
+    "rating": 77.5,
+    "cat": "Sandwich (Breakfast)",
+    "sub": "Meat Egg Cheese",
+    "spot": "henry-s-bagel-deli"
+  },
+  {
     "id": "lox-on-everything-bagel-henry-s-bagel-deli",
     "name": "Lox on Everything Bagel",
     "rating": 82.5,
