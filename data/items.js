@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "hot-chicken-sandwich-monte-s-fine-foods",
+    "name": "Hot Chicken Sandwich",
+    "rating": 90,
+    "cat": "Sandwich",
+    "sub": "Chicken Cutlet",
+    "spot": "monte-s-fine-foods"
+  },
+  {
     "id": "fried-chicken-sandwich-palace-diner",
     "name": "Fried Chicken Sandwich",
     "rating": 85,
