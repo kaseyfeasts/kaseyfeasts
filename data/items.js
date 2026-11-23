@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chocolate-butternut-goody-good-donuts",
+    "name": "Chocolate Butternut",
+    "rating": 90,
+    "cat": "Donut",
+    "sub": "Cake Donut (Chocolate)",
+    "spot": "goody-good-donuts"
+  },
+  {
     "id": "apple-cider-donut-goody-good-donuts",
     "name": "Apple Cider Donut",
     "rating": 65,
