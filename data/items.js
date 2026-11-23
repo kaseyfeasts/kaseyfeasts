@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chocolate-glaze-goody-good-donuts",
+    "name": "Chocolate Glaze",
+    "rating": 90,
+    "cat": "Donut",
+    "sub": "Cake Donut (Chocolate)",
+    "spot": "goody-good-donuts"
+  },
+  {
     "id": "chocolate-butternut-goody-good-donuts",
     "name": "Chocolate Butternut",
     "rating": 90,
