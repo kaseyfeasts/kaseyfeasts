@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "goody-good-donuts",
+    "name": "Goody Good Donuts",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Laconia",
+    "address": "235 Union Ave, Laconia, NH 03246",
+    "lat": 43.531291274298624,
+    "lng": -71.46447544733633,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 77.5,
+        "video": "",
+        "series": "best-donuts",
+        "ep": 4
+      }
+    ]
+  },
+  {
     "id": "the-natural-pickle",
     "name": "The Natural Pickle",
     "country": "United States",
