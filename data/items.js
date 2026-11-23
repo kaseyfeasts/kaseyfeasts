@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-donut-goody-good-donuts",
+    "name": "Glazed Donut",
+    "rating": 70,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "goody-good-donuts"
+  },
+  {
     "id": "boston-cream-goody-good-donuts",
     "name": "Boston Cream",
     "rating": 75,
