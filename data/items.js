@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-cider-donut-goody-good-donuts",
+    "name": "Apple Cider Donut",
+    "rating": 65,
+    "cat": "Donut",
+    "sub": "Cake Donut (Apple Cider)",
+    "spot": "goody-good-donuts"
+  },
+  {
     "id": "the-pickle-mac-panini-the-natural-pickle",
     "name": "The Pickle Mac Panini",
     "rating": 82.5,
