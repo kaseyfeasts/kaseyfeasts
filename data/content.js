@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "lighthouse-local",
+    "name": "Lighthouse Local",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Bedford",
+    "address": "21 Kilton Rd, Bedford, NH 03110",
+    "lat": 42.9568933342807,
+    "lng": -71.48221719527999,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 67.5,
+        "video": "https://www.instagram.com/reels/DcdsizLuaiH/",
+        "series": "best-donuts",
+        "ep": 13
+      }
+    ]
+  },
+  {
     "id": "kane-s-donuts",
     "name": "Kane's Donuts",
     "country": "United States",
