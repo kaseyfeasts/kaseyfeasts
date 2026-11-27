@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "sugar-jelly-donut-shack",
+    "name": "Sugar Jelly",
+    "rating": 65,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "donut-shack"
+  },
+  {
     "id": "apple-fritter-donut-shack",
     "name": "Apple Fritter",
     "rating": 72.5,
