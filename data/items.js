@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "marshmallow-fluff-donut-shack",
+    "name": "Marshmallow Fluff",
+    "rating": 60,
+    "cat": "Donut",
+    "sub": "Filled Donut (Other)",
+    "spot": "donut-shack"
+  },
+  {
     "id": "sugar-jelly-donut-shack",
     "name": "Sugar Jelly",
     "rating": 65,
