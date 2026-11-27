@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-apple-cider-donut-chichester-country-store",
+    "name": "Glazed Apple Cider Donut",
+    "rating": 75,
+    "cat": "Donut",
+    "sub": "Cake Donut (Apple Cider)",
+    "spot": "chichester-country-store"
+  },
+  {
     "id": "cinnamon-sugar-apple-cider-donut-chichester-country-store",
     "name": "Cinnamon Sugar Apple Cider Donut",
     "rating": 75,
