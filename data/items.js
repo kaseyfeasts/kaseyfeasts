@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "sugar-jelly-kane-s-donuts",
+    "name": "Sugar Jelly",
+    "rating": 92.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "kane-s-donuts"
+  },
+  {
     "id": "honey-dip-kane-s-donuts",
     "name": "Honey Dip",
     "rating": 95,
