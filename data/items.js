@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maine-blueberry-kane-s-donuts",
+    "name": "Maine Blueberry",
+    "rating": 90,
+    "cat": "Donut",
+    "sub": "Cake Donut (Blueberry)",
+    "spot": "kane-s-donuts"
+  },
+  {
     "id": "sugar-jelly-kane-s-donuts",
     "name": "Sugar Jelly",
     "rating": 92.5,
