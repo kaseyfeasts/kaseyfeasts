@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "cinnamon-sugar-apple-cider-donut-the-common-man-donut-shop",
+    "name": "Cinnamon Sugar Apple Cider Donut",
+    "rating": 87.5,
+    "cat": "Donut",
+    "sub": "Cake Donut (Apple Cider)",
+    "spot": "the-common-man-donut-shop"
+  },
+  {
     "id": "peach-cobbler-ginger-cake-donut-the-common-man-donut-shop",
     "name": "Peach Cobbler Ginger Cake Donut",
     "rating": 92.5,
