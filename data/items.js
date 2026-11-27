@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "honey-dipped-donna-s-donuts",
+    "name": "Honey Dipped",
+    "rating": 72.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "donna-s-donuts"
+  },
+  {
     "id": "coffee-roll-donna-s-donuts",
     "name": "Coffee Roll",
     "rating": 85,
