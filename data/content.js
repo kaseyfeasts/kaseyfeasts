@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "the-common-man-donut-shop",
+    "name": "The Common Man Donut Shop",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Hooksett",
+    "address": "530 W River Rd, Hooksett, NH 03106",
+    "lat": 43.11072969656084,
+    "lng": -71.47572054175883,
+    "foods": [
+      {
+        "cat": "Donuts (Specialty)",
+        "rating": 87.5,
+        "video": "https://www.instagram.com/reels/DclT_y7uehW/",
+        "series": "best-donuts",
+        "ep": 14
+      }
+    ]
+  },
+  {
     "id": "lighthouse-local",
     "name": "Lighthouse Local",
     "country": "United States",
