@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "boston-cream-davis-square-hand-crafted-donuts-bagels",
+    "name": "Boston Cream",
+    "rating": 70,
+    "cat": "Donut",
+    "sub": "Filled Donut (Boston Cream)",
+    "spot": "davis-square-hand-crafted-donuts-bagels"
+  },
+  {
     "id": "chocolate-frosted-plain-cake-donuts-with-a-difference",
     "name": "Chocolate Frosted Plain Cake",
     "rating": 87.5,
