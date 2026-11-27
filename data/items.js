@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "coffee-roll-donna-s-donuts",
+    "name": "Coffee Roll",
+    "rating": 85,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "donna-s-donuts"
+  },
+  {
     "id": "marshmallow-fluff-donut-shack",
     "name": "Marshmallow Fluff",
     "rating": 60,
