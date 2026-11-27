@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "boston-cream-donut-shack",
+    "name": "Boston Cream",
+    "rating": 75,
+    "cat": "Donut",
+    "sub": "Filled Donut (Boston Cream)",
+    "spot": "donut-shack"
+  },
+  {
     "id": "glazed-donut-donut-shack",
     "name": "Glazed Donut",
     "rating": 80,
