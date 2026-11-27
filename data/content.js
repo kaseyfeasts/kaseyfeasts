@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "somebody-s-place",
+    "name": "Somebody's Place",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Andover",
+    "address": "38 Andover St #4802, Andover, MA 01810",
+    "lat": 42.64390890931134,
+    "lng": -71.15424980505509,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 87.5,
+        "video": "https://www.instagram.com/reels/DX7rCOvRm0U/",
+        "series": "best-donuts",
+        "ep": 5
+      }
+    ]
+  },
+  {
     "id": "goody-good-donuts",
     "name": "Goody Good Donuts",
     "country": "United States",
