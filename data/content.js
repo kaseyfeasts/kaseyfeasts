@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "donuts-with-a-difference",
+    "name": "Donuts with a Difference",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Medford",
+    "address": "35 Riverside Ave, Medford, MA 02155",
+    "lat": 42.41797964545472,
+    "lng": -71.10846011521775,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 97.5,
+        "video": "https://www.instagram.com/reels/DdENgkCBWcn/",
+        "series": "best-donuts",
+        "ep": 15
+      }
+    ]
+  },
+  {
     "id": "the-common-man-donut-shop",
     "name": "The Common Man Donut Shop",
     "country": "United States",
