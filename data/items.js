@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "fried-dough-donut-somebody-s-place",
+    "name": "Fried Dough Donut",
+    "rating": 82.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "somebody-s-place"
+  },
+  {
     "id": "boston-cream-somebody-s-place",
     "name": "Boston Cream",
     "rating": 87.5,
