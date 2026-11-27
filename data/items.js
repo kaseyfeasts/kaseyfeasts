@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chocolate-glaze-somebody-s-place",
+    "name": "Chocolate Glaze",
+    "rating": 67.5,
+    "cat": "Donut",
+    "sub": "Cake Donut (Chocolate)",
+    "spot": "somebody-s-place"
+  },
+  {
     "id": "fried-dough-donut-somebody-s-place",
     "name": "Fried Dough Donut",
     "rating": 82.5,
