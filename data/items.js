@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-fritter-donut-shack",
+    "name": "Apple Fritter",
+    "rating": 72.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Apple Fritter)",
+    "spot": "donut-shack"
+  },
+  {
     "id": "boston-cream-donut-shack",
     "name": "Boston Cream",
     "rating": 75,
