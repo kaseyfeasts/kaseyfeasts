@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-davis-square-hand-crafted-donuts-bagels",
+    "name": "Glazed",
+    "rating": 67.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "davis-square-hand-crafted-donuts-bagels"
+  },
+  {
     "id": "jelly-davis-square-hand-crafted-donuts-bagels",
     "name": "Jelly",
     "rating": 70,
