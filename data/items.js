@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-donut-lighthouse-local",
+    "name": "Glazed Donut",
+    "rating": 67.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "lighthouse-local"
+  },
+  {
     "id": "blueberry-lemon-frosted-donut-lighthouse-local",
     "name": "Blueberry Lemon Frosted Donut",
     "rating": 70,
