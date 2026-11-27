@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "donut-shack",
+    "name": "Donut Shack",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Lowell",
+    "address": "487 Westford St, Lowell, MA 01851",
+    "lat": 42.63503150420391,
+    "lng": -71.33332401586667,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 70,
+        "video": "https://www.instagram.com/reels/DZGOQ01RqX3/",
+        "series": "best-donuts",
+        "ep": 7
+      }
+    ]
+  },
+  {
     "id": "what-the-fluff-donuts",
     "name": "What The Fluff! Donuts",
     "country": "United States",
