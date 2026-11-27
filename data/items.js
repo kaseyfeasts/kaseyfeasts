@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "s-mores-donut-lighthouse-local",
+    "name": "S'mores Donut",
+    "rating": 62.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "lighthouse-local"
+  },
+  {
     "id": "key-lime-pie-donut-lighthouse-local",
     "name": "Key Lime Pie Donut",
     "rating": 65,
