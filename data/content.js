@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "what-the-fluff-donuts",
+    "name": "What The Fluff! Donuts",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Manchester",
+    "address": "87 Amherst St, Manchester, NH 03101",
+    "lat": 42.99196169960047,
+    "lng": -71.46075221703789,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 82.5,
+        "video": "https://www.instagram.com/reels/DYnkJ7eR0_B/",
+        "series": "best-donuts",
+        "ep": 6
+      }
+    ]
+  },
+  {
     "id": "somebody-s-place",
     "name": "Somebody's Place",
     "country": "United States",
