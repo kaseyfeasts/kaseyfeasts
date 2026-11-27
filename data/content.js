@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "davis-square-hand-crafted-donuts-bagels",
+    "name": "Davis Square Hand Crafted Donuts & Bagels",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Somerville",
+    "address": "377 Summer St, Somerville, MA 02144",
+    "lat": 42.39454398135794,
+    "lng": -71.12070927659771,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 65,
+        "video": "https://www.instagram.com/reels/DdL75-VshL6/",
+        "series": "best-donuts",
+        "ep": 16
+      }
+    ]
+  },
+  {
     "id": "donuts-with-a-difference",
     "name": "Donuts with a Difference",
     "country": "United States",
