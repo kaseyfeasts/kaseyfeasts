@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-donut-donut-shack",
+    "name": "Glazed Donut",
+    "rating": 80,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "donut-shack"
+  },
+  {
     "id": "apple-fritter-what-the-fluff-donuts",
     "name": "Apple Fritter",
     "rating": 77.5,
