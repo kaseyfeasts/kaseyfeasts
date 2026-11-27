@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chocolate-drizzle-apple-cider-donut-cider-bellies-doughnuts",
+    "name": "Chocolate Drizzle Apple Cider Donut",
+    "rating": 90,
+    "cat": "Donut",
+    "sub": "Cake Donut (Apple Cider)",
+    "spot": "cider-bellies-doughnuts"
+  },
+  {
     "id": "plain-old-fashioned-apple-cider-donut-cider-bellies-doughnuts",
     "name": "Plain Old Fashioned Apple Cider Donut",
     "rating": 90,
