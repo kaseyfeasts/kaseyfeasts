@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "honey-dip-glazed-donuts-with-a-difference",
+    "name": "Honey Dip (Glazed)",
+    "rating": 100,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "donuts-with-a-difference"
+  },
+  {
     "id": "glazed-cake-donut-the-common-man-donut-shop",
     "name": "Glazed Cake Donut",
     "rating": 82.5,
