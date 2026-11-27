@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-cake-stick-donuts-with-a-difference",
+    "name": "Glazed Cake Stick",
+    "rating": 87.5,
+    "cat": "Donut",
+    "sub": "Cake Donut (Other)",
+    "spot": "donuts-with-a-difference"
+  },
+  {
     "id": "raspberry-jelly-donuts-with-a-difference",
     "name": "Raspberry Jelly",
     "rating": 95,
