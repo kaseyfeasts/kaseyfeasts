@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "blueberry-lemon-frosted-donut-lighthouse-local",
+    "name": "Blueberry Lemon Frosted Donut",
+    "rating": 70,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "lighthouse-local"
+  },
+  {
     "id": "boston-cream-kane-s-donuts",
     "name": "Boston Cream",
     "rating": 85,
