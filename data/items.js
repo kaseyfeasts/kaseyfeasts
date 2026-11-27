@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maple-frosted-donuts-with-a-difference",
+    "name": "Maple Frosted",
+    "rating": 97.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "donuts-with-a-difference"
+  },
+  {
     "id": "boston-cream-donuts-with-a-difference",
     "name": "Boston Cream",
     "rating": 97.5,
