@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "kane-s-donuts",
+    "name": "Kane's Donuts",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Boston",
+    "address": "90 Oliver St, Boston, MA 02110",
+    "lat": 42.36184187829261,
+    "lng": -71.05347633244186,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 92.5,
+        "video": "https://www.instagram.com/reels/DcGhWBKOOJf/",
+        "series": "best-donuts",
+        "ep": 12
+      }
+    ]
+  },
+  {
     "id": "cider-bellies-doughnuts",
     "name": "Cider Bellies Doughnuts",
     "country": "United States",
