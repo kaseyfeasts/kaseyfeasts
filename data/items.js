@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "donna-s-special-maple-frosted-w-apple-filling-donna-s-donuts",
+    "name": "Donna's Special (Maple Frosted w/ Apple Filling)",
+    "rating": 60,
+    "cat": "Donut",
+    "sub": "Filled Donut (Other)",
+    "spot": "donna-s-donuts"
+  },
+  {
     "id": "chocolate-cruller-donna-s-donuts",
     "name": "Chocolate Cruller",
     "rating": 60,
