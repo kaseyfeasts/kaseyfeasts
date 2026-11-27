@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "tiger-tail-somebody-s-place",
+    "name": "Tiger Tail",
+    "rating": 90,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "somebody-s-place"
+  },
+  {
     "id": "honey-dip-somebody-s-place",
     "name": "Honey Dip",
     "rating": 92.5,
