@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "cider-bellies-doughnuts",
+    "name": "Cider Bellies Doughnuts",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Meredith",
+    "address": "18 Quarry Rd, Meredith, NH 03253",
+    "lat": 43.677270581129704,
+    "lng": -71.47167733234227,
+    "foods": [
+      {
+        "cat": "Donuts (Specialty)",
+        "rating": 97.5,
+        "video": "https://www.instagram.com/reels/DZ2HF_JOFN0/",
+        "series": "best-donuts",
+        "ep": 9
+      }
+    ]
+  },
+  {
     "id": "donna-s-donuts",
     "name": "Donna's Donuts",
     "country": "United States",
