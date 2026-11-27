@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "raspberry-jelly-donuts-with-a-difference",
+    "name": "Raspberry Jelly",
+    "rating": 95,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "donuts-with-a-difference"
+  },
+  {
     "id": "maple-frosted-donuts-with-a-difference",
     "name": "Maple Frosted",
     "rating": 97.5,
