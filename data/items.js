@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "boston-cream-kane-s-donuts",
+    "name": "Boston Cream",
+    "rating": 85,
+    "cat": "Donut",
+    "sub": "Filled Donut (Boston Cream)",
+    "spot": "kane-s-donuts"
+  },
+  {
     "id": "apple-fritter-kane-s-donuts",
     "name": "Apple Fritter",
     "rating": 87.5,
