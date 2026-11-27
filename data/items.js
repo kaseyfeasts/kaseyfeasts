@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "jelly-davis-square-hand-crafted-donuts-bagels",
+    "name": "Jelly",
+    "rating": 70,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "davis-square-hand-crafted-donuts-bagels"
+  },
+  {
     "id": "boston-cream-davis-square-hand-crafted-donuts-bagels",
     "name": "Boston Cream",
     "rating": 70,
