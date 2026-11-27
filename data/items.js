@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "peach-cobbler-ginger-cake-donut-the-common-man-donut-shop",
+    "name": "Peach Cobbler Ginger Cake Donut",
+    "rating": 92.5,
+    "cat": "Donut",
+    "sub": "Cake Donut (Other)",
+    "spot": "the-common-man-donut-shop"
+  },
+  {
     "id": "apple-cider-donut-maple-filled-whoopie-pie-the-common-man-donut-shop",
     "name": "Apple Cider Donut Maple Filled Whoopie Pie",
     "rating": 95,
