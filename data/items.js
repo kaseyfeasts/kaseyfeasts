@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "boston-cream-donuts-with-a-difference",
+    "name": "Boston Cream",
+    "rating": 97.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Boston Cream)",
+    "spot": "donuts-with-a-difference"
+  },
+  {
     "id": "honey-dip-glazed-donuts-with-a-difference",
     "name": "Honey Dip (Glazed)",
     "rating": 100,
