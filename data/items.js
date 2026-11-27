@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maple-frosted-davis-square-hand-crafted-donuts-bagels",
+    "name": "Maple Frosted",
+    "rating": 65,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "davis-square-hand-crafted-donuts-bagels"
+  },
+  {
     "id": "glazed-davis-square-hand-crafted-donuts-bagels",
     "name": "Glazed",
     "rating": 67.5,
