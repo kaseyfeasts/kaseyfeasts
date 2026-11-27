@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "chocolate-cruller-donna-s-donuts",
+    "name": "Chocolate Cruller",
+    "rating": 60,
+    "cat": "Donut",
+    "sub": "Cake Donut (Chocolate)",
+    "spot": "donna-s-donuts"
+  },
+  {
     "id": "apple-filled-glazed-donna-s-donuts",
     "name": "Apple Filled Glazed",
     "rating": 65,
