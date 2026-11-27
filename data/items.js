@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-crumble-apple-cider-donut-chichester-country-store",
+    "name": "Apple Crumble Apple Cider Donut",
+    "rating": 75,
+    "cat": "Donut",
+    "sub": "Cake Donut (Apple Cider)",
+    "spot": "chichester-country-store"
+  },
+  {
     "id": "glazed-apple-cider-donut-chichester-country-store",
     "name": "Glazed Apple Cider Donut",
     "rating": 75,
