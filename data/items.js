@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "raspberry-jelly-what-the-fluff-donuts",
+    "name": "Raspberry Jelly",
+    "rating": 82.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "what-the-fluff-donuts"
+  },
+  {
     "id": "glazed-donut-what-the-fluff-donuts",
     "name": "Glazed Donut",
     "rating": 87.5,
