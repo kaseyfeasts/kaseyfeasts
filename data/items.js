@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "blueberry-cake-what-the-fluff-donuts",
+    "name": "Blueberry Cake",
+    "rating": 77.5,
+    "cat": "Donut",
+    "sub": "Cake Donut (Blueberry)",
+    "spot": "what-the-fluff-donuts"
+  },
+  {
     "id": "cinnamon-crunch-what-the-fluff-donuts",
     "name": "Cinnamon Crunch",
     "rating": 80,
