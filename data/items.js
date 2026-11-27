@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "raspberry-jelly-donna-s-donuts",
+    "name": "Raspberry Jelly",
+    "rating": 67.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "donna-s-donuts"
+  },
+  {
     "id": "honey-dipped-donna-s-donuts",
     "name": "Honey Dipped",
     "rating": 72.5,
