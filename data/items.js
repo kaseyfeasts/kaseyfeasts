@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "cinnamon-crunch-what-the-fluff-donuts",
+    "name": "Cinnamon Crunch",
+    "rating": 80,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "what-the-fluff-donuts"
+  },
+  {
     "id": "raspberry-jelly-what-the-fluff-donuts",
     "name": "Raspberry Jelly",
     "rating": 82.5,
