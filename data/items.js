@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "honey-dip-kane-s-donuts",
+    "name": "Honey Dip",
+    "rating": 95,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "kane-s-donuts"
+  },
+  {
     "id": "maple-frosted-apple-cider-donut-chichester-country-store",
     "name": "Maple Frosted Apple Cider Donut",
     "rating": 70,
