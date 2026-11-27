@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "cinnamon-sugar-apple-cider-donut-cider-bellies-doughnuts",
+    "name": "Cinnamon Sugar Apple Cider Donut",
+    "rating": 100,
+    "cat": "Donut",
+    "sub": "Cake Donut (Apple Cider)",
+    "spot": "cider-bellies-doughnuts"
+  },
+  {
     "id": "donna-s-special-maple-frosted-w-apple-filling-donna-s-donuts",
     "name": "Donna's Special (Maple Frosted w/ Apple Filling)",
     "rating": 60,
