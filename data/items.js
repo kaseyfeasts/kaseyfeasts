@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maple-frosted-apple-cider-donut-chichester-country-store",
+    "name": "Maple Frosted Apple Cider Donut",
+    "rating": 70,
+    "cat": "Donut",
+    "sub": "Cake Donut (Apple Cider)",
+    "spot": "chichester-country-store"
+  },
+  {
     "id": "apple-crumble-apple-cider-donut-chichester-country-store",
     "name": "Apple Crumble Apple Cider Donut",
     "rating": 75,
