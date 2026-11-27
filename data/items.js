@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "boston-cream-what-the-fluff-donuts",
+    "name": "Boston Cream",
+    "rating": 87.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Boston Cream)",
+    "spot": "what-the-fluff-donuts"
+  },
+  {
     "id": "chocolate-glaze-somebody-s-place",
     "name": "Chocolate Glaze",
     "rating": 67.5,
