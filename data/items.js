@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "blueberry-old-fashioned-glazed-davis-square-hand-crafted-donuts-bagels",
+    "name": "Blueberry Old Fashioned Glazed",
+    "rating": 60,
+    "cat": "Donut",
+    "sub": "Cake Donut (Blueberry)",
+    "spot": "davis-square-hand-crafted-donuts-bagels"
+  },
+  {
     "id": "maple-frosted-davis-square-hand-crafted-donuts-bagels",
     "name": "Maple Frosted",
     "rating": 65,
