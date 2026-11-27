@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-donut-what-the-fluff-donuts",
+    "name": "Glazed Donut",
+    "rating": 87.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "what-the-fluff-donuts"
+  },
+  {
     "id": "boston-cream-what-the-fluff-donuts",
     "name": "Boston Cream",
     "rating": 87.5,
