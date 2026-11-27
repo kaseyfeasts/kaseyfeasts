@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-fritter-kane-s-donuts",
+    "name": "Apple Fritter",
+    "rating": 87.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Apple Fritter)",
+    "spot": "kane-s-donuts"
+  },
+  {
     "id": "maine-blueberry-kane-s-donuts",
     "name": "Maine Blueberry",
     "rating": 90,
