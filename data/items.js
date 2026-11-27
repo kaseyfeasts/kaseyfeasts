@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "honey-dip-somebody-s-place",
+    "name": "Honey Dip",
+    "rating": 92.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "somebody-s-place"
+  },
+  {
     "id": "glazed-donut-goody-good-donuts",
     "name": "Glazed Donut",
     "rating": 70,
