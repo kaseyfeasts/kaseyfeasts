@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-filled-glazed-donna-s-donuts",
+    "name": "Apple Filled Glazed",
+    "rating": 65,
+    "cat": "Donut",
+    "sub": "Filled Donut (Other)",
+    "spot": "donna-s-donuts"
+  },
+  {
     "id": "raspberry-jelly-donna-s-donuts",
     "name": "Raspberry Jelly",
     "rating": 67.5,
