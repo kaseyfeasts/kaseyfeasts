@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "boston-cream-somebody-s-place",
+    "name": "Boston Cream",
+    "rating": 87.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Boston Cream)",
+    "spot": "somebody-s-place"
+  },
+  {
     "id": "tiger-tail-somebody-s-place",
     "name": "Tiger Tail",
     "rating": 90,
