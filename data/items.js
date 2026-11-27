@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-cider-donut-maple-filled-whoopie-pie-the-common-man-donut-shop",
+    "name": "Apple Cider Donut Maple Filled Whoopie Pie",
+    "rating": 95,
+    "cat": "Donut",
+    "sub": "Cake Donut (Other)",
+    "spot": "the-common-man-donut-shop"
+  },
+  {
     "id": "s-mores-donut-lighthouse-local",
     "name": "S'mores Donut",
     "rating": 62.5,
