@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "donna-s-donuts",
+    "name": "Donna's Donuts",
+    "country": "United States",
+    "ne": true,
+    "state": "Massachusetts",
+    "city": "Tewksbury",
+    "address": "2106 Main St, Tewksbury, MA 01876",
+    "lat": 42.586418354300385,
+    "lng": -71.19869568822465,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 65,
+        "video": "https://www.instagram.com/reels/DZcXHjRBjCd/",
+        "series": "best-donuts",
+        "ep": 8
+      }
+    ]
+  },
+  {
     "id": "donut-shack",
     "name": "Donut Shack",
     "country": "United States",
