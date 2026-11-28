@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-fritter-congdon-s-doughnuts",
+    "name": "Apple Fritter",
+    "rating": 77.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Apple Fritter)",
+    "spot": "congdon-s-doughnuts"
+  },
+  {
     "id": "sugar-rasberry-jelly-congdon-s-doughnuts",
     "name": "Sugar Rasberry Jelly",
     "rating": 77.5,
