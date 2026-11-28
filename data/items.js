@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maple-cruller-farmer-and-the-bell",
+    "name": "Maple Cruller",
+    "rating": 92.5,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "farmer-and-the-bell"
+  },
+  {
     "id": "blueberry-old-fashioned-glazed-davis-square-hand-crafted-donuts-bagels",
     "name": "Blueberry Old Fashioned Glazed",
     "rating": 60,
