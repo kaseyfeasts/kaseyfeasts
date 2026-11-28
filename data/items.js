@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "black-forest-cruller-farmer-and-the-bell",
+    "name": "Black Forest Cruller",
+    "rating": 80,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "farmer-and-the-bell"
+  },
+  {
     "id": "apple-pie-crumb-cruller-farmer-and-the-bell",
     "name": "Apple Pie Crumb Cruller",
     "rating": 85,
