@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "congdon-s-doughnuts",
+    "name": "Congdon's Doughnuts",
+    "country": "United States",
+    "ne": true,
+    "state": "Maine",
+    "city": "Wells",
+    "address": "1090 Post Rd, Wells, ME 04090",
+    "lat": 43.30648492509537,
+    "lng": -70.58519146120017,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 77.5,
+        "video": "https://www.instagram.com/reels/DfmfHJFsyZO/",
+        "series": "best-donuts",
+        "ep": 22
+      }
+    ]
+  },
+  {
     "id": "northwoods-brewing-company",
     "name": "Northwoods Brewing Company",
     "country": "United States",
