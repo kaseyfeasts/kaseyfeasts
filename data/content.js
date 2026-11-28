@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "frosty-s-donuts",
+    "name": "Frosty's Donuts",
+    "country": "United States",
+    "ne": true,
+    "state": "Maine",
+    "city": "Brunswick",
+    "address": "54 Maine St, Brunswick, ME 04011",
+    "lat": 43.917695224019226,
+    "lng": -69.96660450349196,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 90,
+        "video": "https://www.instagram.com/reels/DfyFk8SxACB/",
+        "series": "best-donuts",
+        "ep": 23
+      }
+    ]
+  },
+  {
     "id": "congdon-s-doughnuts",
     "name": "Congdon's Doughnuts",
     "country": "United States",
