@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "honey-dip-congdon-s-doughnuts",
+    "name": "Honey Dip",
+    "rating": 75,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "congdon-s-doughnuts"
+  },
+  {
     "id": "maple-frosted-congdon-s-doughnuts",
     "name": "Maple Frosted",
     "rating": 75,
