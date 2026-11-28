@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "north-country-donuts",
+    "name": "North Country Donuts",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "Morrisville",
+    "address": "73 Lower Main St, Morrisville, VT 05661",
+    "lat": 44.561564266524094,
+    "lng": -72.59971803228991,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 82.5,
+        "video": "https://www.instagram.com/reels/DeWjhI3M9AV/",
+        "series": "best-donuts",
+        "ep": 18
+      }
+    ]
+  },
+  {
     "id": "farmer-and-the-bell",
     "name": "Farmer and the Bell",
     "country": "United States",
