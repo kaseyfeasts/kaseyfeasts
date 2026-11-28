@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "boston-cream-frosty-s-donuts",
+    "name": "Boston Cream",
+    "rating": 87.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Boston Cream)",
+    "spot": "frosty-s-donuts"
+  },
+  {
     "id": "double-chocolate-frosty-s-donuts",
     "name": "Double Chocolate",
     "rating": 90,
