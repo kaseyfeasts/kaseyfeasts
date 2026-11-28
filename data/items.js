@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-fritter-frosty-s-donuts",
+    "name": "Apple Fritter",
+    "rating": 82.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Apple Fritter)",
+    "spot": "frosty-s-donuts"
+  },
+  {
     "id": "raspberry-jelly-filled-frosty-s-donuts",
     "name": "Raspberry Jelly Filled",
     "rating": 82.5,
