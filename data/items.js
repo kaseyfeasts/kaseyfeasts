@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "pumpkin-spice-latte-north-country-donuts",
+    "name": "Pumpkin Spice Latte",
+    "rating": 92.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Other)",
+    "spot": "north-country-donuts"
+  },
+  {
     "id": "black-forest-cruller-farmer-and-the-bell",
     "name": "Black Forest Cruller",
     "rating": 80,
