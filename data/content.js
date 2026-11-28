@@ -377,6 +377,13 @@ const SPOTS = [
         "video": "https://www.instagram.com/reels/DfXCSBNshi5/",
         "series": "best-sandwiches",
         "ep": 33
+      },
+      {
+        "cat": "Donuts (Specialty)",
+        "rating": 100,
+        "video": "https://www.instagram.com/reels/DfUddplsoD_/",
+        "series": "best-donuts",
+        "ep": 21
       }
     ]
   },
