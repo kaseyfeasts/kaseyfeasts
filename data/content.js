@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "northwoods-brewing-company",
+    "name": "Northwoods Brewing Company",
+    "country": "United States",
+    "ne": true,
+    "state": "New Hampshire",
+    "city": "Northwood",
+    "address": "1334 1st New Hampshire Turnpike, Northwood, NH 03261",
+    "lat": 43.22350344874478,
+    "lng": -71.24992381887746,
+    "foods": [
+      {
+        "cat": "Donuts (Specialty)",
+        "rating": 100,
+        "video": "https://www.instagram.com/reels/DfCVBWkMs02/",
+        "series": "best-donuts",
+        "ep": 20
+      }
+    ]
+  },
+  {
     "id": "madeleine-s-bakery",
     "name": "Madeleine's Bakery",
     "country": "United States",
