@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "raspberry-jelly-filled-frosty-s-donuts",
+    "name": "Raspberry Jelly Filled",
+    "rating": 82.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "frosty-s-donuts"
+  },
+  {
     "id": "plain-sea-salt-caramel-frosty-s-donuts",
     "name": "Plain Sea Salt Caramel",
     "rating": 85,
