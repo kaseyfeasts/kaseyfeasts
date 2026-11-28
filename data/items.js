@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-old-fashioned-cake-north-country-donuts",
+    "name": "Glazed Old-Fashioned Cake",
+    "rating": 85,
+    "cat": "Donut",
+    "sub": "Cake Donut (Other)",
+    "spot": "north-country-donuts"
+  },
+  {
     "id": "maple-glazed-north-country-donuts",
     "name": "Maple Glazed",
     "rating": 90,
