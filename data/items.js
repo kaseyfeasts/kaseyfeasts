@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-cruller-lil-s-cafe",
+    "name": "Glazed Cruller",
+    "rating": 100,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "lil-s-cafe"
+  },
+  {
     "id": "almond-joy-cruller-northwoods-brewing-company",
     "name": "Almond Joy Cruller",
     "rating": 85,
