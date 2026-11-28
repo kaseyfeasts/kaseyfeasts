@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "haitian-pb-j-cruller-farmer-and-the-bell",
+    "name": "Haitian PB & J Cruller",
+    "rating": 90,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "farmer-and-the-bell"
+  },
+  {
     "id": "maple-cruller-farmer-and-the-bell",
     "name": "Maple Cruller",
     "rating": 92.5,
