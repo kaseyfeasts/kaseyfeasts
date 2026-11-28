@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "vanilla-glazed-north-country-donuts",
+    "name": "Vanilla Glazed",
+    "rating": 82.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "north-country-donuts"
+  },
+  {
     "id": "glazed-old-fashioned-cake-north-country-donuts",
     "name": "Glazed Old-Fashioned Cake",
     "rating": 85,
