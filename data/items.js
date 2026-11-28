@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "wild-berry-jelly-north-country-donuts",
+    "name": "Wild Berry Jelly",
+    "rating": 92.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "north-country-donuts"
+  },
+  {
     "id": "pumpkin-spice-latte-north-country-donuts",
     "name": "Pumpkin Spice Latte",
     "rating": 92.5,
