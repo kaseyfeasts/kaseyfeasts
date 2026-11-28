@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "sugar-rasberry-jelly-congdon-s-doughnuts",
+    "name": "Sugar Rasberry Jelly",
+    "rating": 77.5,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "congdon-s-doughnuts"
+  },
+  {
     "id": "bavarian-creme-boston-cream-congdon-s-doughnuts",
     "name": "Bavarian Creme (Boston Cream)",
     "rating": 80,
