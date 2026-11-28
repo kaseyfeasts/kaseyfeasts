@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-fritter-madeleine-s-bakery",
+    "name": "Apple Fritter",
+    "rating": 80,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Apple Fritter)",
+    "spot": "madeleine-s-bakery"
+  },
+  {
     "id": "apple-fritter-north-country-donuts",
     "name": "Apple Fritter",
     "rating": 70,
