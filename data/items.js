@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "double-chocolate-frosty-s-donuts",
+    "name": "Double Chocolate",
+    "rating": 90,
+    "cat": "Donut",
+    "sub": "Cake Donut (Chocolate)",
+    "spot": "frosty-s-donuts"
+  },
+  {
     "id": "raised-glazed-frosty-s-donuts",
     "name": "Raised Glazed",
     "rating": 92.5,
