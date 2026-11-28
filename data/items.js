@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "bavarian-creme-boston-cream-congdon-s-doughnuts",
+    "name": "Bavarian Creme (Boston Cream)",
+    "rating": 80,
+    "cat": "Donut",
+    "sub": "Filled Donut (Boston Cream)",
+    "spot": "congdon-s-doughnuts"
+  },
+  {
     "id": "double-chocolate-congdon-s-doughnuts",
     "name": "Double Chocolate",
     "rating": 82.5,
