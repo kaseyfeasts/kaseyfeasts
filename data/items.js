@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maple-glazed-north-country-donuts",
+    "name": "Maple Glazed",
+    "rating": 90,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "north-country-donuts"
+  },
+  {
     "id": "wild-berry-jelly-north-country-donuts",
     "name": "Wild Berry Jelly",
     "rating": 92.5,
