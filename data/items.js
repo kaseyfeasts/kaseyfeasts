@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "sugar-spice-cruller-farmer-and-the-bell",
+    "name": "Sugar & Spice Cruller",
+    "rating": 87.5,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "farmer-and-the-bell"
+  },
+  {
     "id": "haitian-pb-j-cruller-farmer-and-the-bell",
     "name": "Haitian PB & J Cruller",
     "rating": 90,
