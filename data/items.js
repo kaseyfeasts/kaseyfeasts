@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "plain-sea-salt-caramel-frosty-s-donuts",
+    "name": "Plain Sea Salt Caramel",
+    "rating": 85,
+    "cat": "Donut",
+    "sub": "Cake Donut (Other)",
+    "spot": "frosty-s-donuts"
+  },
+  {
     "id": "boston-cream-frosty-s-donuts",
     "name": "Boston Cream",
     "rating": 87.5,
