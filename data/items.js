@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "mocha-cruller-farmer-and-the-bell",
+    "name": "Mocha Cruller",
+    "rating": 85,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "farmer-and-the-bell"
+  },
+  {
     "id": "sugar-spice-cruller-farmer-and-the-bell",
     "name": "Sugar & Spice Cruller",
     "rating": 87.5,
