@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maple-frosted-congdon-s-doughnuts",
+    "name": "Maple Frosted",
+    "rating": 75,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "congdon-s-doughnuts"
+  },
+  {
     "id": "apple-fritter-congdon-s-doughnuts",
     "name": "Apple Fritter",
     "rating": 77.5,
