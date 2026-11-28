@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maple-cruller-lil-s-cafe",
+    "name": "Maple Cruller",
+    "rating": 97.5,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "lil-s-cafe"
+  },
+  {
     "id": "raspberry-cruller-lil-s-cafe",
     "name": "Raspberry Cruller",
     "rating": 100,
