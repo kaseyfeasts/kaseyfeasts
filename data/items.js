@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "maple-frosted-madeleine-s-bakery",
+    "name": "Maple Frosted",
+    "rating": 72.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Other)",
+    "spot": "madeleine-s-bakery"
+  },
+  {
     "id": "glazed-madeleine-s-bakery",
     "name": "Glazed",
     "rating": 75,
