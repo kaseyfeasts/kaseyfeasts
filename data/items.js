@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "blueberry-cruller-northwoods-brewing-company",
+    "name": "Blueberry Cruller",
+    "rating": 100,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "northwoods-brewing-company"
+  },
+  {
     "id": "apple-raspberry-jelly-filled-madeleine-s-bakery",
     "name": "Apple & Raspberry Jelly Filled",
     "rating": 60,
