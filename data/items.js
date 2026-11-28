@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "almond-joy-cruller-northwoods-brewing-company",
+    "name": "Almond Joy Cruller",
+    "rating": 85,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "northwoods-brewing-company"
+  },
+  {
     "id": "caramel-apple-cruller-northwoods-brewing-company",
     "name": "Caramel Apple Cruller",
     "rating": 97.5,
