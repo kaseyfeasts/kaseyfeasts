@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "farmer-and-the-bell",
+    "name": "Farmer and the Bell",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "Woodstock",
+    "address": "69 Pleasant St, Woodstock, VT 05091",
+    "lat": 43.626538623746015,
+    "lng": -72.50713489001764,
+    "foods": [
+      {
+        "cat": "Donuts (Specialty)",
+        "rating": 87.5,
+        "video": "https://www.instagram.com/reels/Dd_YcJ0M8Wn/",
+        "series": "best-donuts",
+        "ep": 17
+      }
+    ]
+  },
+  {
     "id": "davis-square-hand-crafted-donuts-bagels",
     "name": "Davis Square Hand Crafted Donuts & Bagels",
     "country": "United States",
