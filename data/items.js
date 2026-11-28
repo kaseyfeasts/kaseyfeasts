@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "raised-glazed-frosty-s-donuts",
+    "name": "Raised Glazed",
+    "rating": 92.5,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "frosty-s-donuts"
+  },
+  {
     "id": "honey-dip-congdon-s-doughnuts",
     "name": "Honey Dip",
     "rating": 75,
