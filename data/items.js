@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "double-chocolate-congdon-s-doughnuts",
+    "name": "Double Chocolate",
+    "rating": 82.5,
+    "cat": "Donut",
+    "sub": "Cake Donut (Chocolate)",
+    "spot": "congdon-s-doughnuts"
+  },
+  {
     "id": "cinnamon-cruller-lil-s-cafe",
     "name": "Cinnamon Cruller",
     "rating": 95,
