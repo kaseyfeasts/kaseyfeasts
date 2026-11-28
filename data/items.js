@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "caramel-apple-cruller-northwoods-brewing-company",
+    "name": "Caramel Apple Cruller",
+    "rating": 97.5,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "northwoods-brewing-company"
+  },
+  {
     "id": "honey-glazed-cruller-northwoods-brewing-company",
     "name": "Honey Glazed Cruller",
     "rating": 100,
