@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-fritter-north-country-donuts",
+    "name": "Apple Fritter",
+    "rating": 70,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Apple Fritter)",
+    "spot": "north-country-donuts"
+  },
+  {
     "id": "vanilla-glazed-north-country-donuts",
     "name": "Vanilla Glazed",
     "rating": 82.5,
