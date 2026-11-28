@@ -1,6 +1,26 @@
 // Restaurant data managed by Kasey Feasts Admin.
 const SPOTS = [
   {
+    "id": "madeleine-s-bakery",
+    "name": "Madeleine's Bakery",
+    "country": "United States",
+    "ne": true,
+    "state": "Vermont",
+    "city": "Milton",
+    "address": "5 Southerberry Dr, Milton, VT 05468",
+    "lat": 44.62349109620512,
+    "lng": -73.13354753228637,
+    "foods": [
+      {
+        "cat": "Donuts",
+        "rating": 72.5,
+        "video": "https://www.instagram.com/reels/Deg2sdCM3NR/",
+        "series": "best-donuts",
+        "ep": 19
+      }
+    ]
+  },
+  {
     "id": "north-country-donuts",
     "name": "North Country Donuts",
     "country": "United States",
