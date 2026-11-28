@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "glazed-madeleine-s-bakery",
+    "name": "Glazed",
+    "rating": 75,
+    "cat": "Donut",
+    "sub": "Yeast Donut (Glazed/Honey Dip)",
+    "spot": "madeleine-s-bakery"
+  },
+  {
     "id": "apple-fritter-madeleine-s-bakery",
     "name": "Apple Fritter",
     "rating": 80,
