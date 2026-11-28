@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "apple-raspberry-jelly-filled-madeleine-s-bakery",
+    "name": "Apple & Raspberry Jelly Filled",
+    "rating": 60,
+    "cat": "Donut",
+    "sub": "Filled Donut (Jelly)",
+    "spot": "madeleine-s-bakery"
+  },
+  {
     "id": "maple-frosted-madeleine-s-bakery",
     "name": "Maple Frosted",
     "rating": 72.5,
