@@ -1,6 +1,14 @@
 // Food item rankings managed by Kasey Feasts Admin.
 const ITEMS = [
   {
+    "id": "honey-glazed-cruller-northwoods-brewing-company",
+    "name": "Honey Glazed Cruller",
+    "rating": 100,
+    "cat": "Donut",
+    "sub": "French Cruller",
+    "spot": "northwoods-brewing-company"
+  },
+  {
     "id": "blueberry-cruller-northwoods-brewing-company",
     "name": "Blueberry Cruller",
     "rating": 100,
